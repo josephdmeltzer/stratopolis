@@ -49,13 +49,15 @@ public class Viewer extends Application {
         Label label1 = new Label("Placement:");
         textField = new TextField ();
         textField.setPrefWidth(300);
-        Button button = new Button("Refresh");
+        Button button = new Button("Refresh"); /*creates the 'Refresh' button*/
         button.setOnAction(new EventHandler<ActionEvent>() {
+            /*the bit in these curly braces is the behaviour that is executed when the button is pressed*/
             @Override
             public void handle(ActionEvent e) {
                 makePlacement(textField.getText());
                 textField.clear();
-            }
+            } /*Zhixian: this part is what the 'refresh' button does. It takes the text in the
+            * text field and passes it to the function makePlacement, then clears the text field for the next move*/
         });
         HBox hb = new HBox();
         hb.getChildren().addAll(label1, textField, button);
