@@ -7,5 +7,4 @@ public class A {
     public String toString() {
         return "not set yet";
     }
-    A a = new A();
 }
