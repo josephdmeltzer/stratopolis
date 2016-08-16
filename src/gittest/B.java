@@ -6,6 +6,6 @@ package gittest;
 public class B {
 
         String toString() {
-                return "";
+                return "This has been changed. ";
         }
 }
