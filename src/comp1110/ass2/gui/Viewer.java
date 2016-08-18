@@ -8,8 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 import comp1110.ass2.gui.Setup;
 
 /**
@@ -39,6 +41,18 @@ public class Viewer extends Application {
      */
     void makePlacement(String placement) {
         // FIXME Task 5: implement the simple placement viewer
+        for (int i=0; i < placement.length() -3; i+=4) {
+            //place tile based on i and (i+1)
+            //select tile based on (i+2)
+            //rotate tile based on (i+3)
+            if (pos < 0 || pos >= Habitat.PLACES) {
+                throw new IllegalArgumentException("Bad tile position: " + pos);
+            }
+            setImage(new Image(Board.class.getResource(URI_BASE + id + ".png").toString()));
+            setFitHeight(SQUARE_SIZE);
+            setFitWidth(SQUARE_SIZE);
+            setLayoutX(BOARD_X + (pos % Habitat.SIDE) * SQUARE_SIZE);
+            setLayoutY(BOARD_Y + (pos / Habitat.SIDE) * SQUARE_SIZE);
     }
 
 
