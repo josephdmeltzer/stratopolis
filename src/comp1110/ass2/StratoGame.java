@@ -1,4 +1,8 @@
 package comp1110.ass2;
+import java.util.Arrays;
+
+import static java.util.Arrays.binarySearch;
+
 
 /**
  * This class provides the text interface for the Strato Game
@@ -20,9 +24,35 @@ public class StratoGame {
      * @return True if the tile placement is well-formed
      */
     static boolean isTilePlacementWellFormed(String tilePlacement) {
-        // FIXME Task 3: determine whether a tile placement is well-formed
-        return false;
+        char[] rowcol = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        char[] tiles = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U'};
+        char[] rote = {'A', 'B', 'C', 'D'};
+        if (tilePlacement.length() != 4) {
+            return false;
+        } else {
+            if ((binarySearch(rowcol, (tilePlacement.charAt(0)))) < 0) {
+                return false;
+            } else {
+                if ((binarySearch(rowcol, (tilePlacement.charAt(1)))) < 0) {
+                    return false;
+                } else {
+                    if ((binarySearch(rowcol, (tilePlacement.charAt(2)))) < 0) {
+                        return false;
+                    } else {
+                        if ((binarySearch(rowcol, (tilePlacement.charAt(3)))) < 0) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
     }
+
+
+
+
 
     /**
      * Determine whether a placement string is well-formed:
@@ -75,7 +105,7 @@ public class StratoGame {
      * @param placement A placement string
      * @return True if the placement is valid
      */
-    static boolean isPlacementValid(String placement) {
+    static boolean isPlacementValid(String placement, BoardState board) {
         // FIXME Task 6: determine whether a placement is valid
         return false;
     }
