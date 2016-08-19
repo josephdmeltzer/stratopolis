@@ -48,24 +48,16 @@ public class Viewer extends Application {
         // FIXME Task 5: implement the simple placement viewer
         /*check if the placement string is valid*/
 
-      //  this.getChildren().add(new Square());
-
 
             //place tile based on i and (i+1)
             //select tile based on (i+2)
             //rotate tile based on (i+3)
-//            if (pos < 0 || pos >= Habitat.PLACES) {
-//                throw new IllegalArgumentException("Bad tile position: " + pos);
-//            }
-//            setImage(new Image(Board.class.getResource(URI_BASE + id + ".png").toString()));
-//            setFitHeight(SQUARE_SIZE);
-//            setFitWidth(SQUARE_SIZE);
-//            setLayoutX(BOARD_X + (pos % Habitat.SIDE) * SQUARE_SIZE);
-//            setLayoutY(BOARD_Y + (pos / Habitat.SIDE) * SQUARE_SIZE);
 
-        ImageView iv1 = new ImageView();
-        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
         HBox hb = new HBox();
+        hb.getChildren().clear();
+        ImageView iv1 = new ImageView();
+        placementGrp.getChildren().clear();
+        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
         hb.getChildren().add(iv1);
         placementGrp.getChildren().add(hb);
     }
