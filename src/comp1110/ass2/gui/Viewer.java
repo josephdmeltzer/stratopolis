@@ -14,6 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import comp1110.ass2.gui.Setup;
+import comp1110.ass2.StratoGame;
+
 
 /**
  * A very simple viewer for piece placements in the link game.
@@ -46,11 +48,15 @@ public class Viewer extends Application {
 
     void makePlacement(String placement) {
         // FIXME Task 5: implement the simple placement viewer
-        /*check if the placement string is valid*/
-
+        /** Checks if the placement string is valid. Unfortunately, isPlacementWellFormed is NOT public.
+         * If you're sure that it's okay to do so, make it public and uncomment the next statement.*/
+        /*
+        if (!StratoGame.isPlacementWellFormed(placement))
+            throw new IllegalArgumentException("Bad placement" + placement);
+        */
 
             //place tile based on i and (i+1)
-            //select tile based on (i+2)
+            //select tile based on (i+2) -- Done: Manal
             //rotate tile based on (i+3)
 
         HBox hb = new HBox();
