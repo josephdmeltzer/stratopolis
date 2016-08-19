@@ -48,8 +48,11 @@ public class Viewer extends Application {
 
     void makePlacement(String placement) {
         // FIXME Task 5: implement the simple placement viewer
-        /** Checks if the placement string is valid. Unfortunately, isPlacementWellFormed is NOT public.
-         * If you're sure that it's okay to do so, make it public and uncomment the next statement.*/
+
+        /** The next blocked comment checks if the placement string is valid. Unfortunately, isPlacementWellFormed is NOT public.
+         * If you're sure that it's okay to do so, make it public and uncomment the next statement.
+         * -- Manal
+         * */
         /*
         if (!StratoGame.isPlacementWellFormed(placement))
             throw new IllegalArgumentException("Bad placement" + placement);
@@ -59,11 +62,10 @@ public class Viewer extends Application {
             //select tile based on (i+2) -- Done: Manal
             //rotate tile based on (i+3)
 
-        HBox hb = new HBox();
-        hb.getChildren().clear();
         ImageView iv1 = new ImageView();
-        placementGrp.getChildren().clear();
+        placementGrp.getChildren().clear(); // uncomment this line if you do not need the image to be removed each time
         iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
+        HBox hb = new HBox();
         hb.getChildren().add(iv1);
         placementGrp.getChildren().add(hb);
     }
