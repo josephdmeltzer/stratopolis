@@ -6,5 +6,5 @@ package comp1110.ass2;
 /*This describes the entire board, like in Kalaha.*/
 public class BoardState {
     public Colour playerTurn;
-    public Tiles[] all_the_tiles; /*this might not be implemented as an array in the end*/
+//    public Tiles[] all_the_tiles; /*this might not be implemented as an array in the end*/
 }

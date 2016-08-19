@@ -32,7 +32,10 @@ public class Viewer extends Application {
 
     private final Group root = new Group();
     private final Group controls = new Group();
+    private final Group placementGrp = new Group(); // I've added this -- might turn out to be useless
     TextField textField;
+
+
 
 
     /**
@@ -40,11 +43,14 @@ public class Viewer extends Application {
      *
      * @param placement  A valid placement string
      */
+
     void makePlacement(String placement) {
         // FIXME Task 5: implement the simple placement viewer
-        for (int i=0; i < placement.length() -3; i+=4) {
-            Tile a = new Tile();
-        }
+        /*check if the placement string is valid*/
+
+      //  this.getChildren().add(new Square());
+
+
             //place tile based on i and (i+1)
             //select tile based on (i+2)
             //rotate tile based on (i+3)
@@ -56,22 +62,14 @@ public class Viewer extends Application {
 //            setFitWidth(SQUARE_SIZE);
 //            setLayoutX(BOARD_X + (pos % Habitat.SIDE) * SQUARE_SIZE);
 //            setLayoutY(BOARD_Y + (pos / Habitat.SIDE) * SQUARE_SIZE);
+
+        ImageView iv1 = new ImageView();
+        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + 'U' + ".png").toString()));
+        HBox hb = new HBox();
+        hb.getChildren().add(iv1);
+        placementGrp.getChildren().add(hb);
     }
 
-        class Tile extends ImageView {
-            /**
-             * Construct a particular square at a given position
-             * @param id A character representing the type of square to be created.
-             * @param pos An integer reflecting the position on the grid (0 .. 15)
-             */
-            Tile() {
-                setImage(new Image(Board.class.getResource("../../../../assets/A.png").toString()));
-                setFitHeight(100);
-                setFitWidth(100);
-                setLayoutX(10);
-                setLayoutY(10);
-            }
-        }
 
 
     /**
@@ -105,8 +103,12 @@ public class Viewer extends Application {
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
 
         root.getChildren().add(controls);
+        root.getChildren().add(placementGrp);
+
 
         makeControls();
+
+
 
         primaryStage.setScene(scene);
         primaryStage.show();
