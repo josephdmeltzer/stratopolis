@@ -64,7 +64,7 @@ public class Viewer extends Application {
 //            setLayoutY(BOARD_Y + (pos / Habitat.SIDE) * SQUARE_SIZE);
 
         ImageView iv1 = new ImageView();
-        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + 'U' + ".png").toString()));
+        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
         HBox hb = new HBox();
         hb.getChildren().add(iv1);
         placementGrp.getChildren().add(hb);
