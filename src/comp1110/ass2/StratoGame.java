@@ -73,21 +73,21 @@ public class StratoGame {
         int[] counter = new int[20];
         Boolean c1 = len % 4 == 0 && numPieces >=1 && numPieces <= 41;
         if (!c1) return false;
-        for (int i = 0; i < len; i+=4){
+        for (int i = 0; i < len; i += 4){
             if (!isTilePlacementWellFormed("" + placement.charAt(i) + placement.charAt(i+1) + placement.charAt(i+2) + placement.charAt(i+3)))
                 return false;
         }
         if (! placement.substring(0,3).equals("MMUA")) return false;
         if (!((len >= 4 && placement.charAt(6) >= 'K' && placement.charAt(6) <= 'T') || len < 4))
             return false;
-        for (int i=14; i<len-1; i+=8) {
+        for (int i = 14; i< len - 1; i += 8) {
             if (!(placement.charAt(i) >= 'K' && placement.charAt(i) <= 'T')) return false;
         }
-        for (int i=10; i<len-1; i+=8) {
+        for (int i = 10; i < len - 1; i += 8) {
             if (!(placement.charAt(i) >= 'A' && placement.charAt(i) <= 'J')) return false;
         }
 
-        for (int i = 6; i < len; i+=4){
+        for (int i = 6; i < len; i += 4){
             int idx = placement.charAt(i) - 'A';
             counter[idx]++;
             if (counter[idx] >= 2)
