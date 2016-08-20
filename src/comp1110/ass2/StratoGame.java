@@ -98,6 +98,10 @@ public class StratoGame {
 
     }
 
+    // There seems to be no place where we have checked that no part of the tile falls out of the board
+    // I am not adding that functionality just yet because the spec doesn't mention that.
+    // It shouldn't be too hard though -- Manal
+
     /**
      * Determine whether a placement is valid.  To be valid, the placement must be well-formed
      * and each tile placement must follow the game's placement rules.
@@ -107,6 +111,16 @@ public class StratoGame {
      */
     static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
+        if (!isPlacementWellFormed(placement))
+            return false;
+        return isPlacementAdjacent(placement) || isPlacementOn(placement);
+    }
+
+    static boolean isPlacementOn(String placement){
+        return false;
+    }
+
+    static boolean isPlacementAdjacent(String placement){
         /*The next array is used to identify if a position on the board has been covered*/
         /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
         int[][] coverage = new int[26][26];
@@ -115,14 +129,52 @@ public class StratoGame {
 
         if (!isPlacementWellFormed(placement))
             return false;
-        for (int i = 4; i < placement.length(); i++){
+        for (int i = 0; i < placement.length(); i += 4){
             /*The first four characters must be MMUA .. skipping them*/
-            /*check if the tile placed is adjacent/on some other*/
+            if (i < 4)
+                continue;
+            /*check if the tile placed is adjacent some other*/
+            /*Fortunately, the rest of the tiles are all L-shaped*/
             /*To identify the squares covered by the tiles, we must have some sort of a representation of the tiles*/
+            /*For every tile, with the given orientation, identify the squares it covers*/
+            /*__At least__ one of them must be neighbours with a tile which is already placed*/
+
+            /*Recursive Algo: loop through and for each of the tiles placed identify their positions. For the next tile
+            * identify positions and check adjacency
+            * */
+
+            if (coverage[placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1)
+                return false;
+
+            else if (placement.charAt(i+3) == 'A'){
+                if (coverage[1 + placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1 ||
+                    coverage[placement.charAt(i) - 'A'][1 + placement.charAt(i+1) - 'A'] == 1)
+                    return false;
+
+            }
+
+            else if (placement.charAt(i+3) == 'B'){
+                if (coverage[-1 + placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1 ||
+                        coverage[placement.charAt(i) - 'A'][1 + placement.charAt(i+1) - 'A'] == 1)
+                    return false;
+            }
+
+            else if (placement.charAt(i+3) == 'C'){
+                if (coverage[-1 + placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1 ||
+                        coverage[placement.charAt(i) - 'A'][-1 + placement.charAt(i+1) - 'A'] == 1)
+                    return false;
+            }
+
+            else if (placement.charAt(i+3) == 'D'){
+                if (coverage[1 + placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1 ||
+                        coverage[placement.charAt(i) - 'A'][-1 + placement.charAt(i+1) - 'A'] == 1)
+                    return false;
+            }
+
+
 
 
         }
-
 
         return true;
     }
