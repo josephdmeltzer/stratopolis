@@ -133,6 +133,8 @@ public class StratoGame {
             /*The first four characters must be MMUA .. skipping them*/
             if (i < 4)
                 continue;
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i + 1) - 'A';
             /*check if the tile placed is adjacent some other*/
             /*Fortunately, the rest of the tiles are all L-shaped*/
             /*To identify the squares covered by the tiles, we must have some sort of a representation of the tiles*/
@@ -143,32 +145,80 @@ public class StratoGame {
             * identify positions and check adjacency
             * */
 
-            if (coverage[placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1)
-                return false;
+            if (coverage[col][row] == 1)
+                return false; // I think the logic is not entirely correct
+            // In this case we should probably check if the tile lies completely on top by calling another method
+            // returning false at this stage might give false positives
 
-            else if (placement.charAt(i+3) == 'A'){
-                if (coverage[1 + placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1 ||
-                    coverage[placement.charAt(i) - 'A'][1 + placement.charAt(i+1) - 'A'] == 1)
+            // I'll fix this in the morning
+
+            if (placement.charAt(i+3) == 'A'){
+                if (coverage[1 + col][row] == 1 ||
+                    coverage[col][1 + row] == 1)
                     return false;
+                if (coverage[2 + col][row] +
+                        coverage[1 + col][-1 + row] +
+                        coverage[1 + col][1 + row] +
+                        coverage[col][-1 + row] +
+                        coverage[col][2 + row] +
+                        coverage[-1 + col][row] +
+                        coverage[-1 + col][-1 + row] == 0)
+                    return false;
+                coverage[col][row] = 1;
+                coverage[1 + col][row] = 1;
+                coverage[col][1 + row] = 1;
 
             }
 
             else if (placement.charAt(i+3) == 'B'){
-                if (coverage[-1 + placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1 ||
-                        coverage[placement.charAt(i) - 'A'][1 + placement.charAt(i+1) - 'A'] == 1)
+                if (coverage[-1 + col][row] == 1 ||
+                        coverage[col][1 + row] == 1)
                     return false;
+                if (coverage[1 + col][row] +
+                        coverage[1 + col][1 + row] +
+                        coverage[col][-1 + row] +
+                        coverage[col][2 + row] +
+                        coverage[-1 + col][-1 + row] +
+                        coverage[-1 + col][1 + row] +
+                        coverage[-2 + col][row] == 0)
+                    return false;
+                coverage[col][row] = 1;
+                coverage[-1 + col][row] = 1;
+                coverage[col][1 + row] = 1;
             }
 
             else if (placement.charAt(i+3) == 'C'){
-                if (coverage[-1 + placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1 ||
-                        coverage[placement.charAt(i) - 'A'][-1 + placement.charAt(i+1) - 'A'] == 1)
+                if (coverage[-1 + col][row] == 1 ||
+                        coverage[col][-1 + row] == 1)
                     return false;
+                if (coverage[1 + col][row] +
+                        coverage[1 + col][1 + row] +
+                        coverage[col][-2 + row] +
+                        coverage[col][1 + row] +
+                        coverage[-1 + col][-1 + row] +
+                        coverage[-1 + col][1 + row] +
+                        coverage[-2 + col][row] == 0)
+                    return false;
+                coverage[col][row] = 1;
+                coverage[-1 + col][row] = 1;
+                coverage[col][-1 + row] = 1;
             }
 
             else if (placement.charAt(i+3) == 'D'){
-                if (coverage[1 + placement.charAt(i) - 'A'][placement.charAt(i+1) - 'A'] == 1 ||
-                        coverage[placement.charAt(i) - 'A'][-1 + placement.charAt(i+1) - 'A'] == 1)
+                if (coverage[1 + col][row] == 1 ||
+                        coverage[col][-1 + row] == 1)
                     return false;
+                if (coverage[2 + col][row] +
+                        coverage[1 + col][-1 + row] +
+                        coverage[1 + col][1 + row] +
+                        coverage[col][-2 + row] +
+                        coverage[col][1 + row] +
+                        coverage[-1 + col][row] +
+                        coverage[-1 + col][-1 + row] == 0)
+                    return false;
+                coverage[col][row] = 1;
+                coverage[1 + col][row] = 1;
+                coverage[col][-1 + row] = 1;
             }
 
 
