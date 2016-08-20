@@ -105,9 +105,26 @@ public class StratoGame {
      * @param placement A placement string
      * @return True if the placement is valid
      */
-    static boolean isPlacementValid(String placement, BoardState board) {
+    static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
-        return false;
+        /*The next array is used to identify if a position on the board has been covered*/
+        /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
+        int[][] coverage = new int[26][26];
+        coverage[12][12] = 1;
+        coverage[12][13] = 1;
+
+        if (!isPlacementWellFormed(placement))
+            return false;
+        for (int i = 4; i < placement.length(); i++){
+            /*The first four characters must be MMUA .. skipping them*/
+            /*check if the tile placed is adjacent/on some other*/
+            /*To identify the squares covered by the tiles, we must have some sort of a representation of the tiles*/
+
+
+        }
+
+
+        return true;
     }
 
     /**

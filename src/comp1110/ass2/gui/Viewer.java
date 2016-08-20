@@ -34,7 +34,7 @@ public class Viewer extends Application {
 
     private final Group root = new Group();
     private final Group controls = new Group();
-    private final Group placementGrp = new Group(); // I've added this -- might turn out to be useless
+    private final Group placementGrp = new Group();
     TextField textField;
 
 
@@ -105,10 +105,7 @@ public class Viewer extends Application {
         root.getChildren().add(controls);
         root.getChildren().add(placementGrp);
 
-
         makeControls();
-
-
 
         primaryStage.setScene(scene);
         primaryStage.show();
