@@ -113,10 +113,22 @@ public class StratoGame {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement))
             return false;
-        return isPlacementAdjacent(placement) || areColoursAlright(placement);
+        if (!isPlacementAdjacent(placement))
+            return false;
+        return areColoursAlright(placement);
     }
 
     private static boolean areColoursAlright(String placement){
+        /*To Joseph: You need to implement this function*/
+        /*What I think you could do is declare a 26 by 26 grid of Colours
+        * and for each tile over write the assocaited piece colour
+        * If you end up overwriting green on red or red on grren return false
+        * Also, have a look at the comments over the isPlacementAdjacent function
+        * Have a look at the Pieces enum. I've represented the tiles and added an associated function
+        * which *might* be useful. In the process you might have to implement a method which for a given piece and for a
+        * given orientation returns the position and/or comolurs of wach of the three blocks of the tiles -- Manal*/
+
+
         return false;
     }
 
@@ -171,9 +183,12 @@ public class StratoGame {
 
 
     // To Joseph: Treat the next function like a black box. I hope there are no bugs.
-    // It checks if tiles are adjacent to one another or if they are stacked they must be tile dangling
-    // It does NOT check if all satcked tiles straddle between two
+    // It checks if tiles are adjacent to one another or if they are stacked there must be no tile dangling
+    // It does NOT check if all stacked tiles straddle between two -- (*)
     // It also has nothing to do with colours -- Manal
+
+    // Also checking * shouldn't be difficult, it suffices to show that none of the tiles have same origin and orientation
+    // It's just a simple for loop. One of us could implement it -- Manal
 
     private static boolean isPlacementAdjacent(String placement){
         /*The next array is used to identify if a position on the board has been covered*/
@@ -274,9 +289,6 @@ public class StratoGame {
                 coverage[1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
             }
-
-
-
 
         }
 
