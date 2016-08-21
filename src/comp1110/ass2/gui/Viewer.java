@@ -63,11 +63,15 @@ public class Viewer extends Application {
                 ImageView iv1 = new ImageView();
                 /*placementGrp.getChildren().clear(); */
                 iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4*i+2) + ".png").toString()));
+                iv1.setFitWidth(40);
+                iv1.setPreserveRatio(true);
+                iv1.setSmooth(true);
+                iv1.setCache(true);
                 HBox hb = new HBox();
                 hb.getChildren().add(iv1);
                 placementGrp.getChildren().add(hb);
-                hb.setLayoutX(20+10*i);
-                hb.setLayoutY(20+10*i);
+                hb.setLayoutX( (((int) placement.charAt(i))-65)*20 );
+                hb.setLayoutY( (((int) placement.charAt(i))-65)*20 );
 
             }
         }
