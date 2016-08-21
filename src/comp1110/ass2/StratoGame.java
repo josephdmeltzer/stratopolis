@@ -113,14 +113,69 @@ public class StratoGame {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement))
             return false;
-        return isPlacementAdjacent(placement) || isPlacementOn(placement);
+        return isPlacementAdjacent(placement) || areColoursAlright(placement);
     }
 
-    static boolean isPlacementOn(String placement){
+    private static boolean areColoursAlright(String placement){
         return false;
     }
 
-    static boolean isPlacementAdjacent(String placement){
+    private static boolean isOnTop(String piece, String placement){
+        int[][] coverage = new int[26][26];
+        coverage[12][12] = 1;
+        coverage[12][13] = 1;
+
+        for (int i = 4; i < placement.length(); i += 4){
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i + 1) - 'A';
+            coverage[col][row]++;
+            if (placement.charAt(i+3) == 'A'){
+                coverage[1 + col][row]++;
+                coverage[col][1 + row]++;
+            }
+            else if (placement.charAt(i + 3) == 'B'){
+                coverage[-1 + col][row]++;
+                coverage[col][1 + row]++;
+            }
+            else if (placement.charAt(i + 3) == 'C'){
+                coverage[-1 + col][row]++;
+                coverage[col][-1 + row]++;
+            }
+            else if (placement.charAt(i + 3) == 'D'){
+                coverage[1 + col][row]++;
+                coverage[col][-1 + row]++;
+            }
+        }
+
+        int idx1 = piece.charAt(0) - 'A';
+        int idx2 = piece.charAt(1) - 'A';
+        if (coverage[idx1][idx2] == 0)
+            return false;
+
+        if (piece.charAt(3) == 'A')
+            if (!(coverage[1 + idx1][idx2] == coverage[idx1][1 + idx2] && coverage[1 + idx1][idx2] == coverage[idx1][idx2]))
+                return false;
+        else if (piece.charAt(3) == 'B')
+            if(!(coverage[idx1][idx2] == coverage[-1 + idx1][idx2] && coverage[-1 + idx1][idx2] == coverage[idx1][1 + idx2]))
+                return false;
+        else if (piece.charAt(3) == 'C')
+            if (!(coverage[-1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2]))
+                return false;
+        else if (piece.charAt(3) == 'D')
+            if (!(coverage[1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2]))
+                return false;
+        else
+            System.out.println("call from isPlacementAdjacent - should not reach here");
+        return true;
+    }
+
+
+    // To Joseph: Treat the next function like a black box. I hope there are no bugs.
+    // It checks if tiles are adjacent to one another or if they are stacked they must be tile dangling
+    // It does NOT check if all satcked tiles straddle between two
+    // It also has nothing to do with colours -- Manal
+
+    private static boolean isPlacementAdjacent(String placement){
         /*The next array is used to identify if a position on the board has been covered*/
         /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
         int[][] coverage = new int[26][26];
@@ -145,12 +200,11 @@ public class StratoGame {
             * identify positions and check adjacency
             * */
 
-            if (coverage[col][row] == 1)
-                return false; // I think the logic is not entirely correct
-            // In this case we should probably check if the tile lies completely on top by calling another method
-            // returning false at this stage might give false positives
-
-            // I'll fix this in the morning
+            if (coverage[col][row] != 0){
+                if (!isOnTop(placement.substring(i, i + 3), placement.substring(0, i - 1)))
+                    return false;
+                continue;
+            }
 
             if (placement.charAt(i+3) == 'A'){
                 if (coverage[1 + col][row] == 1 ||

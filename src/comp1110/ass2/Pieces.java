@@ -38,4 +38,6 @@ public enum Pieces {
         colours[1] = b;
         colours[2] = c;
     }
+
+
 }
