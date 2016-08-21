@@ -196,7 +196,7 @@ public class StratoGame {
     private static boolean isOnTop(String piece, String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
-        coverage[12][13] = 1;
+        coverage[13][12] = 1;
 
         for (int i = 4; i < placement.length(); i += 4){
             int col = placement.charAt(i) - 'A';
@@ -256,7 +256,7 @@ public class StratoGame {
         /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
-        coverage[12][13] = 1;
+        coverage[13][12] = 1;
 
         if (!isPlacementWellFormed(placement))
             return false;
