@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import comp1110.ass2.gui.Setup;
 import comp1110.ass2.StratoGame;
+import comp1110.ass2.Pieces;
+
+import static comp1110.ass2.Pieces.K;
 
 
 /**
@@ -68,6 +71,7 @@ public class Viewer extends Application {
         HBox hb = new HBox();
         hb.getChildren().add(iv1);
         placementGrp.getChildren().add(hb);
+        System.out.println();
     }
 
 

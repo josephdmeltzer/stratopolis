@@ -39,5 +39,9 @@ public enum Pieces {
         colours[2] = c;
     }
 
+    public Colour[] getColours(Pieces piece){
+        return piece.colours;
+    }
+
 
 }
