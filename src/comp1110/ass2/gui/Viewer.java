@@ -17,8 +17,6 @@ import comp1110.ass2.gui.Setup;
 import comp1110.ass2.StratoGame;
 import comp1110.ass2.Pieces;
 
-import static comp1110.ass2.Pieces.K;
-
 
 /**
  * A very simple viewer for piece placements in the link game.
@@ -55,10 +53,14 @@ public class Viewer extends Application {
         /*String[] variableNames = {"iv1","iv2","iv3","iv4","iv5","iv6","iv7","iv8","iv9","iv10","iv11","iv12","iv13","iv14","iv15","iv16","iv17","iv18","iv19","iv20","iv21","iv22","iv23","iv24","iv25","iv26","iv27","iv28","iv29","iv30","iv31","iv32","iv33","iv34","iv35","iv36","iv37","iv38","iv39","iv40"};*/
         /*Image[] tiles = */
 
+        // Sorry, my bad. I realised that we are not supposed to change the scope for any built in functions. So I've commented
+        // the next exception out.
 
-        if (!StratoGame.isPlacementWellFormed(placement)){
+        // Also, good job upto now -- Manal
+
+        /*if (!StratoGame.isPlacementWellFormed(placement)){
             throw new IllegalArgumentException("Bad placement " + placement);
-        } else{
+        } else{*/
             for (int i=0; i<(placement.length()/4); i++){
                 ImageView iv1 = new ImageView();
                 /*placementGrp.getChildren().clear(); */
@@ -74,8 +76,6 @@ public class Viewer extends Application {
                 hb.setLayoutY( (((int) placement.charAt(i))-65)*20 );
 
             }
-        }
-
 
             //place tile based on i and (i+1)
             //select tile based on (i+2) -- Done: Manal
