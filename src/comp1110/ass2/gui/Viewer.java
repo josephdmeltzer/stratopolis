@@ -63,15 +63,32 @@ public class Viewer extends Application {
                 ImageView iv1 = new ImageView();
                 /*placementGrp.getChildren().clear(); */
                 iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4*i+2) + ".png").toString()));
-                iv1.setFitWidth(40);
+                iv1.setRotate((((int) placement.charAt(i+3))-65)*90);
+                iv1.setFitWidth(80);
                 iv1.setPreserveRatio(true);
                 iv1.setSmooth(true);
                 iv1.setCache(true);
                 HBox hb = new HBox();
                 hb.getChildren().add(iv1);
                 placementGrp.getChildren().add(hb);
-                hb.setLayoutX( (((int) placement.charAt(i))-65)*20 );
-                hb.setLayoutY( (((int) placement.charAt(i))-65)*20 );
+                switch (placement.charAt(i+3)){
+                    case 'A':
+                        hb.setLayoutX( (((int) placement.charAt(i))-65)*10 );
+                        hb.setLayoutY( (((int) placement.charAt(i+1))-65)*10 );
+                        break;
+                    case 'B':
+                        hb.setLayoutX( (((int) placement.charAt(i))-65+1)*10 );
+                        hb.setLayoutY( (((int) placement.charAt(i+1))-65)*10 );
+                        break;
+                    case 'C':
+                        hb.setLayoutX( (((int) placement.charAt(i))-65+1)*10 );
+                        hb.setLayoutY( (((int) placement.charAt(i+1))-65+1)*10 );
+                        break;
+                    case 'D':
+                        hb.setLayoutX( (((int) placement.charAt(i))-65)*10 );
+                        hb.setLayoutY( (((int) placement.charAt(i+1))-65+1)*10 );
+                        break;
+                }
 
             }
         }
