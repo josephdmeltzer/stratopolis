@@ -122,7 +122,7 @@ public class StratoGame {
         /*To Joseph: You need to implement this function*/
         /*What I think you could do is declare a 26 by 26 grid of Colours
         * and for each tile over write the assocaited piece colour
-        * If you're overwritnig the same thing return false
+        * If you end up overwriting green on red or red on grren return false
         * Also, have a look at the comments over the isPlacementAdjacent function
         * Have a look at the Pieces enum. I've represented the tiles and added an associated function
         * which *might* be useful. In the process you might have to implement a method which for a given piece and for a
