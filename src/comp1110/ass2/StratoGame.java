@@ -1,6 +1,10 @@
 package comp1110.ass2;
 import java.util.Arrays;
 
+import static comp1110.ass2.Colour.GREEN;
+import static comp1110.ass2.Colour.RED;
+import static comp1110.ass2.Colour.BLACK;
+import static comp1110.ass2.Pieces.getColoursS;
 import static java.util.Arrays.binarySearch;
 
 
@@ -128,6 +132,63 @@ public class StratoGame {
         * which *might* be useful. In the process you might have to implement a method which for a given piece and for a
         * given orientation returns the position and/or comolurs of wach of the three blocks of the tiles -- Manal*/
 
+        Colour[][] colourTable = new Colour[26][26];
+        colourTable[12][12] = RED;
+        colourTable[12][13] = GREEN;
+
+        for (int i=4; i < placement.length(); i+=4) {
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i+1) - 'A';
+
+            if (colourTable[col][row] == BLACK || getColoursS(placement.charAt(i+2))[0] == BLACK || colourTable[col][row] == getColoursS(placement.charAt(i+2))[0]) {
+                colourTable[col][row] = getColoursS(placement.charAt(i+2))[0];
+            }
+            else return false;
+
+            if (placement.charAt(i+3) == 'A') {
+
+                if (colourTable[col+1][row] == BLACK || getColoursS(placement.charAt(i+2))[1] == BLACK || colourTable[col][row+1] == getColoursS(placement.charAt(i+2))[1]) {
+                    colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if (colourTable[col][row+1] == BLACK || getColoursS(placement.charAt(i+2))[2] == BLACK || colourTable[col][row+1] == getColoursS(placement.charAt(i+2))[2]) {
+                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i+3) == 'B') {
+                if (colourTable[col][row-1] == BLACK || getColoursS(placement.charAt(i+2))[1] == BLACK || colourTable[col][row-1] == getColoursS(placement.charAt(i+2))[1]) {
+                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if (colourTable[col-1][row] == BLACK || getColoursS(placement.charAt(i+2))[2] == BLACK || colourTable[col-1][row] == getColoursS(placement.charAt(i+2))[2]) {
+                    colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i+3) == 'C') {
+                if (colourTable[col-1][row] == BLACK || getColoursS(placement.charAt(i+2))[1] == BLACK || colourTable[col-1][row] == getColoursS(placement.charAt(i+2))[1]) {
+                    colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if (colourTable[col][row-1] == BLACK || getColoursS(placement.charAt(i+2))[2] == BLACK || colourTable[col][row-1] == getColoursS(placement.charAt(i+2))[2]) {
+                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i+3) == 'D') {
+                if (colourTable[col][row+1] == BLACK || getColoursS(placement.charAt(i+2))[1] == BLACK || colourTable[col][row+1] == getColoursS(placement.charAt(i+2))[1]) {
+                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if (colourTable[col+1][row] == BLACK || getColoursS(placement.charAt(i+2))[2] == BLACK || colourTable[col+1][row] == getColoursS(placement.charAt(i+2))[2]) {
+                    colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+
+
+        }
 
         return false;
     }

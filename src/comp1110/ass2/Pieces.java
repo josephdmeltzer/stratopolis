@@ -43,5 +43,5 @@ public enum Pieces {
         return piece.colours;
     }
 
-
+    public static Colour[] getColoursS(char piece) { return Pieces.valueOf(""+piece).colours; }
 }
