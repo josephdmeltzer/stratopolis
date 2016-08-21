@@ -183,8 +183,8 @@ public class StratoGame {
 
 
     // To Joseph: Treat the next function like a black box. I hope there are no bugs.
-    // It checks if tiles are adjacent to one another or if they are stacked they must be tile dangling
-    // It does NOT check if all satcked tiles straddle between two -- (*)
+    // It checks if tiles are adjacent to one another or if they are stacked there must be no tile dangling
+    // It does NOT check if all stacked tiles straddle between two -- (*)
     // It also has nothing to do with colours -- Manal
 
     // Also checking * shouldn't be difficult, it suffices to show that none of the tiles have same origin and orientation
@@ -289,7 +289,7 @@ public class StratoGame {
                 coverage[1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
             }
-            
+
         }
 
         return true;
