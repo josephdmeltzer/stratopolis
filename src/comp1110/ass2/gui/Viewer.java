@@ -17,6 +17,7 @@ import comp1110.ass2.gui.Setup;
 import comp1110.ass2.StratoGame;
 
 
+
 /**
  * A very simple viewer for piece placements in the link game.
  *
@@ -48,26 +49,33 @@ public class Viewer extends Application {
 
     void makePlacement(String placement) {
         // FIXME Task 5: implement the simple placement viewer
+        char[] rowcol = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        /*String[] variableNames = {"iv1","iv2","iv3","iv4","iv5","iv6","iv7","iv8","iv9","iv10","iv11","iv12","iv13","iv14","iv15","iv16","iv17","iv18","iv19","iv20","iv21","iv22","iv23","iv24","iv25","iv26","iv27","iv28","iv29","iv30","iv31","iv32","iv33","iv34","iv35","iv36","iv37","iv38","iv39","iv40"};*/
+        /*Image[] tiles = */
 
-        /** The next blocked comment checks if the placement string is valid. Unfortunately, isPlacementWellFormed is NOT public.
-         * If you're sure that it's okay to do so, make it public and uncomment the next statement.
-         * -- Manal
-         * */
-        /*
-        if (!StratoGame.isPlacementWellFormed(placement))
-            throw new IllegalArgumentException("Bad placement" + placement);
-        */
+
+        if (!StratoGame.isPlacementWellFormed(placement)){
+            throw new IllegalArgumentException("Bad placement " + placement);
+        } else{
+            for (int i=0; i<(placement.length()/4); i++){
+                ImageView iv1 = new ImageView();
+                /*placementGrp.getChildren().clear(); */
+                iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4*i+2) + ".png").toString()));
+                HBox hb = new HBox();
+                hb.getChildren().add(iv1);
+                placementGrp.getChildren().add(hb);
+                hb.setLayoutX(20+10*i);
+                hb.setLayoutY(20+10*i);
+
+            }
+        }
+
 
             //place tile based on i and (i+1)
             //select tile based on (i+2) -- Done: Manal
             //rotate tile based on (i+3)
 
-        ImageView iv1 = new ImageView();
-        placementGrp.getChildren().clear(); // uncomment this line if you do not need the image to be removed each time
-        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
-        HBox hb = new HBox();
-        hb.getChildren().add(iv1);
-        placementGrp.getChildren().add(hb);
+
     }
 
 
