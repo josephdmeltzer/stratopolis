@@ -140,48 +140,48 @@ public class StratoGame {
             int col = placement.charAt(i) - 'A';
             int row = placement.charAt(i+1) - 'A';
 
-            if (colourTable[col][row] == BLACK || getColoursS(placement.charAt(i+2))[0] == BLACK || colourTable[col][row] == getColoursS(placement.charAt(i+2))[0]) {
+            if ((colourTable[col][row] != RED || getColoursS(placement.charAt(i+2))[0] != GREEN) && (colourTable[col][row] != GREEN || getColoursS(placement.charAt(i+2))[0] != RED)) {
                 colourTable[col][row] = getColoursS(placement.charAt(i+2))[0];
             }
             else return false;
 
             if (placement.charAt(i+3) == 'A') {
 
-                if (colourTable[col+1][row] == BLACK || getColoursS(placement.charAt(i+2))[1] == BLACK || colourTable[col][row+1] == getColoursS(placement.charAt(i+2))[1]) {
+                if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
                     colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[1];
                 }
                 else return false;
-                if (colourTable[col][row+1] == BLACK || getColoursS(placement.charAt(i+2))[2] == BLACK || colourTable[col][row+1] == getColoursS(placement.charAt(i+2))[2]) {
+                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
                     colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[2];
                 }
                 else return false;
             }
             else if (placement.charAt(i+3) == 'B') {
-                if (colourTable[col][row-1] == BLACK || getColoursS(placement.charAt(i+2))[1] == BLACK || colourTable[col][row-1] == getColoursS(placement.charAt(i+2))[1]) {
+                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
                     colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[1];
                 }
                 else return false;
-                if (colourTable[col-1][row] == BLACK || getColoursS(placement.charAt(i+2))[2] == BLACK || colourTable[col-1][row] == getColoursS(placement.charAt(i+2))[2]) {
+                if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
                     colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[2];
                 }
                 else return false;
             }
             else if (placement.charAt(i+3) == 'C') {
-                if (colourTable[col-1][row] == BLACK || getColoursS(placement.charAt(i+2))[1] == BLACK || colourTable[col-1][row] == getColoursS(placement.charAt(i+2))[1]) {
+                if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
                     colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[1];
                 }
                 else return false;
-                if (colourTable[col][row-1] == BLACK || getColoursS(placement.charAt(i+2))[2] == BLACK || colourTable[col][row-1] == getColoursS(placement.charAt(i+2))[2]) {
+                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
                     colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[2];
                 }
                 else return false;
             }
             else if (placement.charAt(i+3) == 'D') {
-                if (colourTable[col][row+1] == BLACK || getColoursS(placement.charAt(i+2))[1] == BLACK || colourTable[col][row+1] == getColoursS(placement.charAt(i+2))[1]) {
+                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
                     colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[1];
                 }
                 else return false;
-                if (colourTable[col+1][row] == BLACK || getColoursS(placement.charAt(i+2))[2] == BLACK || colourTable[col+1][row] == getColoursS(placement.charAt(i+2))[2]) {
+                if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
                     colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[2];
                 }
                 else return false;
