@@ -55,13 +55,14 @@ public class StratoGame {
      */
     public static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 4: determine whether a placement is well-formed
+        if (placement == null) return false;
         int len = placement.length();
         int numPieces = len/4;
         int[] counter = new int[20];
         Boolean c1 = (len % 4 == 0) && (numPieces >=1) && (numPieces <= 41);
         if (!c1) return false;
         for (int i = 0; i < len; i += 4){ /*note: name.substring(0,n) returns only up to the (n-1)the character*/
-            if (!(isTilePlacementWellFormed(placement.substring(i+0,i+4))))
+            if (!(isTilePlacementWellFormed(placement.substring(i,i+4))))
                 return false;
         }
         if (! placement.substring(0,4).equals("MMUA")) return false;
@@ -77,12 +78,15 @@ public class StratoGame {
                 if (!(placement.charAt(i) >= 'A' && placement.charAt(i) <= 'J')) return false;
             }
         }
-        if (len>4){
-            for (int i = 6; i < len; i += 4){
-                int idx = placement.charAt(i) - 'A';
-                counter[idx]++;
-                if (counter[idx] >= 2)
-                    return false;
+        for (int i = 6; i < len; i += 4){
+            int idx = placement.charAt(i) - 'A';
+          //  System.out.print("Index" + idx + "in array");
+          //  System.out.print("Is " + placement.charAt(i));
+            counter[idx]++;
+           // System.out.println("has a count of" + counter[idx]);
+            if (counter[idx] > 2) {
+                //System.out.println(counter[idx] + "for " + placement.charAt(i));
+                return false;
             }
         }
 
@@ -107,8 +111,18 @@ public class StratoGame {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
         if (!isPlacementAdjacent(placement)) return false;
-        if (!tileStraddle(placement)) return false;
+        if (!myStraddle(placement)) return false;
         return areColoursAlright(placement);
+    }
+
+    private static boolean myStraddle(String placement){
+        for (int i = 4; i < placement.length(); i += 4){
+            for (int j = i + 4; j < placement.length();  j+= 4){
+                if (placement.charAt(i) == placement.charAt(j) && placement.charAt(i + 1) == placement.charAt(j + 1) && placement.charAt(i + 3) == placement.charAt(j + 3))
+                    return false;
+            }
+        }
+        return true;
     }
 
     private static boolean tileStraddle(String placement) {
@@ -218,7 +232,7 @@ public class StratoGame {
     private static boolean isOnTop(String piece, String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
-        coverage[13][12] = 1;
+        coverage[12][13] = 1;
 
         for (int i = 4; i < placement.length(); i += 4){
             int col = placement.charAt(i) - 'A';
@@ -274,18 +288,17 @@ public class StratoGame {
     // It's just a simple for loop. One of us could implement it -- Manal
 
     private static boolean isPlacementAdjacent(String placement){
+        System.out.println(placement);
         /*The next array is used to identify if a position on the board has been covered*/
         /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
-        coverage[13][12] = 1;
+        coverage[12][13] = 1;
 
         if (!isPlacementWellFormed(placement))
             return false;
-        for (int i = 0; i < placement.length(); i += 4){
+        for (int i = 4; i < placement.length(); i += 4){
             /*The first four characters must be MMUA .. skipping them*/
-            if (i < 4)
-                continue;
             int col = placement.charAt(i) - 'A';
             int row = placement.charAt(i + 1) - 'A';
             /*check if the tile placed is adjacent some other*/
@@ -299,8 +312,11 @@ public class StratoGame {
             * */
 
             if (coverage[col][row] != 0){
-                if (!isOnTop(placement.substring(i, i + 3), placement.substring(0, i - 1)))
+                if (!isOnTop(placement.substring(i, i + 4), placement.substring(0, i))) {
+                    System.out.println("2");
                     return false;
+                }
+                System.out.println("3");
                 continue;
             }
 
