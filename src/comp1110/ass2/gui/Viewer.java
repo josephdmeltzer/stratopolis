@@ -80,29 +80,35 @@ public class Viewer extends Application {
             for (int i=0; i<(placement.length()/4); i++){
                 ImageView iv1 = new ImageView();
                 iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4*i+2) + ".png").toString()));
-                iv1.setRotate((((int) placement.charAt(i+3))-65)*90);
+                iv1.setRotate((((int) placement.charAt(4*i+3))-65)*90);
                 iv1.setFitWidth(48);
                 iv1.setPreserveRatio(true);
                 iv1.setSmooth(true);
                 iv1.setCache(true);
                 gridPane.getChildren().add(iv1);
-                GridPane.setRowIndex(iv1,5+i);
-                GridPane.setColumnIndex(iv1,5+i);
                 GridPane.setRowSpan(iv1,2);
                 GridPane.setColumnSpan(iv1,2);
-                placementGrp.getChildren().add(iv1);
-
-                /*Zhixian: the following just displays the coordinates of the tile on the screen for debugging
-                *It seems that the setRowIndex is working for the text, but not for the tile images*/
-                String coord = java.lang.Integer.toString(getRowIndex(iv1))+java.lang.Integer.toString(getColumnIndex(iv1));
-                Text testing = new Text("coord: "+ coord );
-                gridPane.getChildren().add(testing);
-                GridPane.setRowIndex(testing,1+i);
-                GridPane.setColumnIndex(testing,2+i);
-                GridPane.setRowSpan(testing,4);
+                switch (placement.charAt(4*i+3)){
+                    case 'A':
+                        GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65));
+                        GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65));
+                        break;
+                    case 'B':
+                        GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65-1));
+                        GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65));
+                        break;
+                    case 'C':
+                        GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65-1));
+                        GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65-1));
+                        break;
+                    case 'D':
+                        GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65));
+                        GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65-1));
+                        break;
+                }
             }
+            placementGrp.getChildren().add(gridPane);
 
-            root.getChildren().add(gridPane);
         }
 
 
