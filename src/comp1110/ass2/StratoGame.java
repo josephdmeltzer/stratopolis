@@ -1,5 +1,6 @@
 package comp1110.ass2;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import static comp1110.ass2.Colour.GREEN;
 import static comp1110.ass2.Colour.RED;
@@ -15,6 +16,21 @@ import static java.util.Arrays.binarySearch;
  * (http://boardgamegeek.com/boardgame/125022/stratopolis)
  */
 public class StratoGame {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        String testing = in.next();
+        if (isPlacementWellFormed(testing)){
+            System.out.println("well-formed");
+        } else{
+            System.out.println("not well-formed");
+        }
+        if ('A'<'B'){
+            System.out.println("A<B");
+        }
+        String tests = "MMUA";
+        System.out.println(tests.substring(0,2));
+        System.out.println((int) tests.charAt(0));
+    }
 
     /**
      * Determine whether a tile placement is well-formed according to the following:
@@ -34,23 +50,7 @@ public class StratoGame {
         if (tilePlacement.length() != 4) {
             return false;
         } else {
-            if ((binarySearch(rowcol, (tilePlacement.charAt(0)))) < 0) {
-                return false;
-            } else {
-                if ((binarySearch(rowcol, (tilePlacement.charAt(1)))) < 0) {
-                    return false;
-                } else {
-                    if ((binarySearch(rowcol, (tilePlacement.charAt(2)))) < 0) {
-                        return false;
-                    } else {
-                        if ((binarySearch(rowcol, (tilePlacement.charAt(3)))) < 0) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
-                }
-            }
+            return ('A'<=tilePlacement.charAt(0) && tilePlacement.charAt(0)<='Z' && 'A'<=tilePlacement.charAt(1) && tilePlacement.charAt(1)<='Z' && 'A'<=tilePlacement.charAt(2) && tilePlacement.charAt(2)<='U' && 'A'<=tilePlacement.charAt(3) && tilePlacement.charAt(3)<='D');
         }
     }
 
@@ -70,33 +70,40 @@ public class StratoGame {
      * @param placement A string describing a placement of one or more tiles
      * @return True if the placement is well-formed
      */
-    static boolean isPlacementWellFormed(String placement) {
+    public static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 4: determine whether a placement is well-formed
         int len = placement.length();
         int numPieces = len/4;
         int[] counter = new int[20];
-        Boolean c1 = len % 4 == 0 && numPieces >=1 && numPieces <= 41;
+        Boolean c1 = (len % 4 == 0) && (numPieces >=1) && (numPieces <= 41);
         if (!c1) return false;
-        for (int i = 0; i < len; i += 4){
-            if (!isTilePlacementWellFormed("" + placement.charAt(i) + placement.charAt(i+1) + placement.charAt(i+2) + placement.charAt(i+3)))
+        for (int i = 0; i < len; i += 4){ /*note: name.substring(0,n) returns only up to the (n-1)the character*/
+            if (!(isTilePlacementWellFormed(placement.substring(i+0,i+4))))
                 return false;
         }
-        if (! placement.substring(0,3).equals("MMUA")) return false;
-        if (!((len >= 4 && placement.charAt(6) >= 'K' && placement.charAt(6) <= 'T') || len < 4))
-            return false;
-        for (int i = 14; i< len - 1; i += 8) {
-            if (!(placement.charAt(i) >= 'K' && placement.charAt(i) <= 'T')) return false;
+        if (! placement.substring(0,4).equals("MMUA")) return false;
+        /*if (!((len >= 4 && placement.charAt(6) >= 'K' && placement.charAt(6) <= 'T') || len <= 4)) /*out of range*/
+            /*return false;*/
+        if (len>4){
+            for (int i = 6; i< len - 1; i += 8) {
+                if (!(placement.charAt(i) >= 'K' && placement.charAt(i) <= 'T')) return false;
+            }
         }
-        for (int i = 10; i < len - 1; i += 8) {
-            if (!(placement.charAt(i) >= 'A' && placement.charAt(i) <= 'J')) return false;
+        if (len>8){
+            for (int i = 10; i < len - 1; i += 8) {
+                if (!(placement.charAt(i) >= 'A' && placement.charAt(i) <= 'J')) return false;
+            }
+        }
+        if (len>4){
+            for (int i = 6; i < len; i += 4){
+                int idx = placement.charAt(i) - 'A';
+                counter[idx]++;
+                if (counter[idx] >= 2)
+                    return false;
+            }
         }
 
-        for (int i = 6; i < len; i += 4){
-            int idx = placement.charAt(i) - 'A';
-            counter[idx]++;
-            if (counter[idx] >= 2)
-                return false;
-        }
+
 
         return true;
 
