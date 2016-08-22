@@ -1,12 +1,7 @@
 package comp1110.ass2;
-import java.util.Arrays;
-import java.util.Scanner;
 
-import static comp1110.ass2.Colour.GREEN;
-import static comp1110.ass2.Colour.RED;
-import static comp1110.ass2.Colour.BLACK;
+import static comp1110.ass2.Colour.*;
 import static comp1110.ass2.Pieces.getColoursS;
-import static java.util.Arrays.binarySearch;
 
 
 /**
@@ -36,7 +31,6 @@ public class StratoGame {
             return ('A'<=tilePlacement.charAt(0) && tilePlacement.charAt(0)<='Z' && 'A'<=tilePlacement.charAt(1) && tilePlacement.charAt(1)<='Z' && 'A'<=tilePlacement.charAt(2) && tilePlacement.charAt(2)<='U' && 'A'<=tilePlacement.charAt(3) && tilePlacement.charAt(3)<='D');
         }
     }
-
 
 
 
@@ -110,9 +104,12 @@ public class StratoGame {
     static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
-        if (!outOfBounds(placement)) return false;
-        if (!isPlacementAdjacent(placement)) return false;
-        if (!tileStraddle(placement)) return false;
+        if (!outOfBounds(placement)) {
+            return false;}
+        if (!isPlacementAdjacent(placement)) {
+            return false;}
+        if (!tileStraddle(placement)){
+            return false;}
         return areColoursAlright(placement);
     }
 
@@ -307,14 +304,10 @@ public class StratoGame {
 
     // To Joseph: Treat the next function like a black box. I hope there are no bugs.
     // It checks if tiles are adjacent to one another or if they are stacked there must be no tile dangling
-    // It does NOT check if all stacked tiles straddle between two -- (*)
+    // It does NOT check if all stacked tiles straddle between two
     // It also has nothing to do with colours -- Manal
 
-    // Also checking * shouldn't be difficult, it suffices to show that none of the tiles have same origin and orientation
-    // It's just a simple for loop. One of us could implement it -- Manal
-
     private static boolean isPlacementAdjacent(String placement){
-       // System.out.println(placement);
         /*The next array is used to identify if a position on the board has been covered*/
         /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
         int[][] coverage = new int[26][26];
@@ -339,26 +332,22 @@ public class StratoGame {
 
             if (coverage[col][row] != 0){
                 if (!isOnTop(placement.substring(i, i + 4), placement.substring(0, i))) {
-                    System.out.println("failed because onTop failed");
                     return false;
                 }
                 continue;
             }
 
             if (placement.charAt(i+3) == 'A'){
-                if (coverage[1 + col][row] == 1 ||
-                    coverage[col][1 + row] == 1){
-                    System.out.println("A: checkong other two failed");
+                if ((col < 25 && coverage[1 + col][row] == 1) ||
+                        (row < 25 && coverage[col][1 + row] == 1)){
                     return false;}
-                System.out.println("col = " + col + "row = " + row);
-                if (coverage[2 + col][row] +
-                        coverage[1 + col][-1 + row] +
-                        coverage[1 + col][1 + row] +
-                        coverage[col][-1 + row] +
-                        coverage[col][2 + row] +
-                        coverage[-1 + col][row] +
-                        coverage[-1 + col][1 + row] == 0){
-                    System.out.println("A: neighbours causing problem");
+                if ((2 + col < 26 && coverage[2 + col][row] == 0) &&
+                        (1 + col < 26 && row - 1 >= 0 && coverage[1 + col][-1 + row] == 0) &&
+                        (col + 1 < 26 && row + 1 < 26 && coverage[1 + col][1 + row] == 0) &&
+                        (row - 1 >= 0 && coverage[col][-1 + row] == 0) &&
+                        (row + 2 < 26 && coverage[col][2 + row] == 0) &&
+                        (col -1 >= 0 && coverage[-1 + col][row] == 0) &&
+                        (col - 1 >= 0 && row + 1 < 26 && coverage[-1 + col][1 + row] == 0)){
                     return false;
                 }
                 coverage[col][row] = 1;
@@ -368,19 +357,17 @@ public class StratoGame {
             }
 
             else if (placement.charAt(i+3) == 'B'){
-                if (coverage[-1 + col][row] == 1 ||
-                        coverage[col][1 + row] == 1) {
-                    System.out.println("B: checkong other two failed");
+                if ((col - 1 >= 0 && coverage[-1 + col][row] == 1) ||
+                        (row + 1 < 26 && coverage[col][1 + row] == 1)) {
                     return false;
                 }
-                if (coverage[1 + col][row] +
-                        coverage[1 + col][1 + row] +
-                        coverage[col][-1 + row] +
-                        coverage[col][2 + row] +
-                        coverage[-1 + col][-1 + row] +
-                        coverage[-1 + col][1 + row] +
-                        coverage[-2 + col][row] == 0) {
-                    System.out.println("B: neighbours causing problem");
+                if (((1 + col < 26 && coverage[1 + col][row] == 0) &&
+                        (1 + col < 26 && 1 + row < 26 && coverage[1 + col][1 + row] == 0) &&
+                        (row - 1 >= 0 && coverage[col][-1 + row] == 0) &&
+                        (row + 2 < 26 && coverage[col][2 + row] == 0) &&
+                        (col - 1 >= 0 && row - 1 >= 0 && coverage[-1 + col][-1 + row] == 0) &&
+                        (col - 1 >= 0 && row + 1 < 26 && coverage[-1 + col][1 + row] == 0) &&
+                        (col - 2 >= 0 && coverage[-2 + col][row] == 0))) {
                     return false;
                 }
                 coverage[col][row] = 1;
@@ -389,19 +376,17 @@ public class StratoGame {
             }
 
             else if (placement.charAt(i+3) == 'C'){
-                if (coverage[-1 + col][row] == 1 ||
-                        coverage[col][-1 + row] == 1) {
-                    System.out.println("C: other two");
+                if ((col - 1 >= 0 && coverage[-1 + col][row] == 1) ||
+                        (row - 1 >= 0 && coverage[col][-1 + row] == 1)) {
                     return false;
                 }
-                if (coverage[1 + col][row] +
-                        coverage[1 + col][1 + row] +
-                        coverage[col][-2 + row] +
-                        coverage[col][1 + row] +
-                        coverage[-1 + col][-1 + row] +
-                        coverage[-1 + col][1 + row] +
-                        coverage[-2 + col][row] == 0){
-                    System.out.println("C neighbours");
+                if ((col + 1 < 26 && coverage[1 + col][row] == 0 ) &&
+                        (col + 1 < 26 && row - 1 >= 0 && coverage[1 + col][-1 + row] == 0) &&
+                        (row - 2 >= 0 && coverage[col][-2 + row] == 0) &&
+                        (row + 1 < 26 && coverage[col][1 + row] == 0) &&
+                        (col - 1 >= 0 && row - 1 >= 0 && coverage[-1 + col][-1 + row] == 0) &&
+                        (col - 1 >= 0 && row + 1 < 26 && coverage[-1 + col][1 + row] == 0) &&
+                        (col - 2 >= 0 && coverage[-2 + col][row] == 0)){
                     return false;
                 }
                 coverage[col][row] = 1;
@@ -410,19 +395,17 @@ public class StratoGame {
             }
 
             else if (placement.charAt(i+3) == 'D'){
-                if (coverage[1 + col][row] == 1 ||
-                        coverage[col][-1 + row] == 1){
-                    System.out.println("D: other two");
+                if ((col + 1 < 26 && coverage[1 + col][row] == 1) ||
+                        (row - 1 >= 0 && coverage[col][-1 + row] == 1)){
                     return false;
                 }
-                if (coverage[2 + col][row] +
-                        coverage[1 + col][-1 + row] +
-                        coverage[1 + col][1 + row] +
-                        coverage[col][-2 + row] +
-                        coverage[col][1 + row] +
-                        coverage[-1 + col][row] +
-                        coverage[-1 + col][-1 + row] == 0){
-                    System.out.println("D: neighbours");
+                if ((col + 2 < 26 && coverage[2 + col][row] == 0) &&
+                        (col + 1 < 26 && row - 1 >= 0 && coverage[1 + col][-1 + row] == 0) &&
+                        (col + 1 < 26 && row + 1 < 26 && coverage[1 + col][1 + row] == 0) &&
+                        (row - 2 >= 0 && coverage[col][-2 + row] == 0) &&
+                        (row + 1 < 26 && coverage[col][1 + row] == 0) &&
+                        (col - 1 >= 0 && coverage[-1 + col][row] == 0) &&
+                        (col - 1 >= 0 && row - 1 >= 0 && coverage[-1 + col][-1 + row] == 0)){
                     return false;
                 }
                 coverage[col][row] = 1;
