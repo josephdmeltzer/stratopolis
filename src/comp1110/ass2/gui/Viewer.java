@@ -59,12 +59,12 @@ public class Viewer extends Application {
         /*Image[] tiles = */
         placementGrp.getChildren().clear();
 
-        /*if (!StratoGame.isPlacementWellFormed(placement)){
+        if (!StratoGame.isPlacementWellFormed(placement)){
             throw new IllegalArgumentException("Bad placement " + placement);
-        } else {*/
+        } else{
             GridPane gridPane = new GridPane();
-            gridPane.setPrefSize(520, 520);
-            gridPane.setMaxSize(520, 520);
+            gridPane.setPrefSize(624, 624);
+            gridPane.setMaxSize(624, 624);
 
             gridPane.setGridLinesVisible(true);
             for (int i = 0; i < 26; i++) {
@@ -77,26 +77,39 @@ public class Viewer extends Application {
             }
 
 
-            for (int i = 0; i < (placement.length() / 4); i++) {
+            for (int i=0; i<(placement.length()/4); i++){
                 ImageView iv1 = new ImageView();
-                iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4 * i + 2) + ".png").toString()));
-                iv1.setRotate((((int) placement.charAt(i + 3)) - 65) * 90);
+                iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4*i+2) + ".png").toString()));
+                iv1.setRotate((((int) placement.charAt(4*i+3))-65)*90);
                 iv1.setFitWidth(48);
                 iv1.setPreserveRatio(true);
                 iv1.setSmooth(true);
                 iv1.setCache(true);
-                gridPane.add(iv1, 25, 25);
-                GridPane.setRowSpan(iv1, 2);
-                GridPane.setColumnSpan(iv1, 2);
-                placementGrp.getChildren().add(iv1);
-
-                String coord = java.lang.Integer.toString(getRowIndex(iv1)) + java.lang.Integer.toString(getColumnIndex(iv1));
-                Text testing = new Text(coord);
-                gridPane.getChildren().add(testing);
+                gridPane.getChildren().add(iv1);
+                GridPane.setRowSpan(iv1,2);
+                GridPane.setColumnSpan(iv1,2);
+                switch (placement.charAt(4*i+3)){
+                    case 'A':
+                        GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65));
+                        GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65));
+                        break;
+                    case 'B':
+                        GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65-1));
+                        GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65));
+                        break;
+                    case 'C':
+                        GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65-1));
+                        GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65-1));
+                        break;
+                    case 'D':
+                        GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65));
+                        GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65-1));
+                        break;
+                }
             }
+            placementGrp.getChildren().add(gridPane);
 
-            root.getChildren().add(gridPane);
-
+        }
 
 
 
