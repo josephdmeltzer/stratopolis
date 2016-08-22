@@ -110,6 +110,7 @@ public class StratoGame {
     static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
+        if (!outOfBounds(placement)) return false;
         if (!isPlacementAdjacent(placement)) return false;
         if (!tileStraddle(placement)) return false;
         return areColoursAlright(placement);
@@ -124,6 +125,30 @@ public class StratoGame {
         }
         return true;
     }
+
+    private static boolean outOfBounds(String placement) {
+        if (placement.length()==0) return true;
+//        for (int i = 4; i < placement.length(); i+=4) {
+//            int col = placement.charAt(i) - 'A';
+//            int row = placement.charAt(i+1) - 'A';
+//
+//            if (col > 26 || col < 0 || row > 26 || row < 0) return false;
+//            if (placement.charAt(i+3) == 'A'){
+//                if (col+1 > 26 || row+1 > 26 ) return false;
+//            }
+//            else if (placement.charAt(i + 3) == 'B'){
+//                if (col-1 < 0 || row+1 > 26) return false;
+//            }
+//            else if (placement.charAt(i + 3) == 'C'){
+//                if (col-1 < 0 || row-1 < 0) return false;
+//            }
+//            else if (placement.charAt(i + 3) == 'D'){
+//                if (col+1 > 26 || row-1 < 0) return false;
+//            }
+//        }
+        return true;
+    }
+
 
     private static boolean tileStraddle(String placement) {
         int[][] tileTable = new int[26][26];
