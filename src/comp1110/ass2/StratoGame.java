@@ -115,11 +115,44 @@ public class StratoGame {
      */
     static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
-        if (!isPlacementWellFormed(placement))
-            return false;
-        if (!isPlacementAdjacent(placement))
-            return false;
+        if (!isPlacementWellFormed(placement)) return false;
+        if (!isPlacementAdjacent(placement)) return false;
+        if (!tileStraddle(placement)) return false;
         return areColoursAlright(placement);
+    }
+
+    private static boolean tileStraddle(String placement) {
+        int[][] tileTable = new int[26][26];
+        tileTable[12][12] = 0;
+        tileTable[12][13] = 0;
+
+        for (int i = 4; i < placement.length(); i+=4) {
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i+1) - 'A';
+
+            tileTable[col][row] = i;
+            if (placement.charAt(i+3) == 'A'){
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1]) return false;
+                tileTable[col+1][row] = i;
+                tileTable[col][row+1] = i;
+            }
+            else if (placement.charAt(i + 3) == 'B'){
+                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row+1]) return false;
+                tileTable[col-1][row] = i;
+                tileTable[col][row+1] = i;
+            }
+            else if (placement.charAt(i + 3) == 'C'){
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1]) return false;
+                tileTable[col-1][row] = i;
+                tileTable[col][row-1] = i;
+            }
+            else if (placement.charAt(i + 3) == 'D'){
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1]) return false;
+                tileTable[col+1][row] = i;
+                tileTable[col][row-1] = i;
+            }
+        }
+        return true;
     }
 
     private static boolean areColoursAlright(String placement){
@@ -157,8 +190,8 @@ public class StratoGame {
                 else return false;
             }
             else if (placement.charAt(i+3) == 'B') {
-                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[1];
+                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[1];
                 }
                 else return false;
                 if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
@@ -177,8 +210,8 @@ public class StratoGame {
                 else return false;
             }
             else if (placement.charAt(i+3) == 'D') {
-                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[1];
+                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[1];
                 }
                 else return false;
                 if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
@@ -189,8 +222,7 @@ public class StratoGame {
 
 
         }
-
-        return false;
+        return true;
     }
 
     private static boolean isOnTop(String piece, String placement){
