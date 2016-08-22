@@ -63,8 +63,8 @@ public class Viewer extends Application {
             throw new IllegalArgumentException("Bad placement " + placement);
         } else{
             GridPane gridPane = new GridPane();
-            gridPane.setPrefSize(520, 520);
-            gridPane.setMaxSize(520, 520);
+            gridPane.setPrefSize(624, 624);
+            gridPane.setMaxSize(624, 624);
 
             gridPane.setGridLinesVisible(true);
             for (int i = 0; i < 26; i++) {
@@ -85,14 +85,21 @@ public class Viewer extends Application {
                 iv1.setPreserveRatio(true);
                 iv1.setSmooth(true);
                 iv1.setCache(true);
-                gridPane.add(iv1,25,25);
+                gridPane.getChildren().add(iv1);
+                GridPane.setRowIndex(iv1,5+i);
+                GridPane.setColumnIndex(iv1,5+i);
                 GridPane.setRowSpan(iv1,2);
                 GridPane.setColumnSpan(iv1,2);
                 placementGrp.getChildren().add(iv1);
 
+                /*Zhixian: the following just displays the coordinates of the tile on the screen for debugging
+                *It seems that the setRowIndex is working for the text, but not for the tile images*/
                 String coord = java.lang.Integer.toString(getRowIndex(iv1))+java.lang.Integer.toString(getColumnIndex(iv1));
-                Text testing = new Text(coord);
+                Text testing = new Text("coord: "+ coord );
                 gridPane.getChildren().add(testing);
+                GridPane.setRowIndex(testing,1+i);
+                GridPane.setColumnIndex(testing,2+i);
+                GridPane.setRowSpan(testing,4);
             }
 
             root.getChildren().add(gridPane);
