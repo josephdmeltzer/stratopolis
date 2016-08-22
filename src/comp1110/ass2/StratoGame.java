@@ -109,18 +109,9 @@ public class StratoGame {
      */
     static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
-        if (!isPlacementWellFormed(placement)){
-           // System.out.println("placement not well formed");
-            return false;
-        }
-        if (!isPlacementAdjacent(placement)){
-           // System.out.println("placement not adjacent");
-            return false;
-        }
-        if (!myStraddle(placement)){
-           // System.out.println("tiles not straddling");
-            return false;
-        }
+        if (!isPlacementWellFormed(placement)) return false;
+        if (!isPlacementAdjacent(placement)) return false;
+        if (!tileStraddle(placement)) return false;
         return areColoursAlright(placement);
     }
 
@@ -136,31 +127,32 @@ public class StratoGame {
 
     private static boolean tileStraddle(String placement) {
         int[][] tileTable = new int[26][26];
-        tileTable[12][12] = 0;
-        tileTable[12][13] = 0;
 
         for (int i = 4; i < placement.length(); i+=4) {
             int col = placement.charAt(i) - 'A';
             int row = placement.charAt(i+1) - 'A';
 
-            tileTable[col][row] = i;
             if (placement.charAt(i+3) == 'A'){
-                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1]) return false;
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
                 tileTable[col+1][row] = i;
                 tileTable[col][row+1] = i;
             }
             else if (placement.charAt(i + 3) == 'B'){
-                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row+1]) return false;
+                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
                 tileTable[col-1][row] = i;
                 tileTable[col][row+1] = i;
             }
             else if (placement.charAt(i + 3) == 'C'){
-                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1]) return false;
+                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
                 tileTable[col-1][row] = i;
                 tileTable[col][row-1] = i;
             }
             else if (placement.charAt(i + 3) == 'D'){
-                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1]) return false;
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
                 tileTable[col+1][row] = i;
                 tileTable[col][row-1] = i;
             }
