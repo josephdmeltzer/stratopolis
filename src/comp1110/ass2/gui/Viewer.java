@@ -59,9 +59,9 @@ public class Viewer extends Application {
         /*Image[] tiles = */
         placementGrp.getChildren().clear();
 
-        if (!StratoGame.isPlacementWellFormed(placement)){
+        /*if (!StratoGame.isPlacementWellFormed(placement)){
             throw new IllegalArgumentException("Bad placement " + placement);
-        } else{
+        } else {*/
             GridPane gridPane = new GridPane();
             gridPane.setPrefSize(520, 520);
             gridPane.setMaxSize(520, 520);
@@ -77,26 +77,26 @@ public class Viewer extends Application {
             }
 
 
-            for (int i=0; i<(placement.length()/4); i++){
+            for (int i = 0; i < (placement.length() / 4); i++) {
                 ImageView iv1 = new ImageView();
-                iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4*i+2) + ".png").toString()));
-                iv1.setRotate((((int) placement.charAt(i+3))-65)*90);
+                iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4 * i + 2) + ".png").toString()));
+                iv1.setRotate((((int) placement.charAt(i + 3)) - 65) * 90);
                 iv1.setFitWidth(48);
                 iv1.setPreserveRatio(true);
                 iv1.setSmooth(true);
                 iv1.setCache(true);
-                gridPane.add(iv1,25,25);
-                GridPane.setRowSpan(iv1,2);
-                GridPane.setColumnSpan(iv1,2);
+                gridPane.add(iv1, 25, 25);
+                GridPane.setRowSpan(iv1, 2);
+                GridPane.setColumnSpan(iv1, 2);
                 placementGrp.getChildren().add(iv1);
 
-                String coord = java.lang.Integer.toString(getRowIndex(iv1))+java.lang.Integer.toString(getColumnIndex(iv1));
+                String coord = java.lang.Integer.toString(getRowIndex(iv1)) + java.lang.Integer.toString(getColumnIndex(iv1));
                 Text testing = new Text(coord);
                 gridPane.getChildren().add(testing);
             }
 
             root.getChildren().add(gridPane);
-        }
+
 
 
 
