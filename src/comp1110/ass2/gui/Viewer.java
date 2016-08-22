@@ -43,9 +43,6 @@ public class Viewer extends Application {
     private final Group placementGrp = new Group();
     TextField textField;
 
-
-
-
     /**
      * Draw a placement in the window, removing any previously drawn one
      *
@@ -54,9 +51,9 @@ public class Viewer extends Application {
 
     void makePlacement(String placement) {
         // FIXME Task 5: implement the simple placement viewer
-        char[] rowcol = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-        /*String[] variableNames = {"iv1","iv2","iv3","iv4","iv5","iv6","iv7","iv8","iv9","iv10","iv11","iv12","iv13","iv14","iv15","iv16","iv17","iv18","iv19","iv20","iv21","iv22","iv23","iv24","iv25","iv26","iv27","iv28","iv29","iv30","iv31","iv32","iv33","iv34","iv35","iv36","iv37","iv38","iv39","iv40"};*/
-        /*Image[] tiles = */
+        //char[] rowcol = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        //String[] variableNames = {"iv1","iv2","iv3","iv4","iv5","iv6","iv7","iv8","iv9","iv10","iv11","iv12","iv13","iv14","iv15","iv16","iv17","iv18","iv19","iv20","iv21","iv22","iv23","iv24","iv25","iv26","iv27","iv28","iv29","iv30","iv31","iv32","iv33","iv34","iv35","iv36","iv37","iv38","iv39","iv40"};
+        //Image[] tiles =
         placementGrp.getChildren().clear();
 
         if (!StratoGame.isPlacementWellFormed(placement)){

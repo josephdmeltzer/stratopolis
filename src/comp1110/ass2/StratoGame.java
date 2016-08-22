@@ -12,7 +12,6 @@ import static comp1110.ass2.Pieces.getColoursS;
  */
 public class StratoGame {
 
-
     /**
      * Determine whether a tile placement is well-formed according to the following:
      * - it consists of exactly four characters
@@ -31,9 +30,6 @@ public class StratoGame {
             return ('A'<=tilePlacement.charAt(0) && tilePlacement.charAt(0)<='Z' && 'A'<=tilePlacement.charAt(1) && tilePlacement.charAt(1)<='Z' && 'A'<=tilePlacement.charAt(2) && tilePlacement.charAt(2)<='U' && 'A'<=tilePlacement.charAt(3) && tilePlacement.charAt(3)<='D');
         }
     }
-
-
-
 
     /**
      * Determine whether a placement string is well-formed:
@@ -60,8 +56,6 @@ public class StratoGame {
                 return false;
         }
         if (! placement.substring(0,4).equals("MMUA")) return false;
-        /*if (!((len >= 4 && placement.charAt(6) >= 'K' && placement.charAt(6) <= 'T') || len <= 4)) /*out of range*/
-            /*return false;*/
         if (len>4){
             for (int i = 6; i< len - 1; i += 8) {
                 if (!(placement.charAt(i) >= 'K' && placement.charAt(i) <= 'T')) return false;
@@ -74,20 +68,10 @@ public class StratoGame {
         }
         for (int i = 6; i < len; i += 4){
             int idx = placement.charAt(i) - 'A';
-          //  System.out.print("Index" + idx + "in array");
-          //  System.out.print("Is " + placement.charAt(i));
             counter[idx]++;
-           // System.out.println("has a count of" + counter[idx]);
-            if (counter[idx] > 2) {
-                //System.out.println(counter[idx] + "for " + placement.charAt(i));
-                return false;
-            }
+            if (counter[idx] > 2) return false;
         }
-
-
-
         return true;
-
     }
 
     // There seems to be no place where we have checked that no part of the tile falls out of the board
@@ -104,152 +88,9 @@ public class StratoGame {
     static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
-        if (!outOfBounds(placement)) {
-            return false;}
-        if (!isPlacementAdjacent(placement)) {
-            return false;}
-        if (!tileStraddle(placement)){
-            return false;}
+        if (!isPlacementAdjacent(placement)) return false;
+        if (!tileStraddle(placement)) return false;
         return areColoursAlright(placement);
-    }
-
-    private static boolean myStraddle(String placement){
-        for (int i = 4; i < placement.length(); i += 4){
-            for (int j = i + 4; j < placement.length();  j+= 4){
-                if (placement.charAt(i) == placement.charAt(j) && placement.charAt(i + 1) == placement.charAt(j + 1) && placement.charAt(i + 3) == placement.charAt(j + 3))
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean outOfBounds(String placement) {
-        if (placement.length()==0) return true;
-//        for (int i = 4; i < placement.length(); i+=4) {
-//            int col = placement.charAt(i) - 'A';
-//            int row = placement.charAt(i+1) - 'A';
-//
-//            if (col > 26 || col < 0 || row > 26 || row < 0) return false;
-//            if (placement.charAt(i+3) == 'A'){
-//                if (col+1 > 26 || row+1 > 26 ) return false;
-//            }
-//            else if (placement.charAt(i + 3) == 'B'){
-//                if (col-1 < 0 || row+1 > 26) return false;
-//            }
-//            else if (placement.charAt(i + 3) == 'C'){
-//                if (col-1 < 0 || row-1 < 0) return false;
-//            }
-//            else if (placement.charAt(i + 3) == 'D'){
-//                if (col+1 > 26 || row-1 < 0) return false;
-//            }
-//        }
-        return true;
-    }
-
-
-    private static boolean tileStraddle(String placement) {
-        int[][] tileTable = new int[26][26];
-
-        for (int i = 4; i < placement.length(); i+=4) {
-            int col = placement.charAt(i) - 'A';
-            int row = placement.charAt(i+1) - 'A';
-
-            if (placement.charAt(i+3) == 'A'){
-                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
-                tileTable[col][row] = i;
-                tileTable[col+1][row] = i;
-                tileTable[col][row+1] = i;
-            }
-            else if (placement.charAt(i + 3) == 'B'){
-                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
-                tileTable[col][row] = i;
-                tileTable[col-1][row] = i;
-                tileTable[col][row+1] = i;
-            }
-            else if (placement.charAt(i + 3) == 'C'){
-                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
-                tileTable[col][row] = i;
-                tileTable[col-1][row] = i;
-                tileTable[col][row-1] = i;
-            }
-            else if (placement.charAt(i + 3) == 'D'){
-                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
-                tileTable[col][row] = i;
-                tileTable[col+1][row] = i;
-                tileTable[col][row-1] = i;
-            }
-        }
-        return true;
-    }
-
-    private static boolean areColoursAlright(String placement){
-        /*To Joseph: You need to implement this function*/
-        /*What I think you could do is declare a 26 by 26 grid of Colours
-        * and for each tile over write the assocaited piece colour
-        * If you end up overwriting green on red or red on grren return false
-        * Also, have a look at the comments over the isPlacementAdjacent function
-        * Have a look at the Pieces enum. I've represented the tiles and added an associated function
-        * which *might* be useful. In the process you might have to implement a method which for a given piece and for a
-        * given orientation returns the position and/or comolurs of wach of the three blocks of the tiles -- Manal*/
-
-        Colour[][] colourTable = new Colour[26][26];
-        colourTable[12][12] = RED;
-        colourTable[12][13] = GREEN;
-
-        for (int i=4; i < placement.length(); i+=4) {
-            int col = placement.charAt(i) - 'A';
-            int row = placement.charAt(i+1) - 'A';
-
-            if ((colourTable[col][row] != RED || getColoursS(placement.charAt(i+2))[0] != GREEN) && (colourTable[col][row] != GREEN || getColoursS(placement.charAt(i+2))[0] != RED)) {
-                colourTable[col][row] = getColoursS(placement.charAt(i+2))[0];
-            }
-            else return false;
-
-            if (placement.charAt(i+3) == 'A') {
-
-                if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[1];
-                }
-                else return false;
-                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[2];
-                }
-                else return false;
-            }
-            else if (placement.charAt(i+3) == 'B') {
-                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[1];
-                }
-                else return false;
-                if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[2];
-                }
-                else return false;
-            }
-            else if (placement.charAt(i+3) == 'C') {
-                if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[1];
-                }
-                else return false;
-                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[2];
-                }
-                else return false;
-            }
-            else if (placement.charAt(i+3) == 'D') {
-                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[1];
-                }
-                else return false;
-                if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[2];
-                }
-                else return false;
-            }
-
-
-        }
-        return true;
     }
 
     private static boolean isOnTop(String piece, String placement){
@@ -301,12 +142,7 @@ public class StratoGame {
         return true;
     }
 
-
-    // To Joseph: Treat the next function like a black box. I hope there are no bugs.
-    // It checks if tiles are adjacent to one another or if they are stacked there must be no tile dangling
-    // It does NOT check if all stacked tiles straddle between two
-    // It also has nothing to do with colours -- Manal
-
+    // This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
     private static boolean isPlacementAdjacent(String placement){
         /*The next array is used to identify if a position on the board has been covered*/
         /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
@@ -314,8 +150,6 @@ public class StratoGame {
         coverage[12][12] = 1;
         coverage[12][13] = 1;
 
-        if (!isPlacementWellFormed(placement))
-            return false;
         for (int i = 4; i < placement.length(); i += 4){
             /*The first four characters must be MMUA .. skipping them*/
             int col = placement.charAt(i) - 'A';
@@ -412,9 +246,103 @@ public class StratoGame {
                 coverage[1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
             }
+        }
+        return true;
+    }
+
+    private static boolean tileStraddle(String placement) {
+        int[][] tileTable = new int[26][26];
+
+        for (int i = 4; i < placement.length(); i+=4) {
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i+1) - 'A';
+
+            if (placement.charAt(i+3) == 'A'){
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
+                tileTable[col+1][row] = i;
+                tileTable[col][row+1] = i;
+            }
+            else if (placement.charAt(i + 3) == 'B'){
+                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
+                tileTable[col-1][row] = i;
+                tileTable[col][row+1] = i;
+            }
+            else if (placement.charAt(i + 3) == 'C'){
+                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
+                tileTable[col-1][row] = i;
+                tileTable[col][row-1] = i;
+            }
+            else if (placement.charAt(i + 3) == 'D'){
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
+                tileTable[col+1][row] = i;
+                tileTable[col][row-1] = i;
+            }
+        }
+        return true;
+    }
+
+    private static boolean areColoursAlright(String placement){
+        Colour[][] colourTable = new Colour[26][26];
+        colourTable[12][12] = RED;
+        colourTable[12][13] = GREEN;
+
+        for (int i=4; i < placement.length(); i+=4) {
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i+1) - 'A';
+
+            if ((colourTable[col][row] != RED || getColoursS(placement.charAt(i+2))[0] != GREEN) && (colourTable[col][row] != GREEN || getColoursS(placement.charAt(i+2))[0] != RED)) {
+                colourTable[col][row] = getColoursS(placement.charAt(i+2))[0];
+            }
+            else return false;
+
+            if (placement.charAt(i+3) == 'A') {
+
+                if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i+3) == 'B') {
+                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i+3) == 'C') {
+                if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i+3) == 'D') {
+                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+
 
         }
-
         return true;
     }
 
