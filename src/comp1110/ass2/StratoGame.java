@@ -16,21 +16,7 @@ import static java.util.Arrays.binarySearch;
  * (http://boardgamegeek.com/boardgame/125022/stratopolis)
  */
 public class StratoGame {
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        String testing = in.next();
-        if (isPlacementWellFormed(testing)){
-            System.out.println("well-formed");
-        } else{
-            System.out.println("not well-formed");
-        }
-        if ('A'<'B'){
-            System.out.println("A<B");
-        }
-        String tests = "MMUA";
-        System.out.println(tests.substring(0,2));
-        System.out.println((int) tests.charAt(0));
-    }
+
 
     /**
      * Determine whether a tile placement is well-formed according to the following:
@@ -44,9 +30,6 @@ public class StratoGame {
      * @return True if the tile placement is well-formed
      */
     static boolean isTilePlacementWellFormed(String tilePlacement) {
-        char[] rowcol = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-        char[] tiles = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U'};
-        char[] rote = {'A', 'B', 'C', 'D'};
         if (tilePlacement.length() != 4) {
             return false;
         } else {
