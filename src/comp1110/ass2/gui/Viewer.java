@@ -10,12 +10,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import comp1110.ass2.gui.Setup;
 import comp1110.ass2.StratoGame;
 import comp1110.ass2.Pieces;
+
+import static comp1110.ass2.Pieces.K;
+import static javafx.scene.layout.GridPane.getColumnIndex;
+import static javafx.scene.layout.GridPane.getRowIndex;
 
 
 /**
@@ -52,30 +57,48 @@ public class Viewer extends Application {
         char[] rowcol = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         /*String[] variableNames = {"iv1","iv2","iv3","iv4","iv5","iv6","iv7","iv8","iv9","iv10","iv11","iv12","iv13","iv14","iv15","iv16","iv17","iv18","iv19","iv20","iv21","iv22","iv23","iv24","iv25","iv26","iv27","iv28","iv29","iv30","iv31","iv32","iv33","iv34","iv35","iv36","iv37","iv38","iv39","iv40"};*/
         /*Image[] tiles = */
+        placementGrp.getChildren().clear();
 
-        // Sorry, my bad. I realised that we are not supposed to change the scope for any built in functions. So I've commented
-        // the next exception out.
-
-        // Also, good job upto now -- Manal
-
-        /*if (!StratoGame.isPlacementWellFormed(placement)){
+        if (!StratoGame.isPlacementWellFormed(placement)){
             throw new IllegalArgumentException("Bad placement " + placement);
-        } else{*/
+        } else{
+            GridPane gridPane = new GridPane();
+            gridPane.setPrefSize(520, 520);
+            gridPane.setMaxSize(520, 520);
+
+            gridPane.setGridLinesVisible(true);
+            for (int i = 0; i < 26; i++) {
+                RowConstraints row = new RowConstraints(24);
+                gridPane.getRowConstraints().add(row);
+            }
+            for (int i = 0; i < 26; i++) {
+                ColumnConstraints column = new ColumnConstraints(24);
+                gridPane.getColumnConstraints().add(column);
+            }
+
+
             for (int i=0; i<(placement.length()/4); i++){
                 ImageView iv1 = new ImageView();
-                /*placementGrp.getChildren().clear(); */
                 iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4*i+2) + ".png").toString()));
-                iv1.setFitWidth(40);
+                iv1.setRotate((((int) placement.charAt(i+3))-65)*90);
+                iv1.setFitWidth(48);
                 iv1.setPreserveRatio(true);
                 iv1.setSmooth(true);
                 iv1.setCache(true);
-                HBox hb = new HBox();
-                hb.getChildren().add(iv1);
-                placementGrp.getChildren().add(hb);
-                hb.setLayoutX( (((int) placement.charAt(i))-65)*20 );
-                hb.setLayoutY( (((int) placement.charAt(i))-65)*20 );
+                gridPane.add(iv1,25,25);
+                GridPane.setRowSpan(iv1,2);
+                GridPane.setColumnSpan(iv1,2);
+                placementGrp.getChildren().add(iv1);
 
+                String coord = java.lang.Integer.toString(getRowIndex(iv1))+java.lang.Integer.toString(getColumnIndex(iv1));
+                Text testing = new Text(coord);
+                gridPane.getChildren().add(testing);
             }
+
+            root.getChildren().add(gridPane);
+        }
+
+
 
             //place tile based on i and (i+1)
             //select tile based on (i+2) -- Done: Manal
