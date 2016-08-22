@@ -109,9 +109,18 @@ public class StratoGame {
      */
     static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
-        if (!isPlacementWellFormed(placement)) return false;
-        if (!isPlacementAdjacent(placement)) return false;
-        if (!myStraddle(placement)) return false;
+        if (!isPlacementWellFormed(placement)){
+           // System.out.println("placement not well formed");
+            return false;
+        }
+        if (!isPlacementAdjacent(placement)){
+           // System.out.println("placement not adjacent");
+            return false;
+        }
+        if (!myStraddle(placement)){
+           // System.out.println("tiles not straddling");
+            return false;
+        }
         return areColoursAlright(placement);
     }
 
@@ -288,7 +297,7 @@ public class StratoGame {
     // It's just a simple for loop. One of us could implement it -- Manal
 
     private static boolean isPlacementAdjacent(String placement){
-        System.out.println(placement);
+       // System.out.println(placement);
         /*The next array is used to identify if a position on the board has been covered*/
         /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
         int[][] coverage = new int[26][26];
@@ -313,25 +322,28 @@ public class StratoGame {
 
             if (coverage[col][row] != 0){
                 if (!isOnTop(placement.substring(i, i + 4), placement.substring(0, i))) {
-                    System.out.println("2");
+                    System.out.println("failed because onTop failed");
                     return false;
                 }
-                System.out.println("3");
                 continue;
             }
 
             if (placement.charAt(i+3) == 'A'){
                 if (coverage[1 + col][row] == 1 ||
-                    coverage[col][1 + row] == 1)
-                    return false;
+                    coverage[col][1 + row] == 1){
+                    System.out.println("A: checkong other two failed");
+                    return false;}
+                System.out.println("col = " + col + "row = " + row);
                 if (coverage[2 + col][row] +
                         coverage[1 + col][-1 + row] +
                         coverage[1 + col][1 + row] +
                         coverage[col][-1 + row] +
                         coverage[col][2 + row] +
                         coverage[-1 + col][row] +
-                        coverage[-1 + col][-1 + row] == 0)
+                        coverage[-1 + col][1 + row] == 0){
+                    System.out.println("A: neighbours causing problem");
                     return false;
+                }
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
                 coverage[col][1 + row] = 1;
@@ -340,16 +352,20 @@ public class StratoGame {
 
             else if (placement.charAt(i+3) == 'B'){
                 if (coverage[-1 + col][row] == 1 ||
-                        coverage[col][1 + row] == 1)
+                        coverage[col][1 + row] == 1) {
+                    System.out.println("B: checkong other two failed");
                     return false;
+                }
                 if (coverage[1 + col][row] +
                         coverage[1 + col][1 + row] +
                         coverage[col][-1 + row] +
                         coverage[col][2 + row] +
                         coverage[-1 + col][-1 + row] +
                         coverage[-1 + col][1 + row] +
-                        coverage[-2 + col][row] == 0)
+                        coverage[-2 + col][row] == 0) {
+                    System.out.println("B: neighbours causing problem");
                     return false;
+                }
                 coverage[col][row] = 1;
                 coverage[-1 + col][row] = 1;
                 coverage[col][1 + row] = 1;
@@ -357,16 +373,20 @@ public class StratoGame {
 
             else if (placement.charAt(i+3) == 'C'){
                 if (coverage[-1 + col][row] == 1 ||
-                        coverage[col][-1 + row] == 1)
+                        coverage[col][-1 + row] == 1) {
+                    System.out.println("C: other two");
                     return false;
+                }
                 if (coverage[1 + col][row] +
                         coverage[1 + col][1 + row] +
                         coverage[col][-2 + row] +
                         coverage[col][1 + row] +
                         coverage[-1 + col][-1 + row] +
                         coverage[-1 + col][1 + row] +
-                        coverage[-2 + col][row] == 0)
+                        coverage[-2 + col][row] == 0){
+                    System.out.println("C neighbours");
                     return false;
+                }
                 coverage[col][row] = 1;
                 coverage[-1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
@@ -374,16 +394,20 @@ public class StratoGame {
 
             else if (placement.charAt(i+3) == 'D'){
                 if (coverage[1 + col][row] == 1 ||
-                        coverage[col][-1 + row] == 1)
+                        coverage[col][-1 + row] == 1){
+                    System.out.println("D: other two");
                     return false;
+                }
                 if (coverage[2 + col][row] +
                         coverage[1 + col][-1 + row] +
                         coverage[1 + col][1 + row] +
                         coverage[col][-2 + row] +
                         coverage[col][1 + row] +
                         coverage[-1 + col][row] +
-                        coverage[-1 + col][-1 + row] == 0)
+                        coverage[-1 + col][-1 + row] == 0){
+                    System.out.println("D: neighbours");
                     return false;
+                }
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
