@@ -56,7 +56,7 @@ public class Viewer extends Application {
         //Image[] tiles =
         placementGrp.getChildren().clear();
 
-        if (!StratoGame.isPlacementWellFormed(placement)){
+        if (!StratoGame.isPlacementValid(placement)){
             throw new IllegalArgumentException("Bad placement " + placement);
         } else{
             GridPane gridPane = new GridPane();
