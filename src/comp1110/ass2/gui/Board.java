@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -23,6 +24,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import comp1110.ass2.StratoGame;
 
+import java.util.ArrayList;
+
+import static comp1110.ass2.Colour.GREEN;
+import static comp1110.ass2.Colour.RED;
 import static java.time.format.SignStyle.NORMAL;
 
 public class Board extends Application {
@@ -31,6 +36,9 @@ public class Board extends Application {
     private static final String URI_BASE = "assets/";
 
 
+    private BoardState boardTurn = new BoardState(GREEN);
+    private PlayerG playerG = new PlayerG();
+    private PlayerR playerR = new PlayerR();
 
 
     private final Group root = new Group();
@@ -76,8 +84,13 @@ public class Board extends Application {
         }
 
         /*Make clickable grid*/
-        for (int i=1; i<27; i++){
+        /*BUG: some tiles don't react when clicked*/
+        ArrayList<Tiles> tiles= new ArrayList<Tiles>();
+        for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
+
+                addPane(i,j);
+
                 Rectangle r = new Rectangle(23, 23);
                 r.setFill(Color.WHITE);
                 playingBoard.getChildren().add(r);
@@ -87,6 +100,7 @@ public class Board extends Application {
                 GridPane.setValignment(r, VPos.CENTER);
             }
         }
+
 
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
         playingBoard.setGridLinesVisible(false);
@@ -101,11 +115,25 @@ public class Board extends Application {
         placementGrp.getChildren().add(playingBoard);
     }
 
-    /*void makeGUIPlacement(String placement, Colour turn) {
-        /*Note that the new board's top row and leftmost column are not part of the board, but contain text*/
-        /*ImageView iv1 = new ImageView();
-        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(4*i+2) + ".png").toString()));
-        iv1.setRotate((((int) placement.charAt(4*i+3))-65)*90);
+    private void addPane(int colIndex, int rowIndex){
+        Pane pane = new Pane();
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                char col = (char) (colIndex+64);
+                char row = (char) (rowIndex+64);
+                String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+
+                makeGUIPlacement(placement);
+            }
+        });
+        playingBoard.add(pane, colIndex, rowIndex);
+    }
+
+    void makeGUIPlacement(String placement) {
+        ImageView iv1 = new ImageView();
+        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
+        iv1.setRotate((((int) placement.charAt(3))-65)*90);
         iv1.setFitWidth(48);
         iv1.setPreserveRatio(true);
         iv1.setSmooth(true);
@@ -113,25 +141,36 @@ public class Board extends Application {
         playingBoard.getChildren().add(iv1);
         GridPane.setRowSpan(iv1,2);
         GridPane.setColumnSpan(iv1,2);
-        switch (placement.charAt(4*i+3)){
+        switch (placement.charAt(3)){
             case 'A':
-                GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65));
-                GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65));
+                GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64));
+                GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64));
                 break;
             case 'B':
-                GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65-1));
-                GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65));
+                GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64-1));
+                GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64));
                 break;
             case 'C':
-                GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65-1));
-                GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65-1));
+                GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64-1));
+                GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64-1));
                 break;
             case 'D':
-                GridPane.setColumnIndex(iv1,(((int) placement.charAt(4*i))-65));
-                GridPane.setRowIndex(iv1,(((int) placement.charAt(4*i+1))-65-1));
+                GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64));
+                GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64-1));
                 break;
         }
-    }*/
+
+        /*BUG: it only places green tiles*/
+
+        if (boardTurn.playerTurn==GREEN){
+            playerG.used_tiles = playerG.used_tiles+1;
+            boardTurn.playerTurn=RED;
+        }
+        else{
+            playerR.used_tiles = playerR.used_tiles+1;
+            boardTurn.playerTurn=GREEN;
+        }
+    }
 
 
 
@@ -186,8 +225,6 @@ public class Board extends Application {
     private void makeTwoPlayer(){
         /*Make the control pane*/
 
-        PlayerG playerG = new PlayerG();
-        PlayerR playerR = new PlayerR();
 
         GridPane playerControls = new GridPane();
         playerControls.setPrefSize(120, 650);
