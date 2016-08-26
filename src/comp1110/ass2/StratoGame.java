@@ -430,15 +430,26 @@ public class StratoGame {
      */
     static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
+        String bestMove = "";
+        int bestScore = 0;
         for (char x='A'; x<='Z'; x++) {
             for (char y='A'; y<='Z'; y++) {
                 for (char o='A'; o<='D'; o++) {
-                    if (isPlacementValid(placement+x+y+piece+o)) {
-                        return ""+x+y+piece+o;
+                    if (piece>='A' && piece <='J') {
+                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)>bestScore ) {
+                            bestMove = ""+x+y+piece+o;
+                            bestScore = getScoreForPlacement(placement + x + y + piece + o, false);
+                        }
+                    }
+                    if (piece>='K' && piece <='T') {
+                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true)>bestScore ) {
+                            bestMove = ""+x+y+piece+o;
+                            bestScore = getScoreForPlacement(placement + x + y + piece + o, true);
+                        }
                     }
                 }
             }
         }
-        return "";
+        return bestMove;
     }
 }
