@@ -6,7 +6,7 @@ import static comp1110.ass2.Colour.*;
 /**
  * Created by manalmohania on 25/08/2016.
  */
-public final class Scoring {
+final class Scoring {
     /*I wanted to have a separate class to handle scoring -- Manal*/
     private static final int BOARD_SIZE = 26;
 
@@ -16,7 +16,6 @@ public final class Scoring {
     private static Colour[][] colours;
     private static Colour[][] colours2;
     private static int[][] heights = new int[BOARD_SIZE][BOARD_SIZE];
-
 
     static int getScore(String placement, boolean green){
 
@@ -56,7 +55,6 @@ public final class Scoring {
             }
         }
 
-
         int maxArea = 1;
         int maxHeight = 1;
 
@@ -83,7 +81,6 @@ public final class Scoring {
             return max;
         }
 
-
         if (colours2[col][row] != colour) {
             return max;
         }
@@ -100,16 +97,13 @@ public final class Scoring {
         int val;
 
         if (!(col >= 0 && row >= 0 && col <= 26 && row <= 26)){
-            val = 0;
-            return val;
+            return 0;
         }
-
 
         flags[col][row] = 1;
 
         if (colours[col][row] != colour) {
-            val = 0;
-            return val;
+            return 0;
         }
 
         colours[col][row] = BLACK;
@@ -140,9 +134,6 @@ public final class Scoring {
             }
         }
         return -1;
-    }
-    public static void main(String[] args) {
-        System.out.println(getScore("MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC", false));
     }
 
 }
