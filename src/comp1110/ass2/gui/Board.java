@@ -39,6 +39,7 @@ public class Board extends Application {
     private BoardState boardTurn = new BoardState(GREEN);
     private PlayerG playerG = new PlayerG();
     private PlayerR playerR = new PlayerR();
+    private String moveHistory;
 
 
     private final Group root = new Group();
@@ -84,12 +85,10 @@ public class Board extends Application {
         }
 
         /*Make clickable grid*/
-        /*BUG: some tiles don't react when clicked*/
+        /*BUG: Tiles further down/left than MN don't react when clicked*/
         ArrayList<Tiles> tiles= new ArrayList<Tiles>();
         for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
-
-                addPane(i,j);
 
                 Rectangle r = new Rectangle(23, 23);
                 r.setFill(Color.WHITE);
@@ -98,6 +97,8 @@ public class Board extends Application {
                 GridPane.setColumnIndex(r,j);
                 GridPane.setHalignment(r, HPos.CENTER);
                 GridPane.setValignment(r, VPos.CENTER);
+
+                addPane(i,j);
             }
         }
 
@@ -105,7 +106,7 @@ public class Board extends Application {
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
         playingBoard.setGridLinesVisible(false);
 
-        /*Attempt to style board with actual grid lines using CSS*/
+        /*Styles board with actual grid lines using CSS*/
         playingBoard.setHgap(1);
         playingBoard.setVgap(1);
         playingBoard.setStyle("-fx-background-color: black");
@@ -116,6 +117,7 @@ public class Board extends Application {
     }
 
     private void addPane(int colIndex, int rowIndex){
+        /*BUG: Event stops working when it has an image covering it*/
         Pane pane = new Pane();
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -131,44 +133,51 @@ public class Board extends Application {
     }
 
     void makeGUIPlacement(String placement) {
-        ImageView iv1 = new ImageView();
-        iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
-        iv1.setRotate((((int) placement.charAt(3))-65)*90);
-        iv1.setFitWidth(48);
-        iv1.setPreserveRatio(true);
-        iv1.setSmooth(true);
-        iv1.setCache(true);
-        playingBoard.getChildren().add(iv1);
-        GridPane.setRowSpan(iv1,2);
-        GridPane.setColumnSpan(iv1,2);
-        switch (placement.charAt(3)){
-            case 'A':
-                GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64));
-                GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64));
-                break;
-            case 'B':
-                GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64-1));
-                GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64));
-                break;
-            case 'C':
-                GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64-1));
-                GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64-1));
-                break;
-            case 'D':
-                GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64));
-                GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64-1));
-                break;
-        }
+        /*BUG: no contingency if used_tiles goes out of bounds*/
+        /*BUG: check if it only throws Bad placement when the placement is actually invalid*/
+        if ((!StratoGame.isPlacementValid(moveHistory + placement)) && (!placement.equals("MMUA"))){
+            throw new IllegalArgumentException("Bad placement " + placement);
+        } else{
+            ImageView iv1 = new ImageView();
+            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
+            iv1.setRotate((((int) placement.charAt(3))-65)*90);
+            iv1.setFitWidth(48);
+            iv1.setPreserveRatio(true);
+            iv1.setSmooth(true);
+            iv1.setCache(true);
+            playingBoard.getChildren().add(iv1);
+            GridPane.setRowSpan(iv1,2);
+            GridPane.setColumnSpan(iv1,2);
+            switch (placement.charAt(3)){
+                case 'A':
+                    GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64));
+                    GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64));
+                    break;
+                case 'B':
+                    GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64-1));
+                    GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64));
+                    break;
+                case 'C':
+                    GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64-1));
+                    GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64-1));
+                    break;
+                case 'D':
+                    GridPane.setColumnIndex(iv1,(((int) placement.charAt(0))-64));
+                    GridPane.setRowIndex(iv1,(((int) placement.charAt(1))-64-1));
+                    break;
+            }
 
         /*BUG: it only places green tiles*/
 
-        if (boardTurn.playerTurn==GREEN){
-            playerG.used_tiles = playerG.used_tiles+1;
-            boardTurn.playerTurn=RED;
-        }
-        else{
-            playerR.used_tiles = playerR.used_tiles+1;
-            boardTurn.playerTurn=GREEN;
+            if (boardTurn.playerTurn==GREEN){
+                playerG.used_tiles = playerG.used_tiles+1;
+                boardTurn.playerTurn=RED;
+            }
+            else{
+                playerR.used_tiles = playerR.used_tiles+1;
+                boardTurn.playerTurn=GREEN;
+            }
+            moveHistory = moveHistory + placement;
         }
     }
 
@@ -304,7 +313,8 @@ public class Board extends Application {
         passes a 4-char string to makeGUIPlacement,
         and updates whose turn it its with a corrosponding change in which text is bolded.*/
 
-        placementGrp.getChildren().add(playingBoard);
+
+        makeGUIPlacement("MMUA");
     }
 
 
