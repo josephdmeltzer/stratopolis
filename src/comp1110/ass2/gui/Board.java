@@ -40,6 +40,8 @@ public class Board extends Application {
     private PlayerG playerG = new PlayerG();
     private PlayerR playerR = new PlayerR();
     private String moveHistory;
+    private ImageView ivg = new ImageView();
+    ImageView ivr = new ImageView();
 
 
     private final Group root = new Group();
@@ -124,18 +126,26 @@ public class Board extends Application {
             public void handle(MouseEvent e) {
                 char col = (char) (colIndex+64);
                 char row = (char) (rowIndex+64);
-                String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+                if (boardTurn.playerTurn==GREEN){
+                    String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+                    makeGUIPlacement(placement, ivg, ivr);
+                }else{
+                    String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+                    makeGUIPlacement(placement, ivg, ivr);
+                }
 
-                makeGUIPlacement(placement);
+
+
             }
         });
         playingBoard.add(pane, colIndex, rowIndex);
     }
 
-    void makeGUIPlacement(String placement) {
+    void makeGUIPlacement(String placement, ImageView ivg, ImageView ivr) {
         /*BUG: no contingency if used_tiles goes out of bounds*/
         /*BUG: check if it only throws Bad placement when the placement is actually invalid*/
-        if ((!StratoGame.isPlacementValid(moveHistory + placement)) && (!placement.equals("MMUA"))){
+        String stuff = moveHistory + placement;
+        if (false /*(!StratoGame.isPlacementValid(stuff)) && (!placement.equals("MMUA"))*/){
             throw new IllegalArgumentException("Bad placement " + placement);
         } else{
             ImageView iv1 = new ImageView();
@@ -167,17 +177,29 @@ public class Board extends Application {
                     break;
             }
 
-        /*BUG: it only places green tiles*/
+        /*BUG: it has the turns in the wrong order*/
 
             if (boardTurn.playerTurn==GREEN){
                 playerG.used_tiles = playerG.used_tiles+1;
+                ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+                ivg.setFitWidth(80);
+                ivg.setPreserveRatio(true);
+                ivg.setSmooth(true);
+                ivg.setCache(true);
                 boardTurn.playerTurn=RED;
             }
             else{
                 playerR.used_tiles = playerR.used_tiles+1;
+                ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+                ivr.setFitWidth(80);
+                ivr.setPreserveRatio(true);
+                ivr.setSmooth(true);
+                ivr.setCache(true);
                 boardTurn.playerTurn=GREEN;
             }
-            moveHistory = moveHistory + placement;
+            moveHistory = stuff;
+
+
         }
     }
 
@@ -226,15 +248,12 @@ public class Board extends Application {
 
         placementGrp.getChildren().addAll(vb);
 
-        /*controls.getChildren().add(later);*/
     }
 
 
 
     private void makeTwoPlayer(){
         /*Make the control pane*/
-
-
         GridPane playerControls = new GridPane();
         playerControls.setPrefSize(120, 650);
         playerControls.setMaxSize(120, 650);
@@ -247,7 +266,7 @@ public class Board extends Application {
         redtxt.setFill(Color.RED);
         redtxt.setFont(Font.font("Verdana", 14));
 
-        ImageView ivg = new ImageView();
+
         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
         ivg.setRotate((((int) (playerG.rotation)-65)*90));
         ivg.setFitWidth(80);
@@ -255,7 +274,6 @@ public class Board extends Application {
         ivg.setSmooth(true);
         ivg.setCache(true);
 
-        ImageView ivr = new ImageView();
         ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
         ivr.setRotate((((int) (playerR.rotation)-65)*90));
         ivr.setFitWidth(80);
@@ -314,7 +332,7 @@ public class Board extends Application {
         and updates whose turn it its with a corrosponding change in which text is bolded.*/
 
 
-        makeGUIPlacement("MMUA");
+        makeGUIPlacement("MMUA",ivg,ivr);
     }
 
 
