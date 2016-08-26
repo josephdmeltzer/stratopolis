@@ -39,9 +39,9 @@ public enum Pieces {
         colours[2] = c;
     }
 
-    public Colour[] getColours(Pieces piece){
+    /*public Colour[] getColours(Pieces piece){
         return piece.colours;
-    }
+    }*/
 
-    public static Colour[] getColoursS(char piece) { return Pieces.valueOf(""+piece).colours; }
+    public static Colour[] getColours(char piece) { return Pieces.valueOf(""+piece).colours; }
 }

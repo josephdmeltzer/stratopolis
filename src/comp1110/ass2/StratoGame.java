@@ -1,7 +1,8 @@
 package comp1110.ass2;
 
 import static comp1110.ass2.Colour.*;
-import static comp1110.ass2.Pieces.getColoursS;
+import static comp1110.ass2.Pieces.getColours;
+import static comp1110.ass2.Scoring.getScore;
 
 
 /**
@@ -11,6 +12,8 @@ import static comp1110.ass2.Pieces.getColoursS;
  * (http://boardgamegeek.com/boardgame/125022/stratopolis)
  */
 public class StratoGame {
+
+    int[][] flags; // NOTE: DO NOT WRITE TO THIS.
 
     /**
      * Determine whether a tile placement is well-formed according to the following:
@@ -56,16 +59,15 @@ public class StratoGame {
                 return false;
         }
         if (! placement.substring(0,4).equals("MMUA")) return false;
-        if (len>4){
-            for (int i = 6; i< len - 1; i += 8) {
-                if (!(placement.charAt(i) >= 'K' && placement.charAt(i) <= 'T')) return false;
-            }
+
+        for (int i = 6; i< len - 1; i += 8) {
+            if (!(placement.charAt(i) >= 'K' && placement.charAt(i) <= 'T')) return false;
         }
-        if (len>8){
-            for (int i = 10; i < len - 1; i += 8) {
-                if (!(placement.charAt(i) >= 'A' && placement.charAt(i) <= 'J')) return false;
-            }
+
+        for (int i = 10; i < len - 1; i += 8) {
+            if (!(placement.charAt(i) >= 'A' && placement.charAt(i) <= 'J')) return false;
         }
+
         for (int i = 6; i < len; i += 4){
             int idx = placement.charAt(i) - 'A';
             counter[idx]++;
@@ -85,7 +87,7 @@ public class StratoGame {
      * @param placement A placement string
      * @return True if the placement is valid
      */
-    static boolean isPlacementValid(String placement) {
+    public static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
         if (!isPlacementAdjacent(placement)) return false;
@@ -93,7 +95,46 @@ public class StratoGame {
         return areColoursAlright(placement);
     }
 
-    private static boolean isOnTop(String piece, String placement){
+    /*This method assumes that the placement string is valid*/
+    static Colour[][] colourArray(String placement){
+        Colour[][] coverage = new Colour[26][26];
+        coverage[12][12] = RED;
+        coverage[12][13] = GREEN;
+        
+        for (int i = 4; i < placement.length(); i += 4){
+            /*jump to required position*/
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i + 1) - 'A';
+            char piece = placement.charAt(i + 2);
+            char orientation = placement.charAt(i + 3);
+            /*based on the orientation change the appropriate colours*/
+
+            coverage[col][row] = getColours(piece)[0];
+
+            if (orientation == 'A'){
+                coverage[col + 1][row] = getColours(piece)[1];
+                coverage[col][row + 1] = getColours(piece)[2];
+            }
+            else if (orientation == 'B'){
+                coverage[col][row + 1] = getColours(piece)[1];
+                coverage[col - 1][row] = getColours(piece)[2];
+            }
+            else if (orientation == 'C'){
+                coverage[col - 1][row] = getColours(piece)[1];
+                coverage[col][row - 1] = getColours(piece)[2];
+            }
+            else if (orientation == 'D'){
+                coverage[col][row - 1] = getColours(piece)[1];
+                coverage[col + 1][row] = getColours(piece)[2];
+            }
+            else
+                System.out.println("colourArray: should not reach here");
+        }
+        
+        return coverage;
+    }
+    
+    static int[][] heightArray(String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
         coverage[12][13] = 1;
@@ -119,6 +160,12 @@ public class StratoGame {
                 coverage[col][-1 + row]++;
             }
         }
+        return coverage;
+    }
+
+    private static boolean isOnTop(String piece, String placement){
+        int[][] coverage;
+        coverage = heightArray(placement);
 
         int idx1 = piece.charAt(0) - 'A';
         int idx2 = piece.charAt(1) - 'A';
@@ -142,27 +189,27 @@ public class StratoGame {
         return true;
     }
 
-    // This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
+    /* This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
+    *
+    * To make this method more efficient the call to isOnTop can be removed and the code can be adjusted here.
+    * Saves the copying of a 26x26 array numerous times.
+    * */
+
     private static boolean isPlacementAdjacent(String placement){
-        /*The next array is used to identify if a position on the board has been covered*/
-        /*I'll have the two middle tiles as 1 since they're covered since the beginning*/
+        /*
+           The next array is used to identify if a position on the board has been covered
+           I'll have the two middle tiles as 1 since they're covered since the beginning
+        */
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
         coverage[12][13] = 1;
 
         for (int i = 4; i < placement.length(); i += 4){
-            /*The first four characters must be MMUA .. skipping them*/
+
+            //The first four characters must be MMUA .. skipping them
+
             int col = placement.charAt(i) - 'A';
             int row = placement.charAt(i + 1) - 'A';
-            /*check if the tile placed is adjacent some other*/
-            /*Fortunately, the rest of the tiles are all L-shaped*/
-            /*To identify the squares covered by the tiles, we must have some sort of a representation of the tiles*/
-            /*For every tile, with the given orientation, identify the squares it covers*/
-            /*__At least__ one of them must be neighbours with a tile which is already placed*/
-
-            /*Recursive Algo: loop through and for each of the tiles placed identify their positions. For the next tile
-            * identify positions and check adjacency
-            * */
 
             if (coverage[col][row] != 0){
                 if (!isOnTop(placement.substring(i, i + 4), placement.substring(0, i))) {
@@ -175,19 +222,19 @@ public class StratoGame {
                 if ((col < 25 && coverage[1 + col][row] == 1) ||
                         (row < 25 && coverage[col][1 + row] == 1)){
                     return false;}
-                if ((2 + col < 26 && coverage[2 + col][row] == 0) &&
-                        (1 + col < 26 && row - 1 >= 0 && coverage[1 + col][-1 + row] == 0) &&
-                        (col + 1 < 26 && row + 1 < 26 && coverage[1 + col][1 + row] == 0) &&
-                        (row - 1 >= 0 && coverage[col][-1 + row] == 0) &&
-                        (row + 2 < 26 && coverage[col][2 + row] == 0) &&
-                        (col -1 >= 0 && coverage[-1 + col][row] == 0) &&
-                        (col - 1 >= 0 && row + 1 < 26 && coverage[-1 + col][1 + row] == 0)){
+                if ((!(2 + col < 26) || coverage[2 + col][row] == 0) &&
+                        (!(1 + col < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
+                        (!(col + 1 < 26 && row + 1 < 26) || coverage[1 + col][1 + row] == 0) &&
+                        (!(row - 1 >= 0) || coverage[col][-1 + row] == 0) &&
+                        (!(row + 2 < 26) || coverage[col][2 + row] == 0) &&
+                        (!(col -1 >= 0) || coverage[-1 + col][row] == 0) &&
+                        (!(col - 1 >= 0) || row + 1 < 26 && coverage[-1 + col][1 + row] == 0)){
                     return false;
                 }
+
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
                 coverage[col][1 + row] = 1;
-
             }
 
             else if (placement.charAt(i+3) == 'B'){
@@ -195,15 +242,16 @@ public class StratoGame {
                         (row + 1 < 26 && coverage[col][1 + row] == 1)) {
                     return false;
                 }
-                if (((1 + col < 26 && coverage[1 + col][row] == 0) &&
-                        (1 + col < 26 && 1 + row < 26 && coverage[1 + col][1 + row] == 0) &&
-                        (row - 1 >= 0 && coverage[col][-1 + row] == 0) &&
-                        (row + 2 < 26 && coverage[col][2 + row] == 0) &&
-                        (col - 1 >= 0 && row - 1 >= 0 && coverage[-1 + col][-1 + row] == 0) &&
-                        (col - 1 >= 0 && row + 1 < 26 && coverage[-1 + col][1 + row] == 0) &&
-                        (col - 2 >= 0 && coverage[-2 + col][row] == 0))) {
+                if (((!(1 + col < 26) || coverage[1 + col][row] == 0) &&
+                        (!(1 + col < 26 && 1 + row < 26) || coverage[1 + col][1 + row] == 0) &&
+                        (!(row - 1 >= 0) || coverage[col][-1 + row] == 0) &&
+                        (!(row + 2 < 26) || coverage[col][2 + row] == 0) &&
+                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0) &&
+                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0) &&
+                        (!(col - 2 >= 0) || coverage[-2 + col][row] == 0))) {
                     return false;
                 }
+
                 coverage[col][row] = 1;
                 coverage[-1 + col][row] = 1;
                 coverage[col][1 + row] = 1;
@@ -214,15 +262,16 @@ public class StratoGame {
                         (row - 1 >= 0 && coverage[col][-1 + row] == 1)) {
                     return false;
                 }
-                if ((col + 1 < 26 && coverage[1 + col][row] == 0 ) &&
-                        (col + 1 < 26 && row - 1 >= 0 && coverage[1 + col][-1 + row] == 0) &&
-                        (row - 2 >= 0 && coverage[col][-2 + row] == 0) &&
-                        (row + 1 < 26 && coverage[col][1 + row] == 0) &&
-                        (col - 1 >= 0 && row - 1 >= 0 && coverage[-1 + col][-1 + row] == 0) &&
-                        (col - 1 >= 0 && row + 1 < 26 && coverage[-1 + col][1 + row] == 0) &&
-                        (col - 2 >= 0 && coverage[-2 + col][row] == 0)){
+                if ((!(col + 1 < 26) || coverage[1 + col][row] == 0 ) &&
+                        (!(col + 1 < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
+                        (!(row - 2 >= 0) || coverage[col][-2 + row] == 0) &&
+                        (!(row + 1 < 26) || coverage[col][1 + row] == 0) &&
+                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0) &&
+                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0) &&
+                        (!(col - 2 >= 0) || coverage[-2 + col][row] == 0)){
                     return false;
                 }
+
                 coverage[col][row] = 1;
                 coverage[-1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
@@ -233,19 +282,22 @@ public class StratoGame {
                         (row - 1 >= 0 && coverage[col][-1 + row] == 1)){
                     return false;
                 }
-                if ((col + 2 < 26 && coverage[2 + col][row] == 0) &&
-                        (col + 1 < 26 && row - 1 >= 0 && coverage[1 + col][-1 + row] == 0) &&
-                        (col + 1 < 26 && row + 1 < 26 && coverage[1 + col][1 + row] == 0) &&
-                        (row - 2 >= 0 && coverage[col][-2 + row] == 0) &&
-                        (row + 1 < 26 && coverage[col][1 + row] == 0) &&
-                        (col - 1 >= 0 && coverage[-1 + col][row] == 0) &&
-                        (col - 1 >= 0 && row - 1 >= 0 && coverage[-1 + col][-1 + row] == 0)){
+                if ((!(col + 2 < 26) || coverage[2 + col][row] == 0) &&
+                        (!(col + 1 < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
+                        (!(col + 1 < 26 && row + 1 < 26) || coverage[1 + col][1 + row] == 0) &&
+                        (!(row - 2 >= 0) || coverage[col][-2 + row] == 0) &&
+                        (!(row + 1 < 26) || coverage[col][1 + row] == 0) &&
+                        (!(col - 1 >= 0) || coverage[-1 + col][row] == 0) &&
+                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0)){
                     return false;
                 }
+
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
             }
+            else
+                System.out.println("isPlacementAdjacent: should not reach here");
         }
         return true;
     }
@@ -294,54 +346,52 @@ public class StratoGame {
             int col = placement.charAt(i) - 'A';
             int row = placement.charAt(i+1) - 'A';
 
-            if ((colourTable[col][row] != RED || getColoursS(placement.charAt(i+2))[0] != GREEN) && (colourTable[col][row] != GREEN || getColoursS(placement.charAt(i+2))[0] != RED)) {
-                colourTable[col][row] = getColoursS(placement.charAt(i+2))[0];
+            if ((colourTable[col][row] != RED || getColours(placement.charAt(i+2))[0] != GREEN) && (colourTable[col][row] != GREEN || getColours(placement.charAt(i+2))[0] != RED)) {
+                colourTable[col][row] = getColours(placement.charAt(i+2))[0];
             }
             else return false;
 
             if (placement.charAt(i+3) == 'A') {
 
-                if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[1];
+                if ((colourTable[col+1][row] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col+1][row] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col+1][row] = getColours(placement.charAt(i+2))[1];
                 }
                 else return false;
-                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[2];
+                if ((colourTable[col][row+1] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row+1] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col][row+1] = getColours(placement.charAt(i+2))[2];
                 }
                 else return false;
             }
             else if (placement.charAt(i+3) == 'B') {
-                if ((colourTable[col][row+1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col][row+1] = getColoursS(placement.charAt(i+2))[1];
+                if ((colourTable[col][row+1] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col][row+1] = getColours(placement.charAt(i+2))[1];
                 }
                 else return false;
-                if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[2];
+                if ((colourTable[col-1][row] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col-1][row] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col-1][row] = getColours(placement.charAt(i+2))[2];
                 }
                 else return false;
             }
             else if (placement.charAt(i+3) == 'C') {
-                if ((colourTable[col-1][row] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col-1][row] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col-1][row] = getColoursS(placement.charAt(i+2))[1];
+                if ((colourTable[col-1][row] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col-1][row] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col-1][row] = getColours(placement.charAt(i+2))[1];
                 }
                 else return false;
-                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[2];
+                if ((colourTable[col][row-1] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row-1] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col][row-1] = getColours(placement.charAt(i+2))[2];
                 }
                 else return false;
             }
             else if (placement.charAt(i+3) == 'D') {
-                if ((colourTable[col][row-1] != RED || getColoursS(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColoursS(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col][row-1] = getColoursS(placement.charAt(i+2))[1];
+                if ((colourTable[col][row-1] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col][row-1] = getColours(placement.charAt(i+2))[1];
                 }
                 else return false;
-                if ((colourTable[col+1][row] != RED || getColoursS(placement.charAt(i+2))[2] != GREEN) && (colourTable[col+1][row] != GREEN || getColoursS(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col+1][row] = getColoursS(placement.charAt(i+2))[2];
+                if ((colourTable[col+1][row] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col+1][row] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col+1][row] = getColours(placement.charAt(i+2))[2];
                 }
                 else return false;
             }
-
-
         }
         return true;
     }
@@ -355,9 +405,18 @@ public class StratoGame {
      *              otherwise the score for the red player should be returned
      * @return the score for the requested player, given the placement
      */
+
     static int getScoreForPlacement(String placement, boolean green) {
         // FIXME Task 7: determine the score for a player given a placement
-        return 0;
+
+        /*I have this here for the moment but will remove it once main gets implemented*/
+        if (!isPlacementValid(placement))
+            return -1;
+        // 1. convert the placement string into a 2d array
+        // 2. find the largest area to determine the score
+        // 3. parallel to 2, find the max height in the SAME region
+        // 4. determine score
+        return getScore(placement, green);
     }
 
     /**
