@@ -6,7 +6,7 @@ import static comp1110.ass2.Colour.*;
 /**
  * Created by manalmohania on 25/08/2016.
  */
-public final class Scoring {
+final class Scoring {
     /*I wanted to have a separate class to handle scoring -- Manal*/
     private static final int BOARD_SIZE = 26;
 
@@ -16,7 +16,7 @@ public final class Scoring {
     private static Colour[][] colours;
     private static Colour[][] colours2;
     private static int[][] heights = new int[BOARD_SIZE][BOARD_SIZE];
-    
+
     static int getScore(String placement, boolean green){
 
         colours = colourArray(placement);
