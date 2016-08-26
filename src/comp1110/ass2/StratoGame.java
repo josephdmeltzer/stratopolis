@@ -227,8 +227,8 @@ public class StratoGame {
                         (!(col + 1 < 26 && row + 1 < 26) || coverage[1 + col][1 + row] == 0) &&
                         (!(row - 1 >= 0) || coverage[col][-1 + row] == 0) &&
                         (!(row + 2 < 26) || coverage[col][2 + row] == 0) &&
-                        (!(col -1 >= 0) || coverage[-1 + col][row] == 0) &&
-                        (!(col - 1 >= 0) || row + 1 < 26 && coverage[-1 + col][1 + row] == 0)){
+                        (!(col - 1 >= 0) || coverage[-1 + col][row] == 0) &&
+                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0)){
                     return false;
                 }
 

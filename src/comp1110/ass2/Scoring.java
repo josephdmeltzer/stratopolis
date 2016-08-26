@@ -6,6 +6,7 @@ import static comp1110.ass2.Colour.*;
 /**
  * Created by manalmohania on 25/08/2016.
  */
+
 final class Scoring {
     /*I wanted to have a separate class to handle scoring -- Manal*/
     private static final int BOARD_SIZE = 26;
@@ -118,22 +119,11 @@ final class Scoring {
     }
 
     private static int myMax(int a, int b, int c, int d){
-        if (a >= b) {
-            if (c >= d) {
-                if (a >= c) {
-                    return a;
-                }
-                return c;
-            }
-        }
-        else {
-            if (c >= d) {
-                if (b >= c)
-                    return b;
-                return c;
-            }
-        }
-        return -1;
+        return Math.max(Math.max(Math.max(a, b), c),d);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getScore("MMUA", false));
     }
 
 }
