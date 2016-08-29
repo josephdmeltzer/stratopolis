@@ -92,8 +92,11 @@ public class StratoGame {
         if (!isPlacementWellFormed(placement)) return false;
         if (!isPlacementAdjacent(placement)) return false;
         if (!tileStraddle(placement)) return false;
+        if (!checkBounds(placement)) return false;
         return areColoursAlright(placement);
     }
+
+
 
     /*This method assumes that the placement string is valid*/
     static Colour[][] colourArray(String placement){
@@ -298,6 +301,48 @@ public class StratoGame {
             }
             else
                 System.out.println("isPlacementAdjacent: should not reach here");
+        }
+        return true;
+    }
+
+    private static boolean checkBounds(String placement){
+        /*Inspect the positions of the origins of the pieces*/
+
+        int flag = 0;
+
+        for (int i = 0; i < placement.length(); i += 4){
+            if (placement.charAt(i) == 'A' || placement.charAt(i + 1) == 'A' || placement.charAt(i) == 'Z' || placement.charAt(i + 1) == 'Z'){
+                flag = 1;
+                break;
+            }
+        }
+        /*return true if it has nothing on the periphery of the grid*/
+        if (flag == 0)
+            return true;
+
+        /*else check*/
+        // if on the top row, the rotation must not be C or D
+        // if on the rightmost column, the rotation must not be A or D
+        // if on the bottom row, the rotation must not be A or B
+        // if on the leftmost column, rotation must not be B or C
+
+        for (int i = 0; i < placement.length(); i += 4) {
+            if (placement.charAt(i) == 'A'){
+                if (placement.charAt(i + 3) == 'B' || placement.charAt(i + 3) == 'C')
+                    return false;
+            }
+            else if (placement.charAt(i) == 'Z'){
+                if (placement.charAt(i + 3) == 'A' || placement.charAt(i + 3) == 'D')
+                    return false;
+            }
+            else if (placement.charAt(i + 1) == 'A'){
+                if (placement.charAt(i + 3) == 'C' || placement.charAt(i + 3) == 'D')
+                    return false;
+            }
+            else if (placement.charAt(i + 1) == 'Z'){
+                if (placement.charAt(i + 3) == 'A' || placement.charAt(i + 3) == 'B')
+                    return false;
+            }
         }
         return true;
     }

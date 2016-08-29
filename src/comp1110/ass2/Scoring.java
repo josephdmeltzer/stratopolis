@@ -26,7 +26,7 @@ final class Scoring {
 
         int[][] candidates = new int[400][2]; // An upper bound for the number of contiguous regions of a certain colour
 
-        /*set all flags to zero*/
+        /*reset all flags to zero*/
         for (int i = 0; i < BOARD_SIZE; i++){
             for (int j = 0; j < BOARD_SIZE; j++){
                 flags[i][j] = 0;
@@ -87,7 +87,6 @@ final class Scoring {
         }
 
         colours2[col][row] = BLACK;
-
         val = heights[col][row] > max ? heights[col][row] : max;
 
         return myMax(floodHeight(col + 1, row, colour, val), floodHeight(col - 1, row, colour, val), floodHeight(col, row + 1, colour, val), floodHeight(col, row - 1, colour, val));
@@ -108,8 +107,6 @@ final class Scoring {
         }
 
         colours[col][row] = BLACK;
-
-
         val = 1 + floodFill(col + 1, row, colour) +
                 floodFill(col - 1, row, colour) +
                 floodFill(col, row + 1, colour) +
@@ -121,9 +118,4 @@ final class Scoring {
     private static int myMax(int a, int b, int c, int d){
         return Math.max(Math.max(Math.max(a, b), c),d);
     }
-
-    public static void main(String[] args) {
-        System.out.println(getScore("MMUA", false));
-    }
-
 }
