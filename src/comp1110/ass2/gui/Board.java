@@ -26,6 +26,7 @@ import comp1110.ass2.StratoGame;
 
 import java.util.ArrayList;
 
+import static comp1110.ass2.Colour.BLACK;
 import static comp1110.ass2.Colour.GREEN;
 import static comp1110.ass2.Colour.RED;
 import static java.time.format.SignStyle.NORMAL;
@@ -36,7 +37,7 @@ public class Board extends Application {
     private static final String URI_BASE = "assets/";
 
 
-    private BoardState boardTurn = new BoardState(GREEN);
+    private BoardState boardTurn = new BoardState(BLACK);
     private PlayerG playerG = new PlayerG();
     private PlayerR playerR = new PlayerR();
     private String moveHistory;
@@ -86,8 +87,8 @@ public class Board extends Application {
             GridPane.setValignment(label2, VPos.CENTER);
         }
 
-        /*Make clickable grid*/
-        /*BUG: Tiles further down/left than MN don't react when clicked*/
+
+
         ArrayList<Tiles> tiles= new ArrayList<Tiles>();
         for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
@@ -101,9 +102,9 @@ public class Board extends Application {
                 GridPane.setValignment(r, VPos.CENTER);
 
                 addPane(i,j);
+                addPane(j,i);
             }
         }
-
 
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
         playingBoard.setGridLinesVisible(false);
@@ -119,26 +120,36 @@ public class Board extends Application {
     }
 
     private void addPane(int colIndex, int rowIndex){
-        /*BUG: Event stops working when it has an image covering it*/
         Pane pane = new Pane();
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 char col = (char) (colIndex+64);
                 char row = (char) (rowIndex+64);
-                if (boardTurn.playerTurn==GREEN){
-                    String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
-                    makeGUIPlacement(placement, ivg, ivr);
-                }else{
-                    String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
-                    makeGUIPlacement(placement, ivg, ivr);
+                switch (boardTurn.playerTurn){
+                    case RED:
+                        String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+                        makeGUIPlacement(placement, ivg, ivr);
+                        break;
+                    case GREEN:
+                        String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+                        makeGUIPlacement(placement2, ivg, ivr);
+                        break;
+                    case BLACK:
+                        makeGUIPlacement("MMUA", ivg, ivr);
+                        break;
                 }
-
-
-
+                /*Crude fix for images covering events*/
+                addPane(colIndex+1, rowIndex);
+                addPane(colIndex-1, rowIndex);
+                addPane(colIndex, rowIndex+1);
+                addPane(colIndex, rowIndex-1);
+                addPane(colIndex, rowIndex);
             }
         });
-        playingBoard.add(pane, colIndex, rowIndex);
+        playingBoard.getChildren().add(pane);
+        GridPane.setRowIndex(pane,rowIndex);
+        GridPane.setColumnIndex(pane,colIndex);
     }
 
     void makeGUIPlacement(String placement, ImageView ivg, ImageView ivr) {
@@ -177,29 +188,30 @@ public class Board extends Application {
                     break;
             }
 
-        /*BUG: it has the turns in the wrong order*/
 
-            if (boardTurn.playerTurn==GREEN){
-                playerG.used_tiles = playerG.used_tiles+1;
-                ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
-                ivg.setFitWidth(80);
-                ivg.setPreserveRatio(true);
-                ivg.setSmooth(true);
-                ivg.setCache(true);
-                boardTurn.playerTurn=RED;
+            switch (boardTurn.playerTurn){
+                case RED:
+                    playerG.used_tiles = playerG.used_tiles+1;
+                    ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+                    ivr.setFitWidth(80);
+                    ivr.setPreserveRatio(true);
+                    ivr.setSmooth(true);
+                    ivr.setCache(true);
+                    boardTurn.playerTurn=GREEN;
+                    break;
+                case GREEN:
+                    playerR.used_tiles = playerR.used_tiles+1;
+                    ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+                    ivg.setFitWidth(80);
+                    ivg.setPreserveRatio(true);
+                    ivg.setSmooth(true);
+                    ivg.setCache(true);
+                    boardTurn.playerTurn=RED;
+                    break;
+                case BLACK:
+                    boardTurn.playerTurn=GREEN;
+                    break;
             }
-            else{
-                playerR.used_tiles = playerR.used_tiles+1;
-                ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
-                ivr.setFitWidth(80);
-                ivr.setPreserveRatio(true);
-                ivr.setSmooth(true);
-                ivr.setCache(true);
-                boardTurn.playerTurn=GREEN;
-            }
-            moveHistory = stuff;
-
-
         }
     }
 
