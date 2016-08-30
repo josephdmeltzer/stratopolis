@@ -3,6 +3,7 @@ package comp1110.ass2;
 import static comp1110.ass2.Colour.*;
 import static comp1110.ass2.Pieces.getColours;
 import static comp1110.ass2.Scoring.getScore;
+import static comp1110.ass2.Scoring.getWinner;
 
 
 /**
@@ -380,6 +381,12 @@ public class StratoGame {
             }
         }
         return true;
+    }
+
+    /*returns true if green wins*/
+    /*ASSUMES THAT THE PLACEMENT STRING IS VALID*/
+    static boolean hasGreenWon(String placement){
+        return getWinner(placement);
     }
 
     private static boolean areColoursAlright(String placement){

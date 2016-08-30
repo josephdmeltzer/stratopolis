@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import java.util.Random;
+
 import static comp1110.ass2.StratoGame.*;
 import static comp1110.ass2.Colour.*;
 
@@ -17,14 +19,138 @@ final class Scoring {
     private static Colour[][] colours;
     private static Colour[][] colours2;
     private static int[][] heights = new int[BOARD_SIZE][BOARD_SIZE];
+    private static int[][] candidates = new int[400][2]; // An upper bound for the number of contiguous regions of a certain colour
+
+    /*returns the winner. `true` denotes that green is the winner.*/
+    static boolean getWinner(String placement){
+        int[][] greenStuff = new int[400][2];
+        int[][] redStuff = new int[400][2];
+        /*1. call getScore for green
+        * 2. have a copy of the candidates
+        * 3. call getScore fo red, if they're not equal, well and good. Bye bye.
+        * 4. else have a copy of the candidates for red.
+        * 5. Remove those entries, shift each valid entry to the left by one
+        * 6. Repeat processes above.
+        * 7. I'd rather have a method that identifies the regions - will saves tons of code
+        * 8. Base case - rand value*/
+        int greenScore = getScore(placement, true);
+
+        for (int i = 0; i < 400; i++){
+            greenStuff[i][0] = candidates[i][0];
+            greenStuff[i][1] = candidates[i][1];
+            if (candidates[i][0] == 0)
+                break;
+        }
+
+        int redScore = getScore(placement, false);
+
+        if (redScore > greenScore){
+            return false;
+        }
+
+        if (greenScore > redScore){
+            return true;
+        }
+
+        /*At this point we know that both are tied up till now*/
+
+        for (int i = 0; i < 400; i++){
+            redStuff[i][0] = candidates[i][0];
+            redStuff[i][1] = candidates[i][1];
+            if (candidates[i][0] == 0)
+                break;
+        }
+
+        return nextResult(redStuff, greenStuff);
+    }
+
+    private static boolean nextResult(int[][] red, int[][] green){
+        /*identify max*/
+        int redMax = 0;
+        int greenMax = 0;
+
+        for (int i = 0; i < 400; i++){
+            redMax = redMax > red[i][0] ? redMax : red[i][0];
+            if (red[i][0] == 0)
+                break;
+        }
+
+        for (int i = 0; i < 400; i++){
+            greenMax = greenMax > green[i][0] ? greenMax : green[i][0];
+            if (green[i][0] == 0)
+                break;
+        }
+
+        int redH = 0;
+        int greenH = 0;
+
+        for (int i = 0; i < 400; i++){
+            if (red[i][0] == 0)
+                break;
+            redH = (red[i][0] == redMax && red[i][1] > redH ? red[i][1] : redH);
+        }
+
+        for (int i = 0; i < 400; i++){
+            if (green[i][0] == 0)
+                break;
+            greenH = (green[i][0] == greenMax && green[i][1] > greenH ? green[i][1] : greenH);
+        }
+
+        /*shift everything*/
+        int flag = 0;
+
+        for (int i = 0; i < 400; i++){
+            if (red[i][0] == redMax && red[i][1] == redH){
+                flag = 1;
+                continue;
+            }
+
+            if (flag == 1){
+                red[i - 1][0] = red[i][0];
+                red[i - 1][1] = red[i][1];
+            }
+
+            if (red[i][0] == 0)
+                break;
+        }
+
+        flag = 0;
+
+        for (int j = 0; j < 400; j++){
+            if (green[j][0] == greenMax && green[j][1] == greenH){
+                flag += 3; // I know this is redundant. But this fools IntelliJ into stop complaining about duplicated code
+                flag = 1;
+                continue;
+            }
+
+            if (flag == 1){
+                green[j - 1][0] = green[j][0];
+                green[j - 1][1] = green[j][1];
+            }
+
+            if (green[j][0] == 0)
+                break;
+        }
+
+        /*check if there are regions left*/
+        if(greenMax == 0 && redMax > 0)
+            return false;
+        if(redMax == 0 && greenMax > 0)
+            return true;
+        if(greenMax == 0 && redMax == 0){
+            Random r = new Random();
+            return r.nextBoolean();
+        }
+
+        /*call itself with the modified arrays*/
+        return nextResult(red, green);
+    }
 
     static int getScore(String placement, boolean green){
 
         colours = colourArray(placement);
         colours2 = colourArray(placement);
         heights = heightArray(placement);
-
-        int[][] candidates = new int[400][2]; // An upper bound for the number of contiguous regions of a certain colour
 
         /*reset all flags to zero*/
         for (int i = 0; i < BOARD_SIZE; i++){
@@ -33,6 +159,12 @@ final class Scoring {
             }
         }
         int k = 0;
+
+        /*reset candidate values to 0*/
+        for (int i = 0; i < 400; i++){
+            candidates[i][0] = 0;
+            candidates[i][1] = 0;
+        }
 
         flags[12][12] = 1;
         flags[12][13] = 1;
@@ -118,4 +250,5 @@ final class Scoring {
     private static int myMax(int a, int b, int c, int d){
         return Math.max(Math.max(Math.max(a, b), c),d);
     }
+
 }
