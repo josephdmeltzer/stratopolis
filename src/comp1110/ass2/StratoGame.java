@@ -227,8 +227,8 @@ public class StratoGame {
                         (!(col + 1 < 26 && row + 1 < 26) || coverage[1 + col][1 + row] == 0) &&
                         (!(row - 1 >= 0) || coverage[col][-1 + row] == 0) &&
                         (!(row + 2 < 26) || coverage[col][2 + row] == 0) &&
-                        (!(col -1 >= 0) || coverage[-1 + col][row] == 0) &&
-                        (!(col - 1 >= 0) || row + 1 < 26 && coverage[-1 + col][1 + row] == 0)){
+                        (!(col - 1 >= 0) || coverage[-1 + col][row] == 0) &&
+                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0)){
                     return false;
                 }
 
@@ -430,6 +430,26 @@ public class StratoGame {
      */
     static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
-        return null;
+        String bestMove = "";
+        int bestScore = 0;
+        for (char x='A'; x<='Z'; x++) {
+            for (char y='A'; y<='Z'; y++) {
+                for (char o='A'; o<='D'; o++) {
+                    if (piece>='A' && piece <='J') {
+                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)>bestScore ) {
+                            bestMove = ""+x+y+piece+o;
+                            bestScore = getScoreForPlacement(placement + x + y + piece + o, false);
+                        }
+                    }
+                    if (piece>='K' && piece <='T') {
+                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true)>bestScore ) {
+                            bestMove = ""+x+y+piece+o;
+                            bestScore = getScoreForPlacement(placement + x + y + piece + o, true);
+                        }
+                    }
+                }
+            }
+        }
+        return bestMove;
     }
 }
