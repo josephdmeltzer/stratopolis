@@ -191,7 +191,7 @@ public class Board extends Application {
 
             switch (boardTurn.playerTurn){
                 case RED:
-                    playerG.used_tiles = playerG.used_tiles+1;
+                    playerR.used_tiles = playerR.used_tiles+1;
                     ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
                     ivr.setFitWidth(80);
                     ivr.setPreserveRatio(true);
@@ -200,7 +200,7 @@ public class Board extends Application {
                     boardTurn.playerTurn=GREEN;
                     break;
                 case GREEN:
-                    playerR.used_tiles = playerR.used_tiles+1;
+                    playerG.used_tiles = playerG.used_tiles+1;
                     ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
                     ivg.setFitWidth(80);
                     ivg.setPreserveRatio(true);
@@ -239,7 +239,7 @@ public class Board extends Application {
             @Override
             public void handle(ActionEvent e) {
                 placementGrp.getChildren().clear();
-                /*funstion that creates the game*/
+                /*function that creates the game*/
             }
         });
 
