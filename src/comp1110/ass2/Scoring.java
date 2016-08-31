@@ -117,13 +117,13 @@ final class Scoring {
                 break;
         }
 
+        /*same thing with the green array*/
         flag = 0;
 
         for (int j = 0; j < 400; j++){
             if (green[j][0] == greenMax && green[j][1] == greenH){
                 if (flag == 0){
-                    flag += 3; // I know this is redundant. But this fools IntelliJ into stop complaining about duplicated code
-                    flag = 1;
+                    flag += 1; // Fooled IntelliJ into stop complaining about duplicated code. Remove that `+` and you'll see what I mean
                     continue;
                 }
                 flag = 1;
@@ -200,6 +200,7 @@ final class Scoring {
         for (int i = 0; i < 400; i++){
             if (candidates[i][0] == 0)
                 break;
+            // System.out.println(i + "\t" + candidates[i][0] + "\t" + candidates[i][1]);
             maxArea = (candidates[i][0] > maxArea ? candidates[i][0] : maxArea);
         }
 
@@ -257,4 +258,10 @@ final class Scoring {
         return Math.max(Math.max(Math.max(a, b), c),d);
     }
 
+    /*
+    * Some Strings:
+     * MMUANLOBLOEDNOTDLLJB: it's symmetric
+     * MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC: The one on the project page
+     * More given in TestUtility
+    * */
 }
