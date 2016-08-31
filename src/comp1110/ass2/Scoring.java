@@ -121,8 +121,8 @@ final class Scoring {
 
         for (int j = 0; j < 400; j++){
             if (green[j][0] == greenMax && green[j][1] == greenH){
-                flag += 3; // I know this is redundant. But this fools IntelliJ into stop complaining about duplicated code
                 if (flag == 0){
+                    flag += 3; // I know this is redundant. But this fools IntelliJ into stop complaining about duplicated code
                     flag = 1;
                     continue;
                 }
