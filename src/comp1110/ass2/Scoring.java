@@ -101,8 +101,11 @@ final class Scoring {
 
         for (int i = 0; i < 400; i++){
             if (red[i][0] == redMax && red[i][1] == redH){
+                if (flag == 0){
+                    flag = 1;
+                    continue;
+                }
                 flag = 1;
-                continue;
             }
 
             if (flag == 1){
@@ -119,8 +122,11 @@ final class Scoring {
         for (int j = 0; j < 400; j++){
             if (green[j][0] == greenMax && green[j][1] == greenH){
                 flag += 3; // I know this is redundant. But this fools IntelliJ into stop complaining about duplicated code
+                if (flag == 0){
+                    flag = 1;
+                    continue;
+                }
                 flag = 1;
-                continue;
             }
 
             if (flag == 1){
