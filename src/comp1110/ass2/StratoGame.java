@@ -14,8 +14,6 @@ import static comp1110.ass2.Scoring.getWinner;
  */
 public class StratoGame {
 
-    int[][] flags; // NOTE: DO NOT WRITE TO THIS.
-
     /**
      * Determine whether a tile placement is well-formed according to the following:
      * - it consists of exactly four characters
@@ -77,9 +75,6 @@ public class StratoGame {
         return true;
     }
 
-    // There seems to be no place where we have checked that no part of the tile falls out of the board
-    // I am not adding that functionality just yet because the spec doesn't mention that.
-    // It shouldn't be too hard though -- Manal
 
     /**
      * Determine whether a placement is valid.  To be valid, the placement must be well-formed
@@ -96,8 +91,6 @@ public class StratoGame {
         if (!checkBounds(placement)) return false;
         return areColoursAlright(placement);
     }
-
-
 
     /*This method assumes that the placement string is valid*/
     static Colour[][] colourArray(String placement){
@@ -137,7 +130,8 @@ public class StratoGame {
         
         return coverage;
     }
-    
+
+    /*and so does this*/
     static int[][] heightArray(String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
@@ -193,7 +187,8 @@ public class StratoGame {
         return true;
     }
 
-    /* This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
+    /**
+     *  This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
     *
     * To make this method more efficient the call to isOnTop can be removed and the code can be adjusted here.
     * Saves the copying of a 26x26 array numerous times.
@@ -383,9 +378,13 @@ public class StratoGame {
         return true;
     }
 
-    /*returns true if green wins*/
-    /*ASSUMES THAT THE PLACEMENT STRING IS VALID*/
-    static boolean hasGreenWon(String placement){
+    /**
+     * This method returns true if green has won the game.
+     * Currently, the method does not say if green has won by scoring higher points or by virtue of luck.
+     * Adding that functionality should be fairly simple though.
+     * NOTE: THE PLACEMENT STRING IS ASSUMED TO BE VALID
+     * */
+    static boolean greenHasWon(String placement){
         return getWinner(placement);
     }
 

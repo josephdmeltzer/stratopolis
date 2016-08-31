@@ -20,9 +20,12 @@ final class Scoring {
     private static Colour[][] colours2;
     private static int[][] heights = new int[BOARD_SIZE][BOARD_SIZE];
     private static int[][] candidates = new int[400][2]; // An upper bound for the number of contiguous regions of a certain colour
+    private static boolean winnerByChance; // If this bool is true, you'll know that the winner has been determined by chance.
 
     /*returns the winner. `true` denotes that green is the winner.*/
     static boolean getWinner(String placement){
+
+        winnerByChance = false;
         int[][] greenStuff = new int[400][2];
         int[][] redStuff = new int[400][2];
         /*1. call getScore for green
@@ -144,6 +147,7 @@ final class Scoring {
         if(redMax == 0 && greenMax > 0)
             return true;
         if(greenMax == 0 && redMax == 0){
+            winnerByChance = true;
             Random r = new Random();
             return r.nextBoolean();
         }
@@ -257,6 +261,8 @@ final class Scoring {
     private static int myMax(int a, int b, int c, int d){
         return Math.max(Math.max(Math.max(a, b), c),d);
     }
+
+    static boolean isWinnerByChance(){return winnerByChance;}
 
     /*
     * Some Strings:
