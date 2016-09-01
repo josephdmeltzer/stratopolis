@@ -8,6 +8,6 @@ import static comp1110.ass2.Colour.RED;
  */
 
 /*Player B*/
-public class PlayerB extends Player{
+public class PlayerR extends Player{
     public static Colour playerColour = RED;
 }
