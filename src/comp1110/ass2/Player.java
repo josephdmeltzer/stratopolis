@@ -8,4 +8,6 @@ package comp1110.ass2;
 * Each of the players are subclasses of it
 * */
 public class Player {
+    public int used_tiles = 0;
+    public char rotation = 'A';
 }
