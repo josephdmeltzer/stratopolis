@@ -221,7 +221,7 @@ final class Scoring {
 
         int val;
 
-        if (!(col >= 0 && row >= 0 && col <= 26 && row <= 26)){
+        if (!(col >= 0 && row >= 0 && col <= 25 && row <= 25)){
             return max;
         }
 
@@ -239,7 +239,7 @@ final class Scoring {
 
         int val;
 
-        if (!(col >= 0 && row >= 0 && col <= 26 && row <= 26)){
+        if (!(col >= 0 && row >= 0 && col <= 25 && row <= 25)){
             return 0;
         }
 
@@ -262,6 +262,7 @@ final class Scoring {
         return Math.max(Math.max(Math.max(a, b), c),d);
     }
 
+    /*This method hasn't been called as yet, because it will only be used in the very end*/
     static boolean isWinnerByChance(){return winnerByChance;}
 
     /*
@@ -270,4 +271,8 @@ final class Scoring {
      * MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC: The one on the project page
      * More given in TestUtility
     * */
+
+    public static void main(String[] args) {
+        System.out.println(getScore("MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBLOFAONLBNJFBIMNDPQICHMQBQOJDRNPDJNABIPPAJKEDGNQBKQGDHKLBQRHDNRRCTMCCLRKBJHHAMTSCRPAATRMCLGGAURTDUNIBOIKAFMDCLVRDVTBC", false));
+    }
 }
