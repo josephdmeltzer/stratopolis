@@ -168,7 +168,7 @@ public class StratoGame {
         return coverage;
     }
 
-    static boolean isOnTop(String piece, String placement){
+    private static boolean isOnTop(String piece, String placement){
         int[][] coverage;
         coverage = heightArray(placement);
 
@@ -416,7 +416,7 @@ public class StratoGame {
      * Adding that functionality should be fairly simple though.
      * NOTE: THE PLACEMENT STRING IS ASSUMED TO BE VALID
      * */
-    static boolean greenHasWon(String placement){
+    public static boolean greenHasWon(String placement){
         return getWinner(placement);
     }
 

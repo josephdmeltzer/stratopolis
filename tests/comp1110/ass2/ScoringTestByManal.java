@@ -104,7 +104,7 @@ public class ScoringTestByManal {
     * 2. Identify the symmetrically opposite orientation
     * 3. Identify the symmetrically opposite coordinates
     * 4. Ensure nothing other than the centre piece lies in the middle
-    * 5. To ensure symmetry of board available, nothing should go into the bottom row or rightmost column
+    * 5. To ensure symmetry of board available, nothing should go into the rightmost column
     * */
 
     /*returns "" if original string does not satisfy conditions*/
@@ -134,7 +134,7 @@ public class ScoringTestByManal {
 
         else{return x;}
 
-        if (original.charAt(0) == 'Z' || original.charAt(1) == 'A')
+        if (original.charAt(0) == 'Z')
             return x;
 
         char oppCol = (char) (original.charAt(0) + 2 * ('M' - original.charAt(0)));
@@ -142,13 +142,6 @@ public class ScoringTestByManal {
 
         return "" + oppCol + oppRow + oppPiece + oppOr;
     }
-
-    // How do I create a random placement?
-    // Identify centre. Go in random direction
-    // Test spot with a series of random orientations
-    // If placement is valid, place it, else repeat step 2 with the new centre being the current coordinate
-
-    /*is creating the method really worth it?*/
 
     private static char[] shuffle(char[] s){
         int pos = 0;
@@ -178,8 +171,9 @@ public class ScoringTestByManal {
         return shuffled;
     }
 
+    /*This test checks if the winner of a symmetrical board is random*/
     @Test
-    public void testRandomPlacement(){
+    public void testSymmetricPlacement(){
 
         char[] redPieces = new char[20];
 
@@ -200,11 +194,10 @@ public class ScoringTestByManal {
 
         for (int iter = 0; iter < 100; iter++) {
             String placement = "MMUA";
-            cols = shuffle(temp);
-            rows = shuffle(temp);
-            char[] orShuffled = shuffle(orientaions);
-            char[] shuffled = shuffle(redPieces);
-            while (true) {
+                cols = shuffle(temp);
+                rows = shuffle(temp);
+                char[] orShuffled = shuffle(orientaions);
+                char[] shuffled = shuffle(redPieces);
                 for (int i = 0; i < 26; i++) {
                     for (int j = 0; j < 26; j++) {
                         for (int k = 0; k < 20; k++) {
@@ -218,8 +211,7 @@ public class ScoringTestByManal {
                         }
                     }
                 }
-                break;
-            }
+
             /*at this point we have the placement string. Need to check if the winner is random*/
             boolean redWin = false;
             boolean greenWin = false;

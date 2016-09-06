@@ -449,7 +449,7 @@ public class Board extends Application {
             if (moveHistory.length() == 164) {
                 /*TODO: end the game and calculate the score*/
                 placementGrp.getChildren().clear();
-                if (getWinner(moveHistory)){
+                if (Scoring.getWinner(moveHistory)){
                     Text score = new Text("Green Wins!");
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
                     placementGrp.getChildren().add(score);
