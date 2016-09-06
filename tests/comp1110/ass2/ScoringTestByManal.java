@@ -215,7 +215,7 @@ public class ScoringTestByManal {
             /*at this point we have the placement string. Need to check if the winner is random*/
             boolean redWin = false;
             boolean greenWin = false;
-            for (int i = 0; i < 100; i++){
+            for (int i = 0; i < 10000; i++){
                 if (StratoGame.greenHasWon(placement)){
                     greenWin = true;
                 }
@@ -226,7 +226,7 @@ public class ScoringTestByManal {
                     break;
                 }
             }
-            assertTrue("The placement string "+ placement + " is symmetric and needs to have a random winner. However, it is " + StratoGame.greenHasWon(placement) + " that green has won each time", redWin && greenWin);
+            assertTrue("The placement string "+ placement + " is symmetric and needs to have a random winner. However, " + (StratoGame.greenHasWon(placement) ? "green"  : "red") + "  has won each time in 10000 iterations", redWin && greenWin);
         }
 
 
