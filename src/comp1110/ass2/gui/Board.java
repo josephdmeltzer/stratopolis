@@ -474,7 +474,7 @@ public class Board extends Application {
 
 
     private void initialSettings() {
-        Text hi = new Text("Choose playing mode (note: only two-player works for now)");
+        Text hi = new Text("Choose playing mode");
 
         placementGrp.getChildren().add(hi);
         Button playasgreen = new Button("Play as Green");
