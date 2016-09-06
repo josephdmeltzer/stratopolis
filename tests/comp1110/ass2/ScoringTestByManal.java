@@ -107,9 +107,9 @@ public class ScoringTestByManal {
     * 5. To ensure symmetry of board available, nothing should go into the bottom row or rightmost column
     * */
 
-    /*returns 0000 if original string does not satisfy conditions*/
+    /*returns "" if original string does not satisfy conditions*/
     private static String createSymmetric(String original){
-        String x = "0000";
+        String x = "";
         if (original.length() != 4)
             return x;
 
@@ -180,7 +180,7 @@ public class ScoringTestByManal {
 
     @Test
     public void testRandomPlacement(){
-        String placement = "MMUA";
+
         char[] redPieces = new char[20];
 
         for (int i = 0; i < 20; i++){
@@ -198,28 +198,44 @@ public class ScoringTestByManal {
             temp[i] = (char)('A' + i);
         }
 
-        while (true){
+        for (int iter = 0; iter < 100; iter++) {
+            String placement = "MMUA";
             cols = shuffle(temp);
             rows = shuffle(temp);
             char[] orShuffled = shuffle(orientaions);
             char[] shuffled = shuffle(redPieces);
+            while (true) {
+                for (int i = 0; i < 26; i++) {
+                    for (int j = 0; j < 26; j++) {
+                        for (int k = 0; k < 20; k++) {
+                            for (int l = 0; l < 4; l++) {
+                                if (StratoGame.isPlacementValid(placement + cols[i] + rows[j] + shuffled[k] + orShuffled[l]) && cols[i] != 'M') {
+                                    placement += "" + cols[i] + rows[j] + shuffled[k] + orShuffled[l];
+                                    placement += createSymmetric("" + cols[i] + rows[j] + shuffled[k] + orShuffled[l]);
 
-            for (int i = 0; i < 26; i++){
-                for (int j = 0; j < 26; j++){
-                    for (int k = 0; k < 20; k++){
-                        for (int l = 0; l < 4; l++){
-                            if (StratoGame.isPlacementValid(placement + cols[i] + rows[j] + shuffled[k] + orShuffled[l]) && cols[i] != 'M'){
-                                placement += "" + cols[i] + rows[j] + shuffled[k] + orShuffled[l];
-                                placement += createSymmetric("" + cols[i] + rows[j] + shuffled[k] + orShuffled[l]);
-
+                                }
                             }
                         }
                     }
                 }
+                break;
             }
-            break;
+            /*at this point we have the placement string. Need to check if the winner is random*/
+            boolean redWin = false;
+            boolean greenWin = false;
+            for (int i = 0; i < 100; i++){
+                if (StratoGame.greenHasWon(placement)){
+                    greenWin = true;
+                }
+                else{
+                    redWin = true;
+                }
+                if (greenWin && redWin){
+                    break;
+                }
+            }
+            assertTrue("The placement string "+ placement + " is symmetric and needs to have a random winner. However, it is " + StratoGame.greenHasWon(placement) + " that green has won each time", redWin && greenWin);
         }
-        System.out.println(placement);
 
 
     }

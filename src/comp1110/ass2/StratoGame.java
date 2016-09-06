@@ -179,20 +179,25 @@ public class StratoGame {
 
 
         if (piece.charAt(3) == 'A') {
+            if (idx1 == 25 || idx2 == 25){return false;}
+
             if (!(coverage[1 + idx1][idx2] == coverage[idx1][1 + idx2] && coverage[1 + idx1][idx2] == coverage[idx1][idx2]))
                 return false;
         }
         else if (piece.charAt(3) == 'B') {
+            if (idx1 == 0 || idx2 == 25){return false;}
             if (!(coverage[idx1][idx2] == coverage[-1 + idx1][idx2] && coverage[-1 + idx1][idx2] == coverage[idx1][1 + idx2])) {
                 return false;
             }
         }
         else if (piece.charAt(3) == 'C') {
+            if (idx1 == 0 || idx2 == 0){return false;}
             if (!(coverage[-1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2])) {
                 return false;
             }
         }
         else if (piece.charAt(3) == 'D') {
+            if (idx1 == 25 || idx2 == 0){return false;}
             if (!(coverage[1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2]))
                 return false;
         }
@@ -246,9 +251,8 @@ public class StratoGame {
                     return false;
                 }
 
-                if (col == 0 || col == 25 || row == 0 || row == 25) {
-                    System.out.println(placement);
-                    System.out.println(col + " " + row);
+                if (col == 25 || row == 25) {
+                    return false;
                 }
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
@@ -270,9 +274,8 @@ public class StratoGame {
                     return false;
                 }
 
-                if (col == 0 || col == 25 || row == 0 || row == 25) {
-                    System.out.println(placement);
-                    System.out.println(col + " " + row);
+                if (col == 0 || row == 25) {
+                    return false;
                 }
                 coverage[col][row] = 1;
                 coverage[-1 + col][row] = 1;
@@ -294,9 +297,8 @@ public class StratoGame {
                     return false;
                 }
 
-                if (col == 0 || col == 25 || row == 0 || row == 25) {
-                    System.out.println(placement);
-                    System.out.println(col + " " + row);
+                if (col == 0  || row == 0 ) {
+                    return false;
                 }
                 coverage[col][row] = 1;
                 coverage[-1 + col][row] = 1;
@@ -318,9 +320,8 @@ public class StratoGame {
                     return false;
                 }
 
-                if (col == 0 || col == 25 || row == 0 || row == 25) {
-                    System.out.println(placement);
-                    System.out.println(col + " " + row);
+                if (col == 25 || row == 0) {
+                    return false;
                 }
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
