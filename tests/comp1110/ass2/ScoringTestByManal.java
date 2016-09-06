@@ -2,8 +2,6 @@ package comp1110.ass2;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static comp1110.ass2.TestUtility.*;
@@ -25,7 +23,7 @@ public class ScoringTestByManal {
 
     /*
     * Properties of score-
-    * 1. Score > 0
+    * 1. Score >= 0
     * 2. Total Score <= ((n + 1)/2)*(-1 + 3n), where n is the number of pieces on board
     * 3. We know final scores in some strings
     * 4. Max possible score for a certain colour is 450. Not sure if it can be achieved.
@@ -33,12 +31,12 @@ public class ScoringTestByManal {
     */
 
     @Test
-    public void testPositive(){
+    public void testNonNegative(){
         for (int i = 0; i < PLACEMENTS.length; i++){
             for (int j = 1; j < PLACEMENTS[i].length()/4; j++){
                 String temp = PLACEMENTS[i].substring(0, 4*j);
-                assertTrue("Score for "+ temp + " must be positive for red, but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, false) > 0);
-                assertTrue("Score for "+ temp + " must be positive for green, but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, true) > 0);
+                assertTrue("Score for "+ temp + " must be positive for red, but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, false) >= 0);
+                assertTrue("Score for "+ temp + " must be positive for green, but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, true) >= 0);
             }
         }
     }
@@ -62,6 +60,12 @@ public class ScoringTestByManal {
     }
 
     @Test
+    public void testAgainstStrings(){
+        assertTrue("The score for placement MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC for green should be 8 but returned " + StratoGame.getScoreForPlacement("MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC", true), StratoGame.getScoreForPlacement("MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC", true) == 8);
+        assertTrue("The score for placement MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC for red should be 33 but returned " + StratoGame.getScoreForPlacement("MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC", false), StratoGame.getScoreForPlacement("MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC", false) == 33);
+    }
+
+    @Test
     public void testRedScoreBound(){
         for (int i = 0; i < PLACEMENTS.length; i++){
             for (int j = 2; j < PLACEMENTS[i].length()/4; j++){
@@ -70,6 +74,7 @@ public class ScoringTestByManal {
             }
         }
     }
+
 
     /*Tests for winner determination*/
     /*The placement string must be of max possible length*/
@@ -91,7 +96,6 @@ public class ScoringTestByManal {
                 assertTrue("Red has been declared winner in the placement string " + PLACEMENT, StratoGame.greenHasWon(PLACEMENT));
             }
         }
-        System.out.println(createSymmetric("NLOB"));
     }
 
 
@@ -143,4 +147,80 @@ public class ScoringTestByManal {
     // Identify centre. Go in random direction
     // Test spot with a series of random orientations
     // If placement is valid, place it, else repeat step 2 with the new centre being the current coordinate
+
+    /*is creating the method really worth it?*/
+
+    private static char[] shuffle(char[] s){
+        int pos = 0;
+        int len = s.length;
+        Random random = new Random();
+        int[] check = new int[len];
+        char[] shuffled = new char[len];
+        for (int i = 0; i < len; i ++){
+            int x = random.nextInt(len - i);
+            for (int j = 0; j < len; j++){
+                if (x == 0 && check[j] == 0){
+                    pos = j;
+                    break;
+                }
+
+
+                if (check[j] == 0) x--;
+            }
+
+            if (pos == -1){ System.out.printf("Something's not right here "); System.exit(255);}
+
+            shuffled[i] = s[pos];
+            /*update check*/
+            check[pos] = 1;
+
+        }
+        return shuffled;
+    }
+
+    @Test
+    public void testRandomPlacement(){
+        String placement = "MMUA";
+        char[] redPieces = new char[20];
+
+        for (int i = 0; i < 20; i++){
+            redPieces[i] = ((char)('K' + i) > 'T' ? (char)('K' + i - 10) : (char)('K' + i));
+        }
+
+        char[] orientaions = {'A', 'B', 'C', 'D'};
+
+
+        char[] cols;
+        char[] rows;
+        char[] temp = new char[26];
+
+        for (int i = 0; i < 26; i++){
+            temp[i] = (char)('A' + i);
+        }
+
+        while (true){
+            cols = shuffle(temp);
+            rows = shuffle(temp);
+            char[] orShuffled = shuffle(orientaions);
+            char[] shuffled = shuffle(redPieces);
+
+            for (int i = 0; i < 26; i++){
+                for (int j = 0; j < 26; j++){
+                    for (int k = 0; k < 20; k++){
+                        for (int l = 0; l < 4; l++){
+                            if (StratoGame.isPlacementValid(placement + cols[i] + rows[j] + shuffled[k] + orShuffled[l]) && cols[i] != 'M'){
+                                placement += "" + cols[i] + rows[j] + shuffled[k] + orShuffled[l];
+                                placement += createSymmetric("" + cols[i] + rows[j] + shuffled[k] + orShuffled[l]);
+
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        System.out.println(placement);
+
+
+    }
 }

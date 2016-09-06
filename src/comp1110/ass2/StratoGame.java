@@ -52,7 +52,7 @@ public class StratoGame {
      * @param placement A string describing a placement of one or more tiles
      * @return True if the placement is well-formed
      */
-    public static boolean isPlacementWellFormed(String placement) {
+     static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 4: determine whether a placement is well-formed
         if (placement == null) return false;
         int len = placement.length();
@@ -168,7 +168,7 @@ public class StratoGame {
         return coverage;
     }
 
-    private static boolean isOnTop(String piece, String placement){
+    static boolean isOnTop(String piece, String placement){
         int[][] coverage;
         coverage = heightArray(placement);
 
@@ -177,20 +177,28 @@ public class StratoGame {
         if (coverage[idx1][idx2] == 0)
             return false;
 
-        if (piece.charAt(3) == 'A')
+
+        if (piece.charAt(3) == 'A') {
             if (!(coverage[1 + idx1][idx2] == coverage[idx1][1 + idx2] && coverage[1 + idx1][idx2] == coverage[idx1][idx2]))
                 return false;
-        else if (piece.charAt(3) == 'B')
-            if(!(coverage[idx1][idx2] == coverage[-1 + idx1][idx2] && coverage[-1 + idx1][idx2] == coverage[idx1][1 + idx2]))
+        }
+        else if (piece.charAt(3) == 'B') {
+            if (!(coverage[idx1][idx2] == coverage[-1 + idx1][idx2] && coverage[-1 + idx1][idx2] == coverage[idx1][1 + idx2])) {
                 return false;
-        else if (piece.charAt(3) == 'C')
-            if (!(coverage[-1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2]))
+            }
+        }
+        else if (piece.charAt(3) == 'C') {
+            if (!(coverage[-1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2])) {
                 return false;
-        else if (piece.charAt(3) == 'D')
+            }
+        }
+        else if (piece.charAt(3) == 'D') {
             if (!(coverage[1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2]))
                 return false;
-        else
+        }
+        else {
             System.out.println("call from isPlacementAdjacent - should not reach here");
+        }
         return true;
     }
 
@@ -218,7 +226,7 @@ public class StratoGame {
             int row = placement.charAt(i + 1) - 'A';
 
             if (coverage[col][row] != 0){
-                if (!isOnTop(placement.substring(i, i + 4), placement.substring(0, i))) {
+                if (!(isOnTop(placement.substring(i, i + 4), placement.substring(0, i)))) {
                     return false;
                 }
                 continue;
@@ -238,6 +246,10 @@ public class StratoGame {
                     return false;
                 }
 
+                if (col == 0 || col == 25 || row == 0 || row == 25) {
+                    System.out.println(placement);
+                    System.out.println(col + " " + row);
+                }
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
                 coverage[col][1 + row] = 1;
@@ -258,6 +270,10 @@ public class StratoGame {
                     return false;
                 }
 
+                if (col == 0 || col == 25 || row == 0 || row == 25) {
+                    System.out.println(placement);
+                    System.out.println(col + " " + row);
+                }
                 coverage[col][row] = 1;
                 coverage[-1 + col][row] = 1;
                 coverage[col][1 + row] = 1;
@@ -278,6 +294,10 @@ public class StratoGame {
                     return false;
                 }
 
+                if (col == 0 || col == 25 || row == 0 || row == 25) {
+                    System.out.println(placement);
+                    System.out.println(col + " " + row);
+                }
                 coverage[col][row] = 1;
                 coverage[-1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
@@ -298,6 +318,10 @@ public class StratoGame {
                     return false;
                 }
 
+                if (col == 0 || col == 25 || row == 0 || row == 25) {
+                    System.out.println(placement);
+                    System.out.println(col + " " + row);
+                }
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
