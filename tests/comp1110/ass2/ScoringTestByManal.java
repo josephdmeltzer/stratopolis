@@ -32,30 +32,30 @@ public class ScoringTestByManal {
 
     @Test
     public void testNonNegative(){
-        for (int i = 0; i < PLACEMENTS.length; i++){
-            for (int j = 1; j < PLACEMENTS[i].length()/4; j++){
-                String temp = PLACEMENTS[i].substring(0, 4*j);
-                assertTrue("Score for "+ temp + " must be positive for red, but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, false) >= 0);
-                assertTrue("Score for "+ temp + " must be positive for green, but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, true) >= 0);
+        for (String PLACEMENT : PLACEMENTS) {
+            for (int j = 1; j < PLACEMENT.length() / 4; j++) {
+                String temp = PLACEMENT.substring(0, 4 * j);
+                assertTrue("Score for " + temp + " must be positive for red, but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, false) >= 0);
+                assertTrue("Score for " + temp + " must be positive for green, but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, true) >= 0);
             }
         }
     }
 
     @Test
     public void testTotalBound(){
-        for (int i = 0; i < PLACEMENTS.length; i++){
-            for (int j = 1; j < PLACEMENTS[i].length()/4; j++){
-                String temp = PLACEMENTS[i].substring(0, 4*j); // has length 4*j -> j pieces
-                assertTrue("Total score for placement "+ temp + " must be less than or equal to " + ((j + 1)/2)*(3*j - 1) + ", but returned " + (StratoGame.getScoreForPlacement(temp, false) + StratoGame.getScoreForPlacement(temp, true)), (StratoGame.getScoreForPlacement(temp, true) + StratoGame.getScoreForPlacement(temp, false)) <= ((j + 1)/2)*(3*j - 1));
+        for (String PLACEMENT : PLACEMENTS) {
+            for (int j = 1; j < PLACEMENT.length() / 4; j++) {
+                String temp = PLACEMENT.substring(0, 4 * j); // has length 4*j -> j pieces
+                assertTrue("Total score for placement " + temp + " must be less than or equal to " + ((j + 1) / 2) * (3 * j - 1) + ", but returned " + (StratoGame.getScoreForPlacement(temp, false) + StratoGame.getScoreForPlacement(temp, true)), (StratoGame.getScoreForPlacement(temp, true) + StratoGame.getScoreForPlacement(temp, false)) <= ((j + 1) / 2) * (3 * j - 1));
             }
         }
     }
 
     @Test
     public void testLessThan450(){
-        for (int i = 0; i < PLACEMENTS.length; i++){
-            assertFalse("The score for no player can be more than 450, but red returned " + StratoGame.getScoreForPlacement(PLACEMENTS[i], false), StratoGame.getScoreForPlacement(PLACEMENTS[i], false) > 450);
-            assertFalse("The score for no player can be more than 450, but green returned " + StratoGame.getScoreForPlacement(PLACEMENTS[i], true), StratoGame.getScoreForPlacement(PLACEMENTS[i], true) > 450);
+        for (String PLACEMENT : PLACEMENTS) {
+            assertFalse("The score for no player can be more than 450, but red returned " + StratoGame.getScoreForPlacement(PLACEMENT, false), StratoGame.getScoreForPlacement(PLACEMENT, false) > 450);
+            assertFalse("The score for no player can be more than 450, but green returned " + StratoGame.getScoreForPlacement(PLACEMENT, true), StratoGame.getScoreForPlacement(PLACEMENT, true) > 450);
         }
     }
 
@@ -67,10 +67,10 @@ public class ScoringTestByManal {
 
     @Test
     public void testRedScoreBound(){
-        for (int i = 0; i < PLACEMENTS.length; i++){
-            for (int j = 2; j < PLACEMENTS[i].length()/4; j++){
-                String temp = PLACEMENTS[i].substring(0, 4*j);
-                assertTrue("The score for red for a placement string of length " + 4*j + " can be at most " + (2*j - 1)*(1 + j/2) + " but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, false) <= (2*j - 1)*(1 + j/2));
+        for (String PLACEMENT : PLACEMENTS) {
+            for (int j = 2; j < PLACEMENT.length() / 4; j++) {
+                String temp = PLACEMENT.substring(0, 4 * j);
+                assertTrue("The score for red for a placement string of length " + 4 * j + " can be at most " + (2 * j - 1) * (1 + j / 2) + " but returned " + StratoGame.getScoreForPlacement(temp, false), StratoGame.getScoreForPlacement(temp, false) <= (2 * j - 1) * (1 + j / 2));
             }
         }
     }
