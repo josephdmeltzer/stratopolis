@@ -107,7 +107,7 @@ public class ScoringTestByManal {
     * 5. To ensure symmetry of board available, nothing should go into the rightmost column
     * */
 
-    /*returns "" if original string does not satisfy conditions*/
+    /*returns "" if original string does not satisfy condition 5*/
     private static String createSymmetric(String original){
         String x = "";
         if (original.length() != 4)
@@ -192,27 +192,27 @@ public class ScoringTestByManal {
             temp[i] = (char)('A' + i);
         }
 
-        for (int iter = 0; iter < 100; iter++) {
+        for (int iter = 0; iter < 10; iter++) {
             String placement = "MMUA";
-                cols = shuffle(temp);
-                rows = shuffle(temp);
-                char[] orShuffled = shuffle(orientaions);
-                char[] shuffled = shuffle(redPieces);
-                for (int i = 0; i < 26; i++) {
-                    for (int j = 0; j < 26; j++) {
-                        for (int k = 0; k < 20; k++) {
-                            for (int l = 0; l < 4; l++) {
-                                if (StratoGame.isPlacementValid(placement + cols[i] + rows[j] + shuffled[k] + orShuffled[l]) && cols[i] != 'M') {
-                                    placement += "" + cols[i] + rows[j] + shuffled[k] + orShuffled[l];
-                                    placement += createSymmetric("" + cols[i] + rows[j] + shuffled[k] + orShuffled[l]);
+            cols = shuffle(temp);
+            rows = shuffle(temp);
+            char[] orShuffled = shuffle(orientaions);
+            char[] shuffled = shuffle(redPieces);
+            for (int i = 0; i < 26; i++) {
+                for (int j = 0; j < 26; j++) {
+                    for (int k = 0; k < 20; k++) {
+                        for (int l = 0; l < 4; l++) {
+                            if (StratoGame.isPlacementValid(placement + cols[i] + rows[j] + shuffled[k] + orShuffled[l]) && cols[i] != 'M') {
+                                placement += "" + cols[i] + rows[j] + shuffled[k] + orShuffled[l];
+                                placement += createSymmetric("" + cols[i] + rows[j] + shuffled[k] + orShuffled[l]);
 
-                                }
                             }
                         }
                     }
                 }
+            }
 
-            /*at this point we have the placement string. Need to check if the winner is random*/
+            /*at this point we have the symmetric placement string. Need to check if the winner is random*/
             boolean redWin = false;
             boolean greenWin = false;
             for (int i = 0; i < 10000; i++){

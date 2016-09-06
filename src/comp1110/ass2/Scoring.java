@@ -266,7 +266,7 @@ public final class Scoring {
     static boolean isWinnerByChance(){return winnerByChance;}
 
     public static void main(String[] args) {
-        System.out.println(StratoGame.generateMove("MMUANLOB", 'A', 'R'));
+        System.out.println(StratoGame.generateMove("MMUA", 'R', 'A'));
     }
 
 }
