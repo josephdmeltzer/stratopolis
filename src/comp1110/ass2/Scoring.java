@@ -9,7 +9,7 @@ import static comp1110.ass2.Colour.*;
  * Created by manalmohania on 25/08/2016.
  */
 
-final class Scoring {
+public final class Scoring {
     /*I wanted to have a separate class to handle scoring -- Manal*/
     private static final int BOARD_SIZE = 26;
 
@@ -23,7 +23,7 @@ final class Scoring {
     private static boolean winnerByChance; // If this bool is true, you'll know that the winner has been determined by chance.
 
     /*returns the winner. `true` denotes that green is the winner.*/
-    static boolean getWinner(String placement){
+    public static boolean getWinner(String placement){
 
         winnerByChance = false;
         int[][] greenStuff = new int[400][2];

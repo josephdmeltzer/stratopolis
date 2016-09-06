@@ -486,7 +486,7 @@ public class StratoGame {
      * @param opponentsPiece The piece your opponent will be asked to play next ('A' to 'T' or 0 if last move).
      * @return A string indicating a valid tile placement that represents your move.
      */
-    static String generateMove(String placement, char piece, char opponentsPiece) {
+    public static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
         String bestMove = "";
         int bestScore = 0;
