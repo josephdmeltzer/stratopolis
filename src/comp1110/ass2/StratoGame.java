@@ -417,7 +417,7 @@ public class StratoGame {
      * Adding that functionality should be fairly simple though.
      * NOTE: THE PLACEMENT STRING IS ASSUMED TO BE VALID
      * */
-    public static boolean greenHasWon(String placement){
+    static boolean greenHasWon(String placement){
         return getWinner(placement);
     }
 

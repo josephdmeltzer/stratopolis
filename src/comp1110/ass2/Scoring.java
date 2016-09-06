@@ -99,7 +99,7 @@ public final class Scoring {
             greenH = (green[i][0] == greenMax && green[i][1] > greenH ? green[i][1] : greenH);
         }
 
-        /*shift everything*/
+        /*remove max and shift everything*/
         int flag = 0;
 
         for (int i = 0; i < 400; i++){
@@ -264,15 +264,5 @@ public final class Scoring {
 
     /*This method hasn't been called as yet, because it will only be used in the very end*/
     static boolean isWinnerByChance(){return winnerByChance;}
-
-    /*
-    * Some Strings:
-     * MMUANLOBLOEDNOTDLLJB: it's symmetric
-     * MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBMLDANPLDNNBAONMCLOFAPQTC: The one on the project page
-     * More given in TestUtility
-    * */
-
-    public static void main(String[] args) {
-        StratoGame.isPlacementValid("MMUANOKDLLABNOKC");
-    }
+    
 }
