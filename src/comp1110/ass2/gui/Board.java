@@ -40,9 +40,11 @@ public class Board extends Application {
     private BoardState boardTurn = new BoardState(BLACK);
     private PlayerG playerG = new PlayerG();
     private PlayerR playerR = new PlayerR();
-    private String moveHistory;
+    private String moveHistory = "";
     private ImageView ivg = new ImageView();
     ImageView ivr = new ImageView();
+    Text greentxt = new Text("Green");
+    Text redtxt = new Text("Red");
 
 
     private final Group root = new Group();
@@ -154,9 +156,10 @@ public class Board extends Application {
 
     void makeGUIPlacement(String placement, ImageView ivg, ImageView ivr) {
         /*BUG: no contingency if used_tiles goes out of bounds*/
-        /*BUG: check if it only throws Bad placement when the placement is actually invalid*/
-        String stuff = moveHistory + placement;
-        if (false /*(!StratoGame.isPlacementValid(stuff)) && (!placement.equals("MMUA"))*/){
+        /*BUG: end the game and calculate the score*/
+        moveHistory = moveHistory.concat(placement);
+        System.out.println(moveHistory);
+        if (!StratoGame.isPlacementValid(moveHistory)){
             throw new IllegalArgumentException("Bad placement " + placement);
         } else{
             ImageView iv1 = new ImageView();
@@ -197,6 +200,8 @@ public class Board extends Application {
                     ivr.setPreserveRatio(true);
                     ivr.setSmooth(true);
                     ivr.setCache(true);
+                    greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                    redtxt.setFont(Font.font("Verdana",FontWeight.NORMAL, 14));
                     boardTurn.playerTurn=GREEN;
                     break;
                 case GREEN:
@@ -206,6 +211,8 @@ public class Board extends Application {
                     ivg.setPreserveRatio(true);
                     ivg.setSmooth(true);
                     ivg.setCache(true);
+                    greentxt.setFont(Font.font("Verdana",FontWeight.NORMAL, 14));
+                    redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
                     boardTurn.playerTurn=RED;
                     break;
                 case BLACK:
@@ -270,11 +277,11 @@ public class Board extends Application {
         playerControls.setPrefSize(120, 650);
         playerControls.setMaxSize(120, 650);
 
-        Text greentxt = new Text("Green");
-        greentxt.setFill(Color.GREEN);
-        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
-        Text redtxt = new Text("Red");
+        greentxt.setFill(Color.GREEN);
+        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+
         redtxt.setFill(Color.RED);
         redtxt.setFont(Font.font("Verdana", 14));
 
