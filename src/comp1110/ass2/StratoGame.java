@@ -514,7 +514,28 @@ public class StratoGame {
      */
     public static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
+//        String bestMove = "";
+//        int bestScore = 0;
+//        for (char x='A'; x<='Z'; x++) {
+//            for (char y='A'; y<='Z'; y++) {
+//                for (char o='A'; o<='D'; o++) {
+//                    if (piece>='A' && piece <='J') {
+//                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)>bestScore ) {
+//                            bestMove = ""+x+y+piece+o;
+//                            bestScore = getScoreForPlacement(placement + x + y + piece + o, false);
+//                        }
+//                    }
+//                    if (piece>='K' && piece <='T') {
+//                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true)>bestScore ) {
+//                            bestMove = ""+x+y+piece+o;
+//                            bestScore = getScoreForPlacement(placement + x + y + piece + o, true);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return bestMove;
         boolean green = (piece>='K' && piece<='T');
-        return alphabeta(placement, piece, opponentsPiece, 2, -1, 1000, green).move;
+        return alphabeta(placement, piece, opponentsPiece, 2, -100, 1000, true, green).move;
     }
 }
