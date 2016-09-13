@@ -38,10 +38,10 @@ public class AI {
      */
 
     public static moveScore alphabeta(String placement, char piece, char opiece, int depth, int a, int b, boolean maximising, boolean initialGreen) {
-        if (depth==0) return new moveScore("###########", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
+        if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
         if (maximising) {
             int bestScore = -100;
-            String bestMove = "$$$$$$$$$$$$$$$";
+            String bestMove = "";
             for (char x : checkOrder) {
                 for (char y : checkOrder) {
                     for (char o='A'; o<='D'; o++) {
@@ -61,7 +61,7 @@ public class AI {
         }
         else {
             int bestScore = 1000;
-            String bestMove = "@@@@@@@@@@@@@@@@";
+            String bestMove = "";
             for (char x : checkOrder) {
                 for (char y : checkOrder) {
                     for (char o='A'; o<='D'; o++) {
