@@ -1,6 +1,5 @@
 package comp1110.ass2;
 
-import static comp1110.ass2.Colour.GREEN;
 
 /**
  * Created by Aftran261 on 11/08/2016.

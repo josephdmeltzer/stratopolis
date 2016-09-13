@@ -467,12 +467,6 @@ public class Board extends Application {
     }
 
 
-
-
-
-
-
-
     private void initialSettings() {
         Text hi = new Text("Choose playing mode");
 
