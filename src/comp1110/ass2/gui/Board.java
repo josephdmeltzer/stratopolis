@@ -5,12 +5,10 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,9 +27,10 @@ import java.util.ArrayList;
 import static comp1110.ass2.Colour.BLACK;
 import static comp1110.ass2.Colour.GREEN;
 import static comp1110.ass2.Colour.RED;
-import static comp1110.ass2.Scoring.getWinner;
 import static comp1110.ass2.StratoGame.generateMove;
-import static java.time.format.SignStyle.NORMAL;
+import static comp1110.ass2.PlayingMode.PlayerIsGreen;
+import static comp1110.ass2.PlayingMode.PlayerIsRed;
+import static comp1110.ass2.PlayingMode.TwoPlayers;
 
 public class Board extends Application {
     private static final int BOARD_WIDTH = 933;
@@ -39,11 +38,12 @@ public class Board extends Application {
     private static final String URI_BASE = "assets/";
 
 
-    private BoardState boardTurn = new BoardState(BLACK);
+    private BoardState boardState  = new BoardState(BLACK, TwoPlayers);
     private PlayerG playerG = new PlayerG();
     private PlayerR playerR = new PlayerR();
     private String moveHistory = "";
     private ImageView ivg = new ImageView();
+
     ImageView ivr = new ImageView();
     Text greentxt = new Text("Green");
     Text redtxt = new Text("Red");
@@ -56,6 +56,290 @@ public class Board extends Application {
     private GridPane playingBoard = new GridPane();
     TextField textField;
 
+
+/*OVERVIEW: The first function called by the stage is initialSettings(), which creates the first screen with three buttons
+* to choose the playing mode.*/
+
+/* The buttons call, makePlayerAsGreen(), makePlayerAsRed(), or makeTwoPlayer(); which in turn call makeGreenBoard,
+ makeRedBoard(), and makeTwoPlayerBoard respectively. These functions are very similar in how they construct a board,
+ controls, etc. Except that makePlayerAsGreen() and  makePlayerAsRed() only have one 'Rotate' button each,
+ and more importantly they call different functions: addPanePlayerGreen, addPanePlayerRed, or addPane*/
+
+/*Each 'addPane' function creates a pane at the specified row and column on the board, which is built on a GridPane.
+* When clicked, the two player version of the function makes a move based on whose turn it is, then updates the playerTurn variable.
+* The one player version makes the player's move and calls the AI with the appropriate input on which player it's supposed to be.*/
+
+/*The code is currently a mess. The transparent panes added don't stay on top of new images, so I've been adding new panes with
+* every move. Plus I think the bit of code that changes whose turn it is should go in 'addPane' instead of makeGUIPlacement()
+* since for single player we'll be doing two turns with one click and there's no need to record whose turn it is.
+* We can actually use the playerTurn function as an unchanging constant to record who the human player is playing as. */
+
+/*Many of the buttons, text, and images were defined as class fields and modified as functions, instead of being created by functions
+ because they need to be accessible by many different functions.*/
+
+    private void initialSettings() {
+        Text intro = new Text("Choose playing mode");
+
+        placementGrp.getChildren().add(intro);
+
+        Button playasgreen = new Button("Play as Green");
+        playasgreen.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                placementGrp.getChildren().clear();
+                boardState.playingMode = PlayerIsGreen;
+
+                makePlayerAsGreen();
+
+            }
+        });
+
+        Button playasred = new Button("Play as Red");
+        playasred.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                placementGrp.getChildren().clear();
+                boardState.playingMode = PlayerIsRed;
+
+                makePlayerAsRed();
+
+                /*Makes the opponent's move first*/
+                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                String opponent = generateMove(moveHistory, greenTile,redTile);
+                makeGUIPlacement(opponent, ivg, ivr);
+            }
+        });
+
+        Button twoplayer = new Button("Two players");
+        twoplayer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                placementGrp.getChildren().clear();
+                makeTwoPlayer();
+                if (boardState.playerTurn==BLACK) boardState.playerTurn=GREEN;
+                boardState.playingMode = TwoPlayers;
+            }
+        });
+        VBox vb = new VBox();
+        vb.getChildren().addAll(intro,twoplayer,playasred,playasgreen);
+        vb.setSpacing(10);
+        vb.setLayoutX(300);
+        vb.setLayoutY(150);
+
+        placementGrp.getChildren().addAll(vb);
+    }
+
+
+    /*Creates the game with the player playing as green*/
+    private void makePlayerAsGreen(){
+        GridPane playerControls = new GridPane();
+        playerControls.setPrefSize(120, 650);
+        playerControls.setMaxSize(120, 650);
+
+        greentxt.setFill(Color.GREEN);
+        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        redtxt.setFill(Color.RED);
+        redtxt.setFont(Font.font("Verdana", 14));
+
+        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+        ivg.setRotate((((int) (playerG.rotation)-65)*90));
+        ivg.setFitWidth(80);
+        ivg.setPreserveRatio(true);
+        ivg.setSmooth(true);
+        ivg.setCache(true);
+
+        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+        ivr.setRotate((((int) (playerR.rotation)-65)*90));
+        ivr.setFitWidth(80);
+        ivr.setPreserveRatio(true);
+        ivr.setSmooth(true);
+        ivr.setCache(true);
+
+        Button rotateG = new Button("Rotate");
+        rotateG.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                playerG.rotateTile();
+                ivg.setRotate((((int) (playerG.rotation)-65)*90));
+            }
+        });
+
+        playerControls.getChildren().addAll(greentxt,redtxt,rotateG,ivg,ivr);
+
+        GridPane.setColumnIndex(ivg,0);
+        GridPane.setRowIndex(ivg,0);
+        GridPane.setColumnIndex(ivr,1);
+        GridPane.setRowIndex(ivr,0);
+        GridPane.setColumnIndex(rotateG,0);
+        GridPane.setRowIndex(rotateG,1);
+        GridPane.setColumnIndex(greentxt,0);
+        GridPane.setRowIndex(greentxt,2);
+        GridPane.setColumnIndex(redtxt,1);
+        GridPane.setRowIndex(redtxt,2);
+
+        playerControls.setGridLinesVisible(false);
+        playerControls.setLayoutX(740);
+        playerControls.setLayoutY(50);
+
+        playerControls.setHgap(10);
+        playerControls.setVgap(10);
+
+        controls.getChildren().add(playerControls);
+
+        makeGreenBoard();
+
+        makeGUIPlacement("MMUA",ivg,ivr);
+
+        boardState.playingMode = PlayerIsGreen;
+
+    }
+
+
+    private void makePlayerAsRed(){
+        /*Make the control pane*/
+        GridPane playerControls = new GridPane();
+        playerControls.setPrefSize(120, 650);
+        playerControls.setMaxSize(120, 650);
+
+        greentxt.setFill(Color.GREEN);
+        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        redtxt.setFill(Color.RED);
+        redtxt.setFont(Font.font("Verdana", 14));
+
+        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+        ivg.setRotate((((int) (playerG.rotation)-65)*90));
+        ivg.setFitWidth(80);
+        ivg.setPreserveRatio(true);
+        ivg.setSmooth(true);
+        ivg.setCache(true);
+
+        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+        ivr.setRotate((((int) (playerR.rotation)-65)*90));
+        ivr.setFitWidth(80);
+        ivr.setPreserveRatio(true);
+        ivr.setSmooth(true);
+        ivr.setCache(true);
+
+        Button rotateR = new Button("Rotate");
+        rotateR.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                playerR.rotateTile();
+                ivr.setRotate((((int) (playerR.rotation)-65)*90));
+            }
+        });
+
+        playerControls.getChildren().addAll(greentxt,redtxt,rotateR,ivg,ivr);
+
+        GridPane.setColumnIndex(ivg,0);
+        GridPane.setRowIndex(ivg,0);
+        GridPane.setColumnIndex(ivr,1);
+        GridPane.setRowIndex(ivr,0);
+        GridPane.setColumnIndex(rotateR,1);
+        GridPane.setRowIndex(rotateR,1);
+        GridPane.setColumnIndex(greentxt,0);
+        GridPane.setRowIndex(greentxt,2);
+        GridPane.setColumnIndex(redtxt,1);
+        GridPane.setRowIndex(redtxt,2);
+
+        playerControls.setGridLinesVisible(false);
+        playerControls.setLayoutX(740);
+        playerControls.setLayoutY(50);
+
+        playerControls.setHgap(10);
+        playerControls.setVgap(10);
+
+        controls.getChildren().add(playerControls);
+
+
+        /*Make the playing board*/
+        makeRedBoard();
+
+        makeGUIPlacement("MMUA",ivg,ivr);
+
+        boardState.playingMode = PlayerIsRed;
+    }
+
+
+    private void makeTwoPlayer(){
+        /*Make the control pane*/
+        GridPane playerControls = new GridPane();
+        playerControls.setPrefSize(120, 650);
+        playerControls.setMaxSize(120, 650);
+
+        greentxt.setFill(Color.GREEN);
+        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        redtxt.setFill(Color.RED);
+        redtxt.setFont(Font.font("Verdana", 14));
+
+        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+        ivg.setRotate((((int) (playerG.rotation)-65)*90));
+        ivg.setFitWidth(80);
+        ivg.setPreserveRatio(true);
+        ivg.setSmooth(true);
+        ivg.setCache(true);
+
+        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+        ivr.setRotate((((int) (playerR.rotation)-65)*90));
+        ivr.setFitWidth(80);
+        ivr.setPreserveRatio(true);
+        ivr.setSmooth(true);
+        ivr.setCache(true);
+
+        Button rotateG = new Button("Rotate");
+        rotateG.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                playerG.rotateTile();
+                ivg.setRotate((((int) (playerG.rotation)-65)*90));
+            }
+        });
+
+        Button rotateR = new Button("Rotate");
+        rotateR.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                playerR.rotateTile();
+                ivr.setRotate((((int) (playerR.rotation)-65)*90));
+            }
+        });
+
+        playerControls.getChildren().addAll(greentxt,redtxt,rotateG,rotateR,ivg,ivr);
+
+        GridPane.setColumnIndex(ivg,0);
+        GridPane.setRowIndex(ivg,0);
+        GridPane.setColumnIndex(ivr,1);
+        GridPane.setRowIndex(ivr,0);
+        GridPane.setColumnIndex(rotateG,0);
+        GridPane.setRowIndex(rotateG,1);
+        GridPane.setColumnIndex(rotateR,1);
+        GridPane.setRowIndex(rotateR,1);
+        GridPane.setColumnIndex(greentxt,0);
+        GridPane.setRowIndex(greentxt,2);
+        GridPane.setColumnIndex(redtxt,1);
+        GridPane.setRowIndex(redtxt,2);
+
+        playerControls.setGridLinesVisible(false);
+        playerControls.setLayoutX(740);
+        playerControls.setLayoutY(50);
+
+        playerControls.setHgap(10);
+        playerControls.setVgap(10);
+
+        controls.getChildren().add(playerControls);
+
+        /*Make the playing board*/
+        makeTwoPlayerBoard();
+
+        makeGUIPlacement("MMUA",ivg,ivr);
+
+        if (boardState.playerTurn==BLACK) boardState.playerTurn=GREEN;
+        boardState.playingMode = TwoPlayers;
+    }
 
     public void makeTwoPlayerBoard(){
         /*Note: the size of the tiles on the board are still 48x48 pixels */
@@ -93,7 +377,6 @@ public class Board extends Application {
         }
 
 
-
         ArrayList<Tiles> tiles= new ArrayList<Tiles>();
         for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
@@ -122,39 +405,6 @@ public class Board extends Application {
         playingBoard.setLayoutY(10);
 
         placementGrp.getChildren().add(playingBoard);
-    }
-
-    private void addPane(int colIndex, int rowIndex){
-        Pane pane = new Pane();
-        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                char col = (char) (colIndex+64);
-                char row = (char) (rowIndex+64);
-                switch (boardTurn.playerTurn){
-                    case RED:
-                        String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
-                        makeGUIPlacement(placement, ivg, ivr);
-                        break;
-                    case GREEN:
-                        String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
-                        makeGUIPlacement(placement2, ivg, ivr);
-                        break;
-                    case BLACK:
-                        makeGUIPlacement("MMUA", ivg, ivr);
-                        break;
-                }
-                /*Crude fix for images covering events*/
-                addPane(colIndex+1, rowIndex);
-                addPane(colIndex-1, rowIndex);
-                addPane(colIndex, rowIndex+1);
-                addPane(colIndex, rowIndex-1);
-                addPane(colIndex, rowIndex);
-            }
-        });
-        playingBoard.getChildren().add(pane);
-        GridPane.setRowIndex(pane,rowIndex);
-        GridPane.setColumnIndex(pane,colIndex);
     }
 
     public void makeGreenBoard(){
@@ -222,47 +472,6 @@ public class Board extends Application {
         placementGrp.getChildren().add(playingBoard);
     }
 
-    private void addPanePlayerGreen(int colIndex, int rowIndex){
-        Pane pane = new Pane();
-        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                char col = (char) (colIndex+64);
-                char row = (char) (rowIndex+64);
-                switch (boardTurn.playerTurn){
-                    case RED:
-                        Text wait = new Text("Wait for your turn");
-                        controls.getChildren().add(wait);
-                        wait.setLayoutX(710);
-                        wait.setLayoutY(400);
-                        break;
-                    /*The above won't go away, maybe we sould add a scrolling text screen that displays
-                    each valid move, error, and people trying to click then it's not their turn*/
-                    case GREEN:
-                        String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
-                        makeGUIPlacement(placement2, ivg, ivr);
-                        char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                        char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                        String opponent = generateMove(moveHistory, redTile, greenTile);
-                        makeGUIPlacement(opponent, ivg, ivr);
-                        break;
-                    case BLACK:
-                        makeGUIPlacement("MMUA", ivg, ivr);
-                        break;
-                }
-                /*Crude fix for images covering events*/
-                addPanePlayerGreen(colIndex+1, rowIndex);
-                addPanePlayerGreen(colIndex-1, rowIndex);
-                addPanePlayerGreen(colIndex, rowIndex+1);
-                addPanePlayerGreen(colIndex, rowIndex-1);
-                addPanePlayerGreen(colIndex, rowIndex);
-            }
-        });
-        playingBoard.getChildren().add(pane);
-        GridPane.setRowIndex(pane,rowIndex);
-        GridPane.setColumnIndex(pane,colIndex);
-    }
-
     public void makeRedBoard(){
         /*Note: the size of the tiles on the board are still 48x48 pixels */
         playingBoard.setPrefSize(675, 675);
@@ -326,8 +535,304 @@ public class Board extends Application {
         playingBoard.setLayoutY(10);
 
         placementGrp.getChildren().add(playingBoard);
+
+
     }
 
+    private void makePlayerTesting(){
+        /*Make the control pane*/
+        GridPane playerControls = new GridPane();
+        playerControls.setPrefSize(120, 650);
+        playerControls.setMaxSize(120, 650);
+
+        greentxt.setFill(Color.GREEN);
+        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+
+        redtxt.setFill(Color.RED);
+        redtxt.setFont(Font.font("Verdana", 14));
+
+        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+        ivg.setRotate((((int) (playerG.rotation)-65)*90));
+        ivg.setFitWidth(80);
+        ivg.setPreserveRatio(true);
+        ivg.setSmooth(true);
+        ivg.setCache(true);
+
+        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+        ivr.setRotate((((int) (playerR.rotation)-65)*90));
+        ivr.setFitWidth(80);
+        ivr.setPreserveRatio(true);
+        ivr.setSmooth(true);
+        ivr.setCache(true);
+
+        Button rotateG = new Button("Rotate");
+        rotateG.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                playerG.rotateTile();
+                ivg.setRotate((((int) (playerG.rotation)-65)*90));
+            }
+        });
+
+        Button rotateR = new Button("Rotate");
+        rotateR.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                playerR.rotateTile();
+                ivr.setRotate((((int) (playerR.rotation)-65)*90));
+            }
+        });
+
+        playerControls.getChildren().addAll(greentxt,redtxt,rotateG,rotateR,ivg,ivr);
+
+        GridPane.setColumnIndex(ivg,0);
+        GridPane.setRowIndex(ivg,0);
+        GridPane.setColumnIndex(ivr,1);
+        GridPane.setRowIndex(ivr,0);
+        GridPane.setColumnIndex(rotateG,0);
+        GridPane.setRowIndex(rotateG,1);
+        GridPane.setColumnIndex(rotateR,1);
+        GridPane.setRowIndex(rotateR,1);
+        GridPane.setColumnIndex(greentxt,0);
+        GridPane.setRowIndex(greentxt,2);
+        GridPane.setColumnIndex(redtxt,1);
+        GridPane.setRowIndex(redtxt,2);
+
+        playerControls.setGridLinesVisible(false);
+        playerControls.setLayoutX(740);
+        playerControls.setLayoutY(50);
+
+        playerControls.setHgap(10);
+        playerControls.setVgap(10);
+
+        controls.getChildren().add(playerControls);
+
+        /*Make the playing board*/
+        makeTwoPlayerBoard();
+
+        makeGUIPlacement("MMUA",ivg,ivr);
+
+        if (boardState.playerTurn==BLACK) boardState.playerTurn=GREEN;
+        boardState.playingMode = TwoPlayers;
+    }
+
+    public void makeBoardTesting(){
+        /*Note: the size of the tiles on the board are still 48x48 pixels */
+        playingBoard.setPrefSize(675, 675);
+        playingBoard.setMaxSize(700, 700);
+
+        for (int i = 0; i < 27; i++) {
+            RowConstraints row = new RowConstraints(24);
+            playingBoard.getRowConstraints().add(row);
+        }
+        for (int i = 0; i < 27; i++) {
+            ColumnConstraints column = new ColumnConstraints(24);
+            playingBoard.getColumnConstraints().add(column);
+        }
+
+        for (int i=1;i<27;i++){
+            String dummy = Character.toString( (char) (64+i) );
+            Text label1 = new Text(dummy);
+            label1.setFill(Color.WHITE);
+            label1.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            playingBoard.getChildren().add(label1);
+            GridPane.setRowIndex(label1,0);
+            GridPane.setColumnIndex(label1,i);
+            GridPane.setHalignment(label1, HPos.CENTER);
+            GridPane.setValignment(label1, VPos.CENTER);
+
+            Text label2 = new Text(dummy);
+            label2.setFill(Color.WHITE);
+            label2.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+            playingBoard.getChildren().add(label2);
+            GridPane.setRowIndex(label2,i);
+            GridPane.setColumnIndex(label2,0);
+            GridPane.setHalignment(label2, HPos.CENTER);
+            GridPane.setValignment(label2, VPos.CENTER);
+        }
+
+
+        ArrayList<Tiles> tiles= new ArrayList<Tiles>();
+        for (int i=1; i<27;i++){
+            for (int j=1; j<27; j++){
+
+                Rectangle r = new Rectangle(23, 23);
+                r.setFill(Color.WHITE);
+                playingBoard.getChildren().add(r);
+                GridPane.setRowIndex(r,i);
+                GridPane.setColumnIndex(r,j);
+                GridPane.setHalignment(r, HPos.CENTER);
+                GridPane.setValignment(r, VPos.CENTER);
+
+                addPaneTesting(i,j);
+                addPaneTesting(j,i);
+            }
+        }
+
+        /*This line is for debugging purposes only. When set to true, it shows grid lines*/
+        playingBoard.setGridLinesVisible(false);
+
+        /*Styles board with actual grid lines using CSS*/
+        playingBoard.setHgap(1);
+        playingBoard.setVgap(1);
+        playingBoard.setStyle("-fx-background-color: black");
+        playingBoard.setLayoutX(10);
+        playingBoard.setLayoutY(10);
+
+        placementGrp.getChildren().add(playingBoard);
+    }
+
+    private void addPaneTesting(int colIndex, int rowIndex){
+        Pane pane = new Pane();
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                char col = (char) (colIndex+64);
+                char row = (char) (rowIndex+64);
+                switch (boardState.playerTurn){
+                    case RED:
+                        String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+                        makeGUIPlacement(placement, ivg, ivr);
+                        if (playerR.used_tiles<19){
+                            playerR.getNextTile();
+                            ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+                            ivr.setFitWidth(80);
+                            ivr.setPreserveRatio(true);
+                            ivr.setSmooth(true);
+                            ivr.setCache(true);
+                        } else{
+                            ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + "gameover.png").toString()));
+                            ivr.setRotate(0);
+                        }
+                        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                        redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
+                        boardState.playerTurn = GREEN;
+                        break;
+                    case GREEN:
+                        String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+                        makeGUIPlacement(placement2, ivg, ivr);
+                        if (playerG.used_tiles<19){
+                            playerG.getNextTile();
+                            ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+                            ivg.setFitWidth(80);
+                            ivg.setPreserveRatio(true);
+                            ivg.setSmooth(true);
+                            ivg.setCache(true);
+                        } else{
+                            ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "gameover.png").toString()));
+                            ivg.setRotate(0);
+                        }
+                        greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
+                        redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                        boardState.playerTurn = RED;
+                        break;
+                    case BLACK:
+                        makeGUIPlacement("MMUA", ivg, ivr);
+                        boardState.playerTurn = GREEN;
+                        break;
+                }
+                /*Crude fix for images covering events*/
+                addPaneTesting(colIndex+1, rowIndex);
+                addPaneTesting(colIndex-1, rowIndex);
+                addPaneTesting(colIndex, rowIndex+1);
+                addPaneTesting(colIndex, rowIndex-1);
+                addPaneTesting(colIndex, rowIndex);
+            }
+        });
+        playingBoard.getChildren().add(pane);
+        GridPane.setRowIndex(pane,rowIndex);
+        GridPane.setColumnIndex(pane,colIndex);
+    }
+
+    private void addPane(int colIndex, int rowIndex){
+        Pane pane = new Pane();
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                char col = (char) (colIndex+64);
+                char row = (char) (rowIndex+64);
+                switch (boardState.playerTurn){
+                    case RED:
+                        String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+                        makeGUIPlacement(placement, ivg, ivr);
+                        if (playerR.used_tiles<19){
+                            playerR.getNextTile();
+                            ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+                            ivr.setFitWidth(80);
+                            ivr.setPreserveRatio(true);
+                            ivr.setSmooth(true);
+                            ivr.setCache(true);
+                        } else{
+                            ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + "gameover.png").toString()));
+                            ivr.setRotate(0);
+                        }
+                        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                        redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
+                        boardState.playerTurn = GREEN;
+                        break;
+                    case GREEN:
+                        String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+                        makeGUIPlacement(placement2, ivg, ivr);
+                        if (playerG.used_tiles<19){
+                            playerG.getNextTile();
+                            ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+                            ivg.setFitWidth(80);
+                            ivg.setPreserveRatio(true);
+                            ivg.setSmooth(true);
+                            ivg.setCache(true);
+                        } else{
+                            ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "gameover.png").toString()));
+                            ivg.setRotate(0);
+                        }
+                        greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
+                        redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                        boardState.playerTurn = RED;
+                        break;
+                    case BLACK:
+                        makeGUIPlacement("MMUA", ivg, ivr);
+                        boardState.playerTurn = GREEN;
+                        break;
+                }
+                /*Crude fix for images covering events*/
+                addPane(colIndex+1, rowIndex);
+                addPane(colIndex-1, rowIndex);
+                addPane(colIndex, rowIndex+1);
+                addPane(colIndex, rowIndex-1);
+                addPane(colIndex, rowIndex);
+            }
+        });
+        playingBoard.getChildren().add(pane);
+        GridPane.setRowIndex(pane,rowIndex);
+        GridPane.setColumnIndex(pane,colIndex);
+    }
+
+    private void addPanePlayerGreen(int colIndex, int rowIndex){
+        Pane pane = new Pane();
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                char col = (char) (colIndex+64);
+                char row = (char) (rowIndex+64);
+
+                String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+                makeGUIPlacement(placement2, ivg, ivr);
+                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                String opponent = generateMove(moveHistory, redTile, greenTile);
+                makeGUIPlacement(opponent, ivg, ivr);
+
+                /*Crude fix for images covering events*/
+                addPanePlayerGreen(colIndex+1, rowIndex);
+                addPanePlayerGreen(colIndex-1, rowIndex);
+                addPanePlayerGreen(colIndex, rowIndex+1);
+                addPanePlayerGreen(colIndex, rowIndex-1);
+                addPanePlayerGreen(colIndex, rowIndex);
+            }
+        });
+        playingBoard.getChildren().add(pane);
+        GridPane.setRowIndex(pane,rowIndex);
+        GridPane.setColumnIndex(pane,colIndex);
+    }
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -335,25 +840,14 @@ public class Board extends Application {
             public void handle(MouseEvent e) {
                 char col = (char) (colIndex+64);
                 char row = (char) (rowIndex+64);
-                switch (boardTurn.playerTurn){
-                    case RED:
-                        String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
-                        makeGUIPlacement(placement, ivg, ivr);
-                        char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                        char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                        String opponent = generateMove(moveHistory, greenTile,redTile);
-                        makeGUIPlacement(opponent, ivg, ivr);
-                        break;
-                    case GREEN:
-                        Text wait = new Text("Wait for your turn");
-                        controls.getChildren().add(wait);
-                        wait.setLayoutX(710);
-                        wait.setLayoutY(400);
-                        break;
-                    case BLACK:
-                        makeGUIPlacement("MMUA", ivg, ivr);
-                        break;
-                }
+
+                String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+                makeGUIPlacement(placement, ivg, ivr);
+                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                String opponent = generateMove(moveHistory, greenTile,redTile);
+                makeGUIPlacement(opponent, ivg, ivr);
+
                 /*Crude fix for images covering events*/
                 addPanePlayerRed(colIndex+1, rowIndex);
                 addPanePlayerRed(colIndex-1, rowIndex);
@@ -367,10 +861,13 @@ public class Board extends Application {
         GridPane.setColumnIndex(pane,colIndex);
     }
 
+
+    /*This actually doesn't depend at all on playerTurn*/
     void makeGUIPlacement(String placement, ImageView ivg, ImageView ivr) {
         String tempMove = moveHistory.concat(placement);
         /*debugging*/
         System.out.println(tempMove);
+        System.out.println(playerG.rotation);
 
         controls.getChildren().remove(errormessage);
         if (!StratoGame.isPlacementValid(tempMove)) {
@@ -408,44 +905,6 @@ public class Board extends Application {
                     break;
             }
             moveHistory = tempMove;
-            switch (boardTurn.playerTurn) {
-                case RED:
-                    if (playerR.used_tiles<19){
-                        playerR.used_tiles = playerR.used_tiles + 1;
-                        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
-                        ivr.setFitWidth(80);
-                        ivr.setPreserveRatio(true);
-                        ivr.setSmooth(true);
-                        ivr.setCache(true);
-                    } else{
-                        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + "gameover.png").toString()));
-                        ivr.setRotate(0);
-                    }
-
-                    greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-                    redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
-                    boardTurn.playerTurn = GREEN;
-                    break;
-                case GREEN:
-                    if (playerG.used_tiles<19){
-                        playerG.used_tiles = playerG.used_tiles + 1;
-                        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
-                        ivg.setFitWidth(80);
-                        ivg.setPreserveRatio(true);
-                        ivg.setSmooth(true);
-                        ivg.setCache(true);
-                    } else{
-                        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "gameover.png").toString()));
-                        ivg.setRotate(0);
-                    }
-                    greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
-                    redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-                    boardTurn.playerTurn = RED;
-                    break;
-                case BLACK:
-                    boardTurn.playerTurn = GREEN;
-                    break;
-            }
             if (moveHistory.length() == 164) {
                 /*TODO: end the game and calculate the score*/
                 placementGrp.getChildren().clear();
@@ -467,285 +926,6 @@ public class Board extends Application {
     }
 
 
-
-
-
-
-
-
-    private void initialSettings() {
-        Text hi = new Text("Choose playing mode");
-
-        placementGrp.getChildren().add(hi);
-        Button playasgreen = new Button("Play as Green");
-        playasgreen.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                placementGrp.getChildren().clear();
-                makePlayerAsGreen();
-            }
-        });
-
-        Button playasred = new Button("Play as Red");
-        playasred.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                placementGrp.getChildren().clear();
-                makePlayerAsRed();
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                String opponent = generateMove(moveHistory, greenTile,redTile);
-                makeGUIPlacement(opponent, ivg, ivr);
-            }
-        });
-
-
-        Button twoplayer = new Button("Two players");
-        twoplayer.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                placementGrp.getChildren().clear();
-                makeTwoPlayer();
-            }
-        });
-        VBox vb = new VBox();
-        vb.getChildren().addAll(hi,twoplayer,playasred,playasgreen);
-        vb.setSpacing(10);
-        vb.setLayoutX(300);
-        vb.setLayoutY(150);
-
-        placementGrp.getChildren().addAll(vb);
-
-    }
-
-    private void makePlayerAsGreen(){
-        GridPane playerControls = new GridPane();
-        playerControls.setPrefSize(120, 650);
-        playerControls.setMaxSize(120, 650);
-
-
-        greentxt.setFill(Color.GREEN);
-        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-
-
-        redtxt.setFill(Color.RED);
-        redtxt.setFont(Font.font("Verdana", 14));
-
-
-        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
-        ivg.setRotate((((int) (playerG.rotation)-65)*90));
-        ivg.setFitWidth(80);
-        ivg.setPreserveRatio(true);
-        ivg.setSmooth(true);
-        ivg.setCache(true);
-
-        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
-        ivr.setRotate((((int) (playerR.rotation)-65)*90));
-        ivr.setFitWidth(80);
-        ivr.setPreserveRatio(true);
-        ivr.setSmooth(true);
-        ivr.setCache(true);
-
-        Button rotateG = new Button("Rotate");
-        rotateG.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                playerG.rotation = rotateTile(playerG.rotation);
-                ivg.setRotate((((int) (playerG.rotation)-65)*90));
-            }
-        });
-
-        playerControls.getChildren().addAll(greentxt,redtxt,rotateG,ivg,ivr);
-
-        GridPane.setColumnIndex(ivg,0);
-        GridPane.setRowIndex(ivg,0);
-        GridPane.setColumnIndex(ivr,1);
-        GridPane.setRowIndex(ivr,0);
-        GridPane.setColumnIndex(rotateG,0);
-        GridPane.setRowIndex(rotateG,1);
-        GridPane.setColumnIndex(greentxt,0);
-        GridPane.setRowIndex(greentxt,2);
-        GridPane.setColumnIndex(redtxt,1);
-        GridPane.setRowIndex(redtxt,2);
-
-        playerControls.setGridLinesVisible(false);
-        playerControls.setLayoutX(740);
-        playerControls.setLayoutY(50);
-
-        playerControls.setHgap(10);
-        playerControls.setVgap(10);
-
-        controls.getChildren().add(playerControls);
-
-        makeGreenBoard();
-
-        makeGUIPlacement("MMUA",ivg,ivr);
-    }
-
-    private void makePlayerAsRed(){
-        /*Make the control pane*/
-        GridPane playerControls = new GridPane();
-        playerControls.setPrefSize(120, 650);
-        playerControls.setMaxSize(120, 650);
-
-
-        greentxt.setFill(Color.GREEN);
-        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-
-
-        redtxt.setFill(Color.RED);
-        redtxt.setFont(Font.font("Verdana", 14));
-
-
-        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
-        ivg.setRotate((((int) (playerG.rotation)-65)*90));
-        ivg.setFitWidth(80);
-        ivg.setPreserveRatio(true);
-        ivg.setSmooth(true);
-        ivg.setCache(true);
-
-        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
-        ivr.setRotate((((int) (playerR.rotation)-65)*90));
-        ivr.setFitWidth(80);
-        ivr.setPreserveRatio(true);
-        ivr.setSmooth(true);
-        ivr.setCache(true);
-
-
-        Button rotateR = new Button("Rotate");
-        rotateR.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                playerR.rotation = rotateTile(playerR.rotation);
-                ivr.setRotate((((int) (playerR.rotation)-65)*90));
-            }
-        });
-
-        playerControls.getChildren().addAll(greentxt,redtxt,rotateR,ivg,ivr);
-
-        GridPane.setColumnIndex(ivg,0);
-        GridPane.setRowIndex(ivg,0);
-        GridPane.setColumnIndex(ivr,1);
-        GridPane.setRowIndex(ivr,0);
-        GridPane.setColumnIndex(rotateR,1);
-        GridPane.setRowIndex(rotateR,1);
-        GridPane.setColumnIndex(greentxt,0);
-        GridPane.setRowIndex(greentxt,2);
-        GridPane.setColumnIndex(redtxt,1);
-        GridPane.setRowIndex(redtxt,2);
-
-        playerControls.setGridLinesVisible(false);
-        playerControls.setLayoutX(740);
-        playerControls.setLayoutY(50);
-
-        playerControls.setHgap(10);
-        playerControls.setVgap(10);
-
-        controls.getChildren().add(playerControls);
-
-
-        /*Make the playing board*/
-        makeRedBoard();
-
-        makeGUIPlacement("MMUA",ivg,ivr);
-    }
-
-
-    private void makeTwoPlayer(){
-        /*Make the control pane*/
-        GridPane playerControls = new GridPane();
-        playerControls.setPrefSize(120, 650);
-        playerControls.setMaxSize(120, 650);
-
-
-        greentxt.setFill(Color.GREEN);
-        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-
-
-        redtxt.setFill(Color.RED);
-        redtxt.setFont(Font.font("Verdana", 14));
-
-
-        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
-        ivg.setRotate((((int) (playerG.rotation)-65)*90));
-        ivg.setFitWidth(80);
-        ivg.setPreserveRatio(true);
-        ivg.setSmooth(true);
-        ivg.setCache(true);
-
-        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
-        ivr.setRotate((((int) (playerR.rotation)-65)*90));
-        ivr.setFitWidth(80);
-        ivr.setPreserveRatio(true);
-        ivr.setSmooth(true);
-        ivr.setCache(true);
-
-        Button rotateG = new Button("Rotate");
-        rotateG.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                playerG.rotation = rotateTile(playerG.rotation);
-                ivg.setRotate((((int) (playerG.rotation)-65)*90));
-            }
-        });
-
-        Button rotateR = new Button("Rotate");
-        rotateR.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                playerR.rotation = rotateTile(playerR.rotation);
-                ivr.setRotate((((int) (playerR.rotation)-65)*90));
-            }
-        });
-
-        playerControls.getChildren().addAll(greentxt,redtxt,rotateG,rotateR,ivg,ivr);
-
-        GridPane.setColumnIndex(ivg,0);
-        GridPane.setRowIndex(ivg,0);
-        GridPane.setColumnIndex(ivr,1);
-        GridPane.setRowIndex(ivr,0);
-        GridPane.setColumnIndex(rotateG,0);
-        GridPane.setRowIndex(rotateG,1);
-        GridPane.setColumnIndex(rotateR,1);
-        GridPane.setRowIndex(rotateR,1);
-        GridPane.setColumnIndex(greentxt,0);
-        GridPane.setRowIndex(greentxt,2);
-        GridPane.setColumnIndex(redtxt,1);
-        GridPane.setRowIndex(redtxt,2);
-
-        playerControls.setGridLinesVisible(false);
-        playerControls.setLayoutX(740);
-        playerControls.setLayoutY(50);
-
-        playerControls.setHgap(10);
-        playerControls.setVgap(10);
-
-        controls.getChildren().add(playerControls);
-
-
-        /*Make the playing board*/
-        makeTwoPlayerBoard();
-
-        makeGUIPlacement("MMUA",ivg,ivr);
-    }
-
-
-    private char rotateTile(char rotation){
-        if (rotation=='A'){
-            return 'B';
-        }
-        if (rotation=='B'){
-            return 'C';
-        }
-        if (rotation=='C'){
-            return 'D';
-        }
-        if (rotation=='D'){
-            return 'A';
-        } else{
-            return 'A';
-        }
-    }
 
 
 
