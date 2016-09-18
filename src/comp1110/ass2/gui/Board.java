@@ -32,6 +32,7 @@ import static comp1110.ass2.StratoGame.generateMove;
 import static comp1110.ass2.PlayingMode.PlayerIsGreen;
 import static comp1110.ass2.PlayingMode.PlayerIsRed;
 import static comp1110.ass2.PlayingMode.TwoPlayers;
+import static comp1110.ass2.StratoGame.heightArray;
 
 public class Board extends Application {
     private static final int BOARD_WIDTH = 933;
@@ -54,6 +55,7 @@ public class Board extends Application {
     private final Group controls = new Group();
     private final Group placementGrp = new Group();
     private GridPane playingBoard = new GridPane();
+    private GridPane heightLabels = new GridPane();
     private GridPane clickablePanes = new GridPane();
     TextField textField;
 
@@ -297,8 +299,23 @@ public class Board extends Application {
         playingBoard.setLayoutX(10);
         playingBoard.setLayoutY(10);
 
-                /*Adds the clickable panes for playing the game. What kind of function the pane calls when clicked depends on the
-        * playingMode. Instead of chacking what the playingMode is everytime a pand is clicked, we check it now and create
+        heightLabels.setPrefSize(675, 675);
+        heightLabels.setMaxSize(700, 700);
+        for (int i = 0; i < 27; i++) {
+            RowConstraints row = new RowConstraints(24);
+            heightLabels.getRowConstraints().add(row);
+        }
+        for (int i = 0; i < 27; i++) {
+            ColumnConstraints column = new ColumnConstraints(24);
+            heightLabels.getColumnConstraints().add(column);
+        }
+        heightLabels.setHgap(1);
+        heightLabels.setVgap(1);
+        heightLabels.setLayoutX(10);
+        heightLabels.setLayoutY(10);
+
+        /*Adds the clickable panes for playing the game. What kind of function the pane calls when clicked depends on the
+        * playingMode. Instead of checking what the playingMode is everytime a pand is clicked, we check it now and create
         * different panes depending on the playingMode*/
         clickablePanes.setPrefSize(675, 675);
         clickablePanes.setMaxSize(700, 700);
@@ -339,8 +356,13 @@ public class Board extends Application {
                 }
             }
         }
+        clickablePanes.setHgap(1);
+        clickablePanes.setVgap(1);
+        clickablePanes.setLayoutX(10);
+        clickablePanes.setLayoutY(10);
 
         placementGrp.getChildren().add(playingBoard);
+        placementGrp.getChildren().add(heightLabels);
         placementGrp.getChildren().add(clickablePanes);
     }
 
@@ -352,8 +374,8 @@ public class Board extends Application {
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                char col = (char) (colIndex+63);
-                char row = (char) (rowIndex+63);
+                char col = (char) (colIndex+64);
+                char row = (char) (rowIndex+64);
                 switch (boardState.playerTurn){
                     case RED:
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
@@ -383,8 +405,8 @@ public class Board extends Application {
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                char col = (char) (colIndex+63);
-                char row = (char) (rowIndex+63);
+                char col = (char) (colIndex+64);
+                char row = (char) (rowIndex+64);
 
                 String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
                 makeGUIPlacement(placement2, ivg, ivr);
@@ -410,8 +432,8 @@ public class Board extends Application {
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                char col = (char) (colIndex+63);
-                char row = (char) (rowIndex+63);
+                char col = (char) (colIndex+64);
+                char row = (char) (rowIndex+64);
 
                 String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
                 makeGUIPlacement(placement, ivg, ivr);
@@ -477,6 +499,8 @@ public class Board extends Application {
             }
             moveHistory = tempMove;
 
+            displayHeights();
+
             /*update the control panel, and wose turn it is*/
             switch (boardState.playerTurn) {
                 case RED:
@@ -538,6 +562,24 @@ public class Board extends Application {
         }
     }
 
+    void displayHeights(){
+        int[][] heights = heightArray(moveHistory);
+        for (int i=1; i<27;i++){
+            for (int j=1; j<27; j++){
+                String tall = Integer.toString(heights[i-1][j-1]);
+                if (heights[i-1][j-1]!=0){
+                    Text label1 = new Text(tall);
+                    label1.setFill(Color.GREY);
+                    label1.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+                    heightLabels.getChildren().add(label1);
+                    GridPane.setRowIndex(label1,j);
+                    GridPane.setColumnIndex(label1,i);
+                    GridPane.setHalignment(label1, HPos.CENTER);
+                    GridPane.setValignment(label1, VPos.CENTER);
+                }
+            }
+        }
+    }
 
 
 
