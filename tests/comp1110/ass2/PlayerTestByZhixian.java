@@ -22,7 +22,7 @@ public class PlayerTestByZhixian {
     }
 
     @Test
-    public void testPlayerInitialCreationTilesByPlayers() {
+    public void testPlayerInitialCreationTilesOfPlayers() {
         PlayerG playerG = new PlayerG();
         PlayerR playerR = new PlayerR();
         for (int i = 0; i < playerG.available_tiles.size(); i++) {
@@ -56,7 +56,7 @@ public class PlayerTestByZhixian {
     }
 
     @Test
-    public void testRotationRange() {
+    public void testRotateTileRange() {
         Player playerG = new PlayerG();
         Player playerR = new PlayerR();
         for (int i=1; i<6; i++){
@@ -68,7 +68,7 @@ public class PlayerTestByZhixian {
     }
 
     @Test
-    public void testRotationOrder() {
+    public void testRotateTileOrder() {
         Player playerG = new PlayerG();
         Player playerR = new PlayerR();
         for (int i=1; i<6; i++){
@@ -104,7 +104,7 @@ public class PlayerTestByZhixian {
     }
 
     @Test
-    public void testTileRange() {
+    public void testGetTileRange() {
         Player playerG = new PlayerG();
         Player playerR = new PlayerR();
         for (int i=1; i<MAX_TILES+4; i++){
