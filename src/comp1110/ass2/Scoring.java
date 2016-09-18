@@ -23,7 +23,7 @@ public final class Scoring {
     private static boolean winnerByChance; // If this bool is true, you'll know that the winner has been determined by chance.
 
     /*returns the winner. `true` denotes that green is the winner.*/
-    public static boolean getWinner(String placement){
+    static boolean getWinner(String placement){
 
         winnerByChance = false;
         int[][] greenStuff = new int[400][2];
@@ -162,6 +162,12 @@ public final class Scoring {
         colours2 = colourArray(placement);
         heights = heightArray(placement);
 
+        /*for (int i = 0; i < BOARD_SIZE; i++){
+            for (int j = 0; j < BOARD_SIZE; j++){
+                System.out.println("i: " + i + " j: " + j + " " + heights[i][j]);
+            }
+        }*/
+
         /*reset all flags to zero*/
         for (int i = 0; i < BOARD_SIZE; i++){
             for (int j = 0; j < BOARD_SIZE; j++){
@@ -266,6 +272,6 @@ public final class Scoring {
     static boolean isWinnerByChance(){return winnerByChance;}
 
     public static void main(String[] args) {
-        System.out.println(StratoGame.isPlacementValid("MMUAMOQBNQGCMOPCMQBDLQLCOQIDLMMBPOIBKOQBOOBAJMPBHNHAMOMBHLCAIMNBIPHDJLKDGMJBKMSDLKEBMLTDLMDC"));
+        System.out.println(getScore("MMUAKMPDKKCDKOKDKQIDMKPAKRGAJNOCNNADHMQDIPJCGQNDKMHAKHKAGMECMHQAJIABOLMDKTEAKWRDMSBCJWSCGOBDILNDPNDDOGLCFOFCNITAKQGALFMARLJBKYRDMYIANROANQDDSMLDGWFDHRTAQRHB", true));
     }
 }

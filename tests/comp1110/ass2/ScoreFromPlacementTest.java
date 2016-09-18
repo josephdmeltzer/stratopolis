@@ -21,10 +21,10 @@ public class ScoreFromPlacementTest {
         for (int i = 0; i < PLACEMENTS.length; i++) {
             score = StratoGame.getScoreForPlacement(PLACEMENTS[i], true);
             ref = SCORES[i*2];
-            assertTrue("Incorrect score for '"+PLACEMENTS[i]+"', expected "+ref+", but got "+score, score == ref);
+            assertTrue("Incorrect score for green'"+PLACEMENTS[i]+"', expected "+ref+", but got "+score, score == ref);
             score = StratoGame.getScoreForPlacement(PLACEMENTS[i], false);
             ref = SCORES[1+(i*2)];
-            assertTrue("Incorrect score for '"+PLACEMENTS[i]+"', expected "+ref+", but got "+score, score == ref);
+            assertTrue("Incorrect score for red'"+PLACEMENTS[i]+"', expected "+ref+", but got "+score, score == ref);
         }
     }
 }

@@ -15,9 +15,7 @@ import static org.junit.Assert.assertTrue;
 /*This class contains my tests for scoring and winner determination*/
 
 
-public class ScoringTestByManal {
-
-
+public class ScoringAndWinner {
 
     /*Tests for scoring*/
 
@@ -77,6 +75,7 @@ public class ScoringTestByManal {
 
 
     /*Tests for winner determination*/
+
     /*The placement string must be of max possible length*/
     /*Assumes the scoring methods work correctly*/
 
@@ -192,7 +191,7 @@ public class ScoringTestByManal {
             temp[i] = (char)('A' + i);
         }
 
-        for (int iter = 0; iter < 10; iter++) {
+        for (int iter = 0; iter < 25; iter++) {
             String placement = "MMUA";
             cols = shuffle(temp);
             rows = shuffle(temp);
