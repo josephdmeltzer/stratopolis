@@ -21,18 +21,12 @@ import static comp1110.ass2.Scoring.getWinner;
  * (http://boardgamegeek.com/boardgame/125022/stratopolis)
  */
 public class StratoGame {
+    public static void main(String[] args) {
+        String move = generateMove("MMUA", 'A', 'K');
+        System.out.println(move);
+        System.out.println("test");
+    }
 
-    /**
-     * Determine whether a tile placement is well-formed according to the following:
-     * - it consists of exactly four characters
-     * - the first character is in the range A .. Z
-     * - the second character is in the range A .. Z
-     * - the third character is in the range A .. U
-     * - the fourth character is in the range A .. D
-     *
-     * @param tilePlacement A string describing a tile placement
-     * @return True if the tile placement is well-formed
-     */
     static boolean isTilePlacementWellFormed(String tilePlacement) {
         if (tilePlacement.length() != 4) {
             return false;
@@ -536,4 +530,5 @@ public class StratoGame {
         boolean green = (piece>='K' && piece<='T');
         return alphabeta(placement, piece, opponentsPiece, 2, -100, 1000, true, green).move;
     }
+
 }
