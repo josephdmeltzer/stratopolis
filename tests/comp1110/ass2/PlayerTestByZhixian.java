@@ -14,30 +14,40 @@ import java.util.List;
 public class PlayerTestByZhixian {
 
     @Test
-    public void testPlayerInitialCreation() {
+    public void testPlayerInitialCreationNumberOfTiles() {
         PlayerG playerG = new PlayerG();
         PlayerR playerR = new PlayerR();
-        assertTrue("Green Player does not have "+MAX_TILES+" tiles", playerG.available_tiles.size()==MAX_TILES);
-        assertTrue("Red Player does not have "+MAX_TILES+" tiles", playerR.available_tiles.size()==MAX_TILES);
+        assertTrue("Green Player does not have " + MAX_TILES + " tiles", playerG.available_tiles.size() == MAX_TILES);
+        assertTrue("Red Player does not have " + MAX_TILES + " tiles", playerR.available_tiles.size() == MAX_TILES);
+    }
 
-        for (int i=0; i<playerG.available_tiles.size(); i++) {
+    @Test
+    public void testPlayerInitialCreationTilesByPlayers() {
+        PlayerG playerG = new PlayerG();
+        PlayerR playerR = new PlayerR();
+        for (int i = 0; i < playerG.available_tiles.size(); i++) {
             if (((playerG.available_tiles).get(i)) instanceof Character) {
                 char tile = (char) (playerG.available_tiles).get(i);
-                assertTrue("Green Player has tiles that are not from 'K' to 'T'.", 'K'<= tile && tile <='T');
-            } else{
+                assertTrue("Green Player has tiles that are not from 'K' to 'T'.", 'K' <= tile && tile <= 'T');
+            } else {
                 assertTrue("Green Player has tiles that are not of the Character type.", false);
             }
         }
 
-        for (int i=0; i<playerR.available_tiles.size(); i++) {
+        for (int i = 0; i < playerR.available_tiles.size(); i++) {
             if (((playerR.available_tiles).get(i)) instanceof Character) {
                 char tile = (char) (playerR.available_tiles).get(i);
-                assertTrue("Red Player has tiles that are not from 'A' to 'J'.", 'A'<= tile && tile <='J');
-            } else{
+                assertTrue("Red Player has tiles that are not from 'A' to 'J'.", 'A' <= tile && tile <= 'J');
+            } else {
                 assertTrue("Red Player has tiles that are not of the Character type.", false);
             }
         }
+    }
 
+    @Test
+    public void testPlayerInitialCreationRotation() {
+        PlayerG playerG = new PlayerG();
+        PlayerR playerR = new PlayerR();
         assertFalse("Green Player's rotation out of bounds when it was first created", playerG.rotation>'D' || playerG.rotation<'A');
         assertFalse("Red Player's rotation out of bounds when it was first created", playerR.rotation>'D' || playerR.rotation<'A');
 
@@ -54,6 +64,42 @@ public class PlayerTestByZhixian {
             assertFalse("Green Player's rotation out of bounds after " +i+ "rotations", playerG.rotation>'D' || playerG.rotation<'A');
             playerR.rotateTile();
             assertFalse("Red Player's rotation out of bounds after " +i+ "rotations", playerR.rotation>'D' || playerR.rotation<'A');
+        }
+    }
+
+    @Test
+    public void testRotationOrder() {
+        Player playerG = new PlayerG();
+        Player playerR = new PlayerR();
+        for (int i=1; i<6; i++){
+            switch ((playerG.rotation-65) % 4) {
+                case 0: playerG.rotateTile();
+                    assertTrue("Green Player's rotation out of order", playerG.rotation == 'B' );
+                    break;
+                case 1: playerG.rotateTile();
+                    assertTrue("Green Player's rotation out of order", playerG.rotation == 'C' );
+                    break;
+                case 2: playerG.rotateTile();
+                    assertTrue("Green Player's rotation out of order", playerG.rotation == 'D' );
+                    break;
+                case 3: playerG.rotateTile();
+                    assertTrue("Green Player's rotation out of order", playerG.rotation == 'A' );
+                    break;
+                }
+            switch ((playerR.rotation-65) % 4) {
+                case 0: playerR.rotateTile();
+                    assertTrue("Red Player's rotation out of order", playerG.rotation == 'B' );
+                    break;
+                case 1: playerR.rotateTile();
+                    assertTrue("Red Player's rotation out of order", playerG.rotation == 'C' );
+                    break;
+                case 2: playerR.rotateTile();
+                    assertTrue("Red Player's rotation out of order", playerG.rotation == 'D' );
+                    break;
+                case 3: playerR.rotateTile();
+                    assertTrue("Red Player's rotation out of order", playerG.rotation == 'A' );
+                    break;
+            }
         }
     }
 

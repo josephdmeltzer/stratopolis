@@ -18,7 +18,7 @@ public class PlayerR extends Player {
 
     private List movesG(){
         //this generates a valid list of tiles
-        List moves = new ArrayList();
+        ArrayList<Character> moves = new ArrayList<>();
         moves.add('A');
         moves.add('B');
         moves.add('C');
@@ -48,4 +48,5 @@ public class PlayerR extends Player {
         this.used_tiles = 0;
         this.rotation = 'A';
     }
+
 }
