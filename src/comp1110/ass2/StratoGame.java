@@ -88,7 +88,7 @@ public class StratoGame {
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
-        if (!isPlacementAdjacent(placement)) return false;
+        if (!isPlacementAdjacent(placement)) {return false;}
         if (!tileStraddle(placement)) return false;
         if (!checkBounds(placement)) return false;
         return areColoursAlright(placement);
@@ -134,7 +134,7 @@ public class StratoGame {
     }
 
     /*and so does this*/
-    static int[][] heightArray(String placement){
+    public static int[][] heightArray(String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
         coverage[12][13] = 1;
@@ -176,8 +176,9 @@ public class StratoGame {
         if (piece.charAt(3) == 'A') {
             if (idx1 == 25 || idx2 == 25){return false;}
 
-            if (!(coverage[1 + idx1][idx2] == coverage[idx1][1 + idx2] && coverage[1 + idx1][idx2] == coverage[idx1][idx2]))
+            if (!(coverage[1 + idx1][idx2] == coverage[idx1][1 + idx2] && coverage[1 + idx1][idx2] == coverage[idx1][idx2])) {
                 return false;
+            }
         }
         else if (piece.charAt(3) == 'B') {
             if (idx1 == 0 || idx2 == 25){return false;}
@@ -490,10 +491,7 @@ public class StratoGame {
         /*I have this here for the moment but will remove it once main gets implemented*/
         if (!isPlacementValid(placement))
             return -1;
-        // 1. convert the placement string into a 2d array
-        // 2. find the largest area to determine the score
-        // 3. parallel to 2, find the max height in the SAME region
-        // 4. determine score
+
         return getScore(placement, green);
     }
 

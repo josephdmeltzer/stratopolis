@@ -162,6 +162,12 @@ public final class Scoring {
         colours2 = colourArray(placement);
         heights = heightArray(placement);
 
+        /*for (int i = 0; i < BOARD_SIZE; i++){
+            for (int j = 0; j < BOARD_SIZE; j++){
+                System.out.println("i: " + i + " j: " + j + " " + heights[i][j]);
+            }
+        }*/
+
         /*reset all flags to zero*/
         for (int i = 0; i < BOARD_SIZE; i++){
             for (int j = 0; j < BOARD_SIZE; j++){
@@ -264,9 +270,5 @@ public final class Scoring {
 
     /*This method hasn't been called as yet, because it will only be used in the very end*/
     static boolean isWinnerByChance(){return winnerByChance;}
-
-    public static void main(String[] args) {
-        System.out.println(StratoGame.generateMove("MMUANLOB", 'A', 'R'));
-    }
 
 }

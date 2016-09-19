@@ -409,6 +409,12 @@ public class Board extends Application {
                 }
             }
         });
+        pane.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+            }
+        });
         clickablePanes.getChildren().add(pane);
         GridPane.setRowIndex(pane,rowIndex);
         GridPane.setColumnIndex(pane,colIndex);
@@ -610,7 +616,7 @@ public class Board extends Application {
         for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
                 String tall = Integer.toString(heights[i-1][j-1]);
-                if (heights[i-1][j-1]!=0){
+                if (heights[i-1][j-1] > 1){
                     Text label1 = new Text(tall);
                     label1.setFill(Color.GREY);
                     label1.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
