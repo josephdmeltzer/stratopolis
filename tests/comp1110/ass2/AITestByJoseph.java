@@ -33,6 +33,25 @@ public class AITestByJoseph {
         }
     }
 
+    @Test
+    public void testValid() {
+        for (char i = 'K'; i<='T'; i++) {
+            assertTrue("Placement MMUA with piece " + i + " generated an invalid piece", isPlacementValid("MMUA"+generateMove("MMUA", i, 'A')));
+            for (String placement : greenTestPlacements) {
+                if (isPlacementWellFormed(placement+"AA"+i+"A")) {
+                    assertTrue("Placement " + placement + " with piece " + i + " generated an invalid piece", isPlacementValid(placement+generateMove(placement, i, 'A')));
+                }
+            }
+        }
+        for (char i = 'A'; i<='J'; i++) {
+            for (String placement : redTestPlacements) {
+                if (isPlacementWellFormed(placement+"AA"+i+"K")) {
+                    assertTrue("Placement " + placement + " with piece " + i + " generated an invalid piece", isPlacementValid(placement+generateMove(placement, i, 'A')));
+                }
+            }
+        }
+    }
+
     // For each sample placement and every possible piece, ensure that the Alphabeta function with depth 1
     // returns the same result as  the original, more naive code.
     @Test
