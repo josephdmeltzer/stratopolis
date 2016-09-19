@@ -23,7 +23,7 @@ public final class Scoring {
     private static boolean winnerByChance; // If this bool is true, you'll know that the winner has been determined by chance.
 
     /*returns the winner. `true` denotes that green is the winner.*/
-    static boolean getWinner(String placement){
+    public static boolean getWinner(String placement){
 
         winnerByChance = false;
         int[][] greenStuff = new int[400][2];
@@ -271,7 +271,4 @@ public final class Scoring {
     /*This method hasn't been called as yet, because it will only be used in the very end*/
     static boolean isWinnerByChance(){return winnerByChance;}
 
-    public static void main(String[] args) {
-        System.out.println(getScore("MMUAKMPDKKCDKOKDKQIDMKPAKRGAJNOCNNADHMQDIPJCGQNDKMHAKHKAGMECMHQAJIABOLMDKTEAKWRDMSBCJWSCGOBDILNDPNDDOGLCFOFCNITAKQGALFMARLJBKYRDMYIANROANQDDSMLDGWFDHRTAQRHB", true));
-    }
 }

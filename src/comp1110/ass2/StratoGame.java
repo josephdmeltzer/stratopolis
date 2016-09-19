@@ -88,7 +88,7 @@ public class StratoGame {
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
-        if (!isPlacementAdjacent(placement)) return false;
+        if (!isPlacementAdjacent(placement)) {return false;}
         if (!tileStraddle(placement)) return false;
         if (!checkBounds(placement)) return false;
         return areColoursAlright(placement);
@@ -134,7 +134,7 @@ public class StratoGame {
     }
 
     /*and so does this*/
-    static int[][] heightArray(String placement){
+    public static int[][] heightArray(String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
         coverage[12][13] = 1;
