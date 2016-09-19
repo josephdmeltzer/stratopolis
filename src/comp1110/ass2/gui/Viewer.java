@@ -51,12 +51,8 @@ public class Viewer extends Application {
 
     void makePlacement(String placement) {
         // FIXME Task 5: implement the simple placement viewer
-        //char[] rowcol = {'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-        //String[] variableNames = {"iv1","iv2","iv3","iv4","iv5","iv6","iv7","iv8","iv9","iv10","iv11","iv12","iv13","iv14","iv15","iv16","iv17","iv18","iv19","iv20","iv21","iv22","iv23","iv24","iv25","iv26","iv27","iv28","iv29","iv30","iv31","iv32","iv33","iv34","iv35","iv36","iv37","iv38","iv39","iv40"};
-        //Image[] tiles =
-        placementGrp.getChildren().clear();
 
-        if (!StratoGame.isPlacementWellFormed(placement)){
+        if (!StratoGame.isPlacementValid(placement)){
             throw new IllegalArgumentException("Bad placement " + placement);
         } else{
             GridPane gridPane = new GridPane();
@@ -107,14 +103,6 @@ public class Viewer extends Application {
             placementGrp.getChildren().add(gridPane);
 
         }
-
-
-
-            //place tile based on i and (i+1)
-            //select tile based on (i+2) -- Done: Manal
-            //rotate tile based on (i+3)
-
-
     }
 
 
@@ -133,8 +121,7 @@ public class Viewer extends Application {
             public void handle(ActionEvent e) {
                 makePlacement(textField.getText());
                 textField.clear();
-            } /*Zhixian: this part is what the 'refresh' button does. It takes the text in the
-            * text field and passes it to the function makePlacement, then clears the text field for the next move*/
+            }
         });
         HBox hb = new HBox();
         hb.getChildren().addAll(label1, textField, button);
@@ -142,6 +129,19 @@ public class Viewer extends Application {
         hb.setLayoutX(130);
         hb.setLayoutY(VIEWER_HEIGHT - 50);
         controls.getChildren().add(hb);
+
+        // Week 7: we need to create an initial three buttons for three choices.
+        // 1. Once a button is pressed, the buttons are cleared, PlayerA and PlayerB generated, and their top tiles (index used_tiles
+        // of char-array available_tiles) and whose turn it is are displayed.
+        // 2. There should be a rotate button for the player who has the current turn
+          // (and this rotation is stored as part of the Player object)
+        // 3. Each box in the GridPane (in Viewer) would need to be a clickable event that concatenates
+          // its coords with the tile and the rotation
+        // 4. The move can then be passed to makePlacement
+        // 5. There needs to be a method to update BoardState (player turn, 7., etc.). The move should be passed to this with the current BoardState.
+        // 6. Maybe the entire string of moves so far can be stored as a member variable of BoardState to calculate the score later
+        // 7. Or just alter BoardState to have a [26][26] array of heights and top colour.
+          // (^ This would be easier to implement if you've done isPlacementValid())
     }
 
     @Override
