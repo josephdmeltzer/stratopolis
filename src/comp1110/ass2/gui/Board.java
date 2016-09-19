@@ -27,16 +27,17 @@ import java.util.ArrayList;
 import static comp1110.ass2.Colour.BLACK;
 import static comp1110.ass2.Colour.GREEN;
 import static comp1110.ass2.Colour.RED;
+import static comp1110.ass2.Player.MAX_TILES;
 import static comp1110.ass2.StratoGame.generateMove;
 import static comp1110.ass2.PlayingMode.PlayerIsGreen;
 import static comp1110.ass2.PlayingMode.PlayerIsRed;
 import static comp1110.ass2.PlayingMode.TwoPlayers;
+import static comp1110.ass2.StratoGame.heightArray;
 
 public class Board extends Application {
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
     private static final String URI_BASE = "assets/";
-
 
     private BoardState boardState  = new BoardState(BLACK, TwoPlayers);
     private PlayerG playerG = new PlayerG();
@@ -54,6 +55,8 @@ public class Board extends Application {
     private final Group controls = new Group();
     private final Group placementGrp = new Group();
     private GridPane playingBoard = new GridPane();
+    private GridPane heightLabels = new GridPane();
+    private GridPane clickablePanes = new GridPane();
     TextField textField;
 
 
@@ -272,61 +275,19 @@ public class Board extends Application {
             GridPane.setHalignment(label2, HPos.CENTER);
             GridPane.setValignment(label2, VPos.CENTER);
         }
+        for (int i=1; i<27;i++){
+            for (int j=1; j<27; j++){
+                /*Creates white squares on a black background for the board*/
+                Rectangle r = new Rectangle(23, 23);
+                r.setFill(Color.WHITE);
+                playingBoard.getChildren().add(r);
+                GridPane.setRowIndex(r,i);
+                GridPane.setColumnIndex(r,j);
+                GridPane.setHalignment(r, HPos.CENTER);
+                GridPane.setValignment(r, VPos.CENTER);
+            }
+        }
 
-        /*Adds the clickable panes for playing the game. What kind of function the pane calls when clicked depends on the
-        * playingMode. Instead of chacking what the playingMode is everytime a pand is clicked, we check it now and create
-        * different panes depending on the playingMode*/
-        if (boardState.playingMode==PlayerIsGreen) {
-            for (int i=1; i<27;i++){
-                for (int j=1; j<27; j++){
-                /*Creates white squares on a black background for the board*/
-                    Rectangle r = new Rectangle(23, 23);
-                    r.setFill(Color.WHITE);
-                    playingBoard.getChildren().add(r);
-                    GridPane.setRowIndex(r,i);
-                    GridPane.setColumnIndex(r,j);
-                    GridPane.setHalignment(r, HPos.CENTER);
-                    GridPane.setValignment(r, VPos.CENTER);
-                /*Creates the clickable panes of the board*/
-                    addPanePlayerGreen(i,j);
-                    addPanePlayerGreen(j,i);
-                }
-            }
-        }
-        if (boardState.playingMode==PlayerIsRed) {
-            for (int i=1; i<27;i++){
-                for (int j=1; j<27; j++){
-                /*Creates white squares on a black background for the board*/
-                    Rectangle r = new Rectangle(23, 23);
-                    r.setFill(Color.WHITE);
-                    playingBoard.getChildren().add(r);
-                    GridPane.setRowIndex(r,i);
-                    GridPane.setColumnIndex(r,j);
-                    GridPane.setHalignment(r, HPos.CENTER);
-                    GridPane.setValignment(r, VPos.CENTER);
-                /*Creates the clickable panes of the board*/
-                    addPanePlayerRed(i,j);
-                    addPanePlayerRed(j,i);
-                }
-            }
-        }
-        if (boardState.playingMode==TwoPlayers) {
-            for (int i=1; i<27;i++){
-                for (int j=1; j<27; j++){
-                /*Creates white squares on a black background for the board*/
-                    Rectangle r = new Rectangle(23, 23);
-                    r.setFill(Color.WHITE);
-                    playingBoard.getChildren().add(r);
-                    GridPane.setRowIndex(r,i);
-                    GridPane.setColumnIndex(r,j);
-                    GridPane.setHalignment(r, HPos.CENTER);
-                    GridPane.setValignment(r, VPos.CENTER);
-                /*Creates the clickable panes of the board*/
-                    addPaneTwoPlayer(i,j);
-                    addPaneTwoPlayer(j,i);
-                }
-            }
-        }
 
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
         playingBoard.setGridLinesVisible(false);
@@ -338,7 +299,71 @@ public class Board extends Application {
         playingBoard.setLayoutX(10);
         playingBoard.setLayoutY(10);
 
+        heightLabels.setPrefSize(675, 675);
+        heightLabels.setMaxSize(700, 700);
+        for (int i = 0; i < 27; i++) {
+            RowConstraints row = new RowConstraints(24);
+            heightLabels.getRowConstraints().add(row);
+        }
+        for (int i = 0; i < 27; i++) {
+            ColumnConstraints column = new ColumnConstraints(24);
+            heightLabels.getColumnConstraints().add(column);
+        }
+        heightLabels.setHgap(1);
+        heightLabels.setVgap(1);
+        heightLabels.setLayoutX(10);
+        heightLabels.setLayoutY(10);
+
+        /*Adds the clickable panes for playing the game. What kind of function the pane calls when clicked depends on the
+        * playingMode. Instead of checking what the playingMode is everytime a pand is clicked, we check it now and create
+        * different panes depending on the playingMode*/
+        clickablePanes.setPrefSize(675, 675);
+        clickablePanes.setMaxSize(700, 700);
+
+        /*determines the size of the rows and columns of the interaction board*/
+        for (int i = 0; i < 27; i++) {
+            RowConstraints row = new RowConstraints(24);
+            clickablePanes.getRowConstraints().add(row);
+        }
+        for (int i = 0; i < 27; i++) {
+            ColumnConstraints column = new ColumnConstraints(24);
+            clickablePanes.getColumnConstraints().add(column);
+        }
+        if (boardState.playingMode==PlayerIsGreen) {
+            for (int i=1; i<27;i++){
+                for (int j=1; j<27; j++){
+                /*Creates the clickable panes of the board*/
+                    addPanePlayerGreen(i,j);
+                    addPanePlayerGreen(j,i);
+                }
+            }
+        }
+        if (boardState.playingMode==PlayerIsRed) {
+            for (int i=1; i<27;i++){
+                for (int j=1; j<27; j++){
+                /*Creates the clickable panes of the board*/
+                    addPanePlayerRed(i,j);
+                    addPanePlayerRed(j,i);
+                }
+            }
+        }
+        if (boardState.playingMode==TwoPlayers) {
+            for (int i=1; i<27;i++){
+                for (int j=1; j<27; j++){
+                /*Creates the clickable panes of the board*/
+                    addPaneTwoPlayer(i,j);
+                    addPaneTwoPlayer(j,i);
+                }
+            }
+        }
+        clickablePanes.setHgap(1);
+        clickablePanes.setVgap(1);
+        clickablePanes.setLayoutX(10);
+        clickablePanes.setLayoutY(10);
+
         placementGrp.getChildren().add(playingBoard);
+        placementGrp.getChildren().add(heightLabels);
+        placementGrp.getChildren().add(clickablePanes);
     }
 
 
@@ -355,25 +380,21 @@ public class Board extends Application {
                     case RED:
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
                         makeGUIPlacement(placement, ivg, ivr);
+                        System.out.println(placement);
                         break;
                     case GREEN:
                         String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
                         makeGUIPlacement(placement2, ivg, ivr);
+                        System.out.println(placement2);
                         break;
                     case BLACK:
                         makeGUIPlacement("MMUA", ivg, ivr);
                         boardState.playerTurn = GREEN;
                         break;
                 }
-                /*Crude fix for images covering events*/
-                addPaneTwoPlayer(colIndex+1, rowIndex);
-                addPaneTwoPlayer(colIndex-1, rowIndex);
-                addPaneTwoPlayer(colIndex, rowIndex+1);
-                addPaneTwoPlayer(colIndex, rowIndex-1);
-                addPaneTwoPlayer(colIndex, rowIndex);
             }
         });
-        playingBoard.getChildren().add(pane);
+        clickablePanes.getChildren().add(pane);
         GridPane.setRowIndex(pane,rowIndex);
         GridPane.setColumnIndex(pane,colIndex);
     }
@@ -389,21 +410,18 @@ public class Board extends Application {
 
                 String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
                 makeGUIPlacement(placement2, ivg, ivr);
-
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                String opponent = generateMove(moveHistory, redTile, greenTile);
-                makeGUIPlacement(opponent, ivg, ivr);
-
-                /*Crude fix for images covering events*/
-                addPanePlayerGreen(colIndex+1, rowIndex);
-                addPanePlayerGreen(colIndex-1, rowIndex);
-                addPanePlayerGreen(colIndex, rowIndex+1);
-                addPanePlayerGreen(colIndex, rowIndex-1);
-                addPanePlayerGreen(colIndex, rowIndex);
+                String tempMove = moveHistory.concat(placement2);
+                if (StratoGame.isPlacementValid(tempMove)){
+                    char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                    char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                    String opponent = generateMove(moveHistory, redTile, greenTile);
+                    if (opponent=="") System.out.println("Empty string generated by AI");
+                    System.out.println(opponent+" move");
+                    makeGUIPlacement(opponent, ivg, ivr);
+                }
             }
         });
-        playingBoard.getChildren().add(pane);
+        clickablePanes.getChildren().add(pane);
         GridPane.setRowIndex(pane,rowIndex);
         GridPane.setColumnIndex(pane,colIndex);
     }
@@ -420,21 +438,18 @@ public class Board extends Application {
                 String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
                 makeGUIPlacement(placement, ivg, ivr);
 
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                String opponent = generateMove(moveHistory, greenTile,redTile);
-                makeGUIPlacement(opponent, ivg, ivr);
-
-
-                /*Crude fix for images covering events*/
-                addPanePlayerRed(colIndex+1, rowIndex);
-                addPanePlayerRed(colIndex-1, rowIndex);
-                addPanePlayerRed(colIndex, rowIndex+1);
-                addPanePlayerRed(colIndex, rowIndex-1);
-                addPanePlayerRed(colIndex, rowIndex);
+                String tempMove = moveHistory.concat(placement);
+                if (StratoGame.isPlacementValid(tempMove)){
+                    char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                    char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                    String opponent = generateMove(moveHistory, greenTile,redTile);
+                    if (opponent=="") System.out.println("Empty string generated by AI");
+                    System.out.println(opponent+" move");
+                    makeGUIPlacement(opponent, ivg, ivr);
+                }
             }
         });
-        playingBoard.getChildren().add(pane);
+        clickablePanes.getChildren().add(pane);
         GridPane.setRowIndex(pane,rowIndex);
         GridPane.setColumnIndex(pane,colIndex);
     }
@@ -443,6 +458,7 @@ public class Board extends Application {
     /*The method that makes a placement*/
     void makeGUIPlacement(String placement, ImageView ivg, ImageView ivr) {
         String tempMove = moveHistory.concat(placement);
+        System.out.println(tempMove);
         controls.getChildren().remove(errormessage);
 
         if (!StratoGame.isPlacementValid(tempMove)) {
@@ -483,6 +499,8 @@ public class Board extends Application {
             }
             moveHistory = tempMove;
 
+            displayHeights();
+
             /*update the control panel, and wose turn it is*/
             switch (boardState.playerTurn) {
                 case RED:
@@ -494,7 +512,8 @@ public class Board extends Application {
                         ivr.setSmooth(true);
                         ivr.setCache(true);
                     } else{
-                        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + "gameover.png").toString()));
+                        ivr.setRotate(0);
+                        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
                         ivr.setRotate(0);
                     }
                     greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
@@ -510,7 +529,8 @@ public class Board extends Application {
                         ivg.setSmooth(true);
                         ivg.setCache(true);
                     } else{
-                        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "gameover.png").toString()));
+                        ivg.setRotate(0);
+                        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
                         ivg.setRotate(0);
                     }
                     greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
@@ -523,7 +543,7 @@ public class Board extends Application {
             }
 
             /*Checks if the game is over. If it is, we clear the board and display the winner.*/
-            if (moveHistory.length() >= 162) {
+            if (moveHistory.length() >= MAX_TILES*8+2) {
                 placementGrp.getChildren().clear();
                 if (Scoring.getWinner(moveHistory)){
                     Text score = new Text("Green Wins!");
@@ -542,6 +562,24 @@ public class Board extends Application {
         }
     }
 
+    void displayHeights(){
+        int[][] heights = heightArray(moveHistory);
+        for (int i=1; i<27;i++){
+            for (int j=1; j<27; j++){
+                String tall = Integer.toString(heights[i-1][j-1]);
+                if (heights[i-1][j-1]!=0){
+                    Text label1 = new Text(tall);
+                    label1.setFill(Color.GREY);
+                    label1.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+                    heightLabels.getChildren().add(label1);
+                    GridPane.setRowIndex(label1,j);
+                    GridPane.setColumnIndex(label1,i);
+                    GridPane.setHalignment(label1, HPos.CENTER);
+                    GridPane.setValignment(label1, VPos.CENTER);
+                }
+            }
+        }
+    }
 
 
 
