@@ -610,13 +610,11 @@ public class Board extends Application {
 
     /*Display the height at each position*/
     private void displayHeights(){
-        heightLabels.getChildren().clear();
-
         int[][] heights = heightArray(moveHistory);
         for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
                 String tall = Integer.toString(heights[i-1][j-1]);
-                if (heights[i-1][j-1] > 1){
+                if (heights[i-1][j-1]!=0){
                     Text label1 = new Text(tall);
                     label1.setFill(Color.GREY);
                     label1.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
