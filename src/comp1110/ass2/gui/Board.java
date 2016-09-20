@@ -647,7 +647,7 @@ public class Board extends Application {
 
     }
 
-
+   /*This version definately works. Please don't overwrite it.*/
 
     // FIXME Task 8: Implement a basic playable Strato Game in JavaFX that only allows pieces to be placed in valid places
 
