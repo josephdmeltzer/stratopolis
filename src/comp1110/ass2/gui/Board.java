@@ -612,17 +612,6 @@ public class Board extends Application {
 
     // FIXME Task 12: Implement a game that can play good moves
 
-    // Week 7: we need to create an initial three buttons for three choices.
-    // 1. Once a button is pressed, the buttons are cleared, PlayerA and PlayerB generated, and their top tiles (index used_tiles
-    // of char-array available_tiles) and whose turn it is are displayed.
-    // 2. There should be a rotate button for the player who has the current turn
-    // (and this rotation is stored as part of the Player object)
-    // 3. Each box in the GridPane (in Viewer) would need to be a clickable event that concatenates
-    // its coords with the tile and the rotation
-    // 4. The move can then be passed to makePlacement
-    // 5. There needs to be a method to update BoardState (player turn, 7., etc.). The move should be passed to this with the current BoardState.
-    // 6. Maybe the entire string of moves so far can be stored as a member variable of BoardState to calculate the score later
-    // 7. Or just alter BoardState to have a [26][26] array of heights and top colour.
-    // (^ This would be easier to implement if you've done isPlacementValid())
+    // Added outoftiles.png
 }
 
