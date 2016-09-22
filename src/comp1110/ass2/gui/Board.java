@@ -410,31 +410,23 @@ public class Board extends Application {
                 }
             }
         });
-        pane.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                char col = (char) (colIndex + 'A' - 1);
-                char row = (char) (rowIndex + 'A' - 1);
+        pane.setOnMouseEntered(event -> {
+            char col = (char) (colIndex + 'A' - 1);
+            char row = (char) (rowIndex + 'A' - 1);
 
-                switch (boardState.playerTurn){
-                    case RED:
-                        String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
-                        makeTempPlacement(iv, placement);
-                        break;
-                    case GREEN:
-                        String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
-                        makeTempPlacement(iv, placement2);
-                        break;
-                }
+            switch (boardState.playerTurn){
+                case RED:
+                    String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+                    makeTempPlacement(iv, placement);
+                    break;
+                case GREEN:
+                    String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+                    makeTempPlacement(iv, placement2);
+                    break;
             }
         });
 
-        pane.setOnMouseExited(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                removeTempPlacement(iv);
-            }
-        });
+        pane.setOnMouseExited(event -> removeTempPlacement(iv));
         clickablePanes.getChildren().add(pane);
         GridPane.setRowIndex(pane,rowIndex);
         GridPane.setColumnIndex(pane,colIndex);
