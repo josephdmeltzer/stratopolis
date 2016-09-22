@@ -435,20 +435,6 @@ public class Board extends Application {
     /*The clickable panes for when you are playing as green*/
     private void addPanePlayerGreen(int colIndex, int rowIndex){
         Pane pane = new Pane();
-        ImageView iv = new ImageView();
-
-
-        pane.setOnMouseEntered(event -> {
-            char col = (char) (colIndex + 'A' - 1);
-            char row = (char) (rowIndex + 'A' - 1);
-
-            String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
-            makeTempPlacement(iv, placement2);
-        });
-
-        pane.setOnMouseExited(event -> removeTempPlacement(iv));
-
-
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -482,18 +468,6 @@ public class Board extends Application {
     /*The clickable panes for when you are playing as red*/
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
-        ImageView iv = new ImageView();
-
-        pane.setOnMouseEntered(event -> {
-            char col = (char) (colIndex + 'A' - 1);
-            char row = (char) (rowIndex + 'A' - 1);
-
-            String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
-            makeTempPlacement(iv, placement);
-        });
-
-        pane.setOnMouseExited(event -> removeTempPlacement(iv));
-
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -535,37 +509,37 @@ public class Board extends Application {
         if (!StratoGame.isPlacementValid(moveHistory.concat(placement))){
             return;
         }
-        /*This might be unnecessary, but I'll keep it for now*/
         controls.getChildren().remove(errormessage);
-
-        iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
+        // ImageView iv = new ImageView();
+        iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
         iv.setRotate((((int) placement.charAt(3)) - 65) * 90);
         iv.setFitWidth(TILE_SIZE * 2);
-        iv.setOpacity(0.5);
+        iv.setOpacity(0.8);
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
-        iv.setCache(true); // I don't know what this does. There aren't any differences visible to me with this statement
+        iv.setCache(true);
         playingBoard.getChildren().add(iv);
 
+        /*What do these two do?*/
         GridPane.setRowSpan(iv, 2);
         GridPane.setColumnSpan(iv, 2);
 
         switch (placement.charAt(3)) {
             case 'A':
-                GridPane.setColumnIndex(iv, placement.charAt(0) - 'A' + 1);
-                GridPane.setRowIndex(iv, placement.charAt(1) - 'A' + 1);
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' + 1));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' + 1));
                 break;
             case 'B':
-                GridPane.setColumnIndex(iv, placement.charAt(0) - 'A');
-                GridPane.setRowIndex(iv, placement.charAt(1) - 'A' + 1);
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' + 1));
                 break;
             case 'C':
-                GridPane.setColumnIndex(iv, placement.charAt(0) - 'A');
-                GridPane.setRowIndex(iv, placement.charAt(1) - 'A');
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
                 break;
             case 'D':
-                GridPane.setColumnIndex(iv, placement.charAt(0) - 'A' + 1);
-                GridPane.setRowIndex(iv, placement.charAt(1) - 'A');
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' + 1));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
                 break;
         }
 
@@ -586,7 +560,7 @@ public class Board extends Application {
         } else {
             /*create the image that'll go on the board*/
             ImageView iv1 = new ImageView();
-            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
+            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_b.png").toString()));
             iv1.setRotate((((int) placement.charAt(3)) - 65) * 90);
             iv1.setFitWidth(TILE_SIZE*2);
             iv1.setPreserveRatio(true);
