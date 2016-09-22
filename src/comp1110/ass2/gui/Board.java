@@ -437,15 +437,17 @@ public class Board extends Application {
         Pane pane = new Pane();
         ImageView iv = new ImageView();
 
+
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex + 'A' - 1);
             char row = (char) (rowIndex + 'A' - 1);
 
-            String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
-            makeGUIPlacement(placement2);
+            String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+            makeTempPlacement(iv, placement2);
         });
 
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
+
 
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
