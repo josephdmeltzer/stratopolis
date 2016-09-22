@@ -289,7 +289,7 @@ public class Board extends Application {
             for (int j=1; j<27; j++){
                 int rectSize = TILE_SIZE-1;
                 Rectangle r = new Rectangle(rectSize, rectSize);
-                r.setFill(Color.LIGHTGRAY);
+                r.setFill(Color.web("rgb(230,228,221)"));
                 playingBoard.getChildren().add(r);
                 GridPane.setRowIndex(r,i);
                 GridPane.setColumnIndex(r,j);
