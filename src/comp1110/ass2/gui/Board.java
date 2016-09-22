@@ -511,10 +511,10 @@ public class Board extends Application {
         }
         controls.getChildren().remove(errormessage);
         // ImageView iv = new ImageView();
-        iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
+        iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
         iv.setRotate((((int) placement.charAt(3)) - 65) * 90);
         iv.setFitWidth(TILE_SIZE * 2);
-        iv.setOpacity(0.5);
+        iv.setOpacity(0.8);
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
@@ -560,7 +560,7 @@ public class Board extends Application {
         } else {
             /*create the image that'll go on the board*/
             ImageView iv1 = new ImageView();
-            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
+            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_b.png").toString()));
             iv1.setRotate((((int) placement.charAt(3)) - 65) * 90);
             iv1.setFitWidth(TILE_SIZE*2);
             iv1.setPreserveRatio(true);
