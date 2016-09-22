@@ -289,7 +289,7 @@ public class Board extends Application {
             for (int j=1; j<27; j++){
                 int rectSize = TILE_SIZE-1;
                 Rectangle r = new Rectangle(rectSize, rectSize);
-                r.setFill(Color.WHITE);
+                r.setFill(Color.LIGHTGRAY);
                 playingBoard.getChildren().add(r);
                 GridPane.setRowIndex(r,i);
                 GridPane.setColumnIndex(r,j);
@@ -435,6 +435,18 @@ public class Board extends Application {
     /*The clickable panes for when you are playing as green*/
     private void addPanePlayerGreen(int colIndex, int rowIndex){
         Pane pane = new Pane();
+        ImageView iv = new ImageView();
+
+        pane.setOnMouseEntered(event -> {
+            char col = (char) (colIndex+64);
+            char row = (char) (rowIndex+64);
+
+            String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+            makeTempPlacement(iv, placement2);
+        });
+
+        pane.setOnMouseExited(event -> removeTempPlacement(iv));
+
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -468,6 +480,18 @@ public class Board extends Application {
     /*The clickable panes for when you are playing as red*/
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
+        ImageView iv = new ImageView();
+
+        pane.setOnMouseEntered(event -> {
+            char col = (char) (colIndex + 'A' - 1);
+            char row = (char) (rowIndex + 'A' - 1);
+
+            String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+            makeTempPlacement(iv, placement);
+        });
+
+        pane.setOnMouseExited(event -> removeTempPlacement(iv));
+
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
