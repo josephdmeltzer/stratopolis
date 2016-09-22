@@ -388,6 +388,7 @@ public class Board extends Application {
     /*The clickable panes for when there are two players*/
     private void addPaneTwoPlayer(int colIndex, int rowIndex){
         Pane pane = new Pane();
+        ImageView iv = new ImageView();
         pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -412,7 +413,26 @@ public class Board extends Application {
         pane.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                char col = (char) (colIndex + 'A' - 1);
+                char row = (char) (rowIndex + 'A' - 1);
 
+                switch (boardState.playerTurn){
+                    case RED:
+                        String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+                        makeTempPlacement(iv, placement);
+                        break;
+                    case GREEN:
+                        String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+                        makeTempPlacement(iv, placement2);
+                        break;
+                }
+            }
+        });
+
+        pane.setOnMouseExited(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                removeTempPlacement(iv);
             }
         });
         clickablePanes.getChildren().add(pane);
@@ -487,6 +507,52 @@ public class Board extends Application {
         GridPane.setColumnIndex(pane,colIndex);
     }
 
+    private void removeTempPlacement(ImageView iv){
+        if (iv == null)
+            return;
+        playingBoard.getChildren().remove(iv);
+    }
+
+    private void makeTempPlacement(ImageView iv, String placement){
+        if (!StratoGame.isPlacementValid(moveHistory.concat(placement))){
+            return;
+        }
+        controls.getChildren().remove(errormessage);
+        // ImageView iv = new ImageView();
+        iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + ".png").toString()));
+        iv.setRotate((((int) placement.charAt(3)) - 65) * 90);
+        iv.setFitWidth(TILE_SIZE * 2);
+        iv.setOpacity(0.5);
+        iv.setPreserveRatio(true);
+        iv.setSmooth(true);
+        iv.setCache(true);
+        playingBoard.getChildren().add(iv);
+
+        /*What do these two do?*/
+        GridPane.setRowSpan(iv, 2);
+        GridPane.setColumnSpan(iv, 2);
+
+        switch (placement.charAt(3)) {
+            case 'A':
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' + 1));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' + 1));
+                break;
+            case 'B':
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' + 1));
+                break;
+            case 'C':
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
+                break;
+            case 'D':
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' + 1));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
+                break;
+        }
+
+
+    }
 
     /*The method that makes a placement*/
     private void makeGUIPlacement(String placement) {
