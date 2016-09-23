@@ -93,8 +93,8 @@ public class Board extends Application {
     private Text redtxt = new Text("Red");
     private Text errormessage = new Text("Invalid move!!!");
     private Text aiThink = new Text("Thinking...");
-    private Text redScore = new Text("1");
-    private Text greenScore = new Text("1");
+    private Text redScore = new Text("001");
+    private Text greenScore = new Text("001");
     Text theScores = new Text();
 
     /*Various Groups that organise the screen*/
@@ -339,8 +339,8 @@ public class Board extends Application {
 
         Rectangle r = new Rectangle();
         r.setLayoutY(50);
-        r.setLayoutX(743);
-        r.setWidth(160);
+        r.setLayoutX(748);
+        r.setWidth(170);
         r.setHeight(80);
         r.setArcHeight(20);
         r.setArcWidth(20);
@@ -748,7 +748,8 @@ public class Board extends Application {
         String placement = boardState.moveHistory;
         controls.getChildren().remove(greenScore);
         int score = StratoGame.getScoreForPlacement(placement, true);
-        greenScore.setText("" + score);
+        String scoreText = (score < 10 ? "00" + score : (score < 100 ? "0" + score : "" + score));
+        greenScore.setText(scoreText);
         controls.getChildren().add(greenScore);
         greenScore.setLayoutY(100);
         greenScore.setLayoutX(750);
@@ -760,7 +761,8 @@ public class Board extends Application {
         String placement = boardState.moveHistory;
         controls.getChildren().remove(redScore); // don't forget to add red score and green score to controls
         int score = StratoGame.getScoreForPlacement(placement, false);
-        redScore.setText("" + score);
+        String scoreText = (score < 10 ? "00" + score : (score < 100 ? "0" + score : "" + score));
+        redScore.setText(scoreText);
         controls.getChildren().add(redScore);
         redScore.setLayoutX(830);
         redScore.setLayoutY(100);
