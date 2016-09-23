@@ -7,6 +7,8 @@ import static comp1110.ass2.StratoGame.isPlacementValid;
 /**
  * Created by josephmeltzer on 11/08/16.
  */
+
+/*Implementated by Joseph Meltzer*/
 public class AI {
     /**
      * The moveScore (nested) class is an object which combines a move and its score.

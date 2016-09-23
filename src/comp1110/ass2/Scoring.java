@@ -11,6 +11,8 @@ import static comp1110.ass2.Colour.*;
  * Created by manalmohania on 25/08/2016.
  */
 
+/*Idea for and implementation of class by Manal Mohania*/
+
 public final class Scoring {
     /*I wanted to have a separate class to handle scoring -- Manal*/
     private static final int BOARD_SIZE = 26;
@@ -158,7 +160,7 @@ public final class Scoring {
         return nextResult(red, green);
     }
 
-    static int getScore(String placement, boolean green) {
+    public static int getScore(String placement, boolean green) {
 
         colours = colourArray(placement);
         colours2 = colourArray(placement);

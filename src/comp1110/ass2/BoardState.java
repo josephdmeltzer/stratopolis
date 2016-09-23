@@ -1,9 +1,9 @@
 package comp1110.ass2;
 
 /**
- * Created by Aftran261 on 11/08/2016.
+ * Created by u5807060 on 11/08/2016.
  */
-/*This describes the entire board, like in Kalaha.*/
+/*Implemented by Zhixian Wu*/
 public class BoardState {
     public Colour playerTurn;
     public PlayingMode playingMode;
