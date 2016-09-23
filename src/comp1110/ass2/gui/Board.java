@@ -86,7 +86,7 @@ public class Board extends Application {
     private PlayerG playerG;
     private PlayerR playerR;
 
-    /*Nodes that need to be accessable by many functions*/
+    /*Nodes that need to be accessible by many functions*/
     private ImageView ivg = new ImageView();
     private ImageView ivr = new ImageView();
     private Text greentxt = new Text("Green");
@@ -338,8 +338,8 @@ public class Board extends Application {
 
         Rectangle r = new Rectangle();
         r.setLayoutY(50);
-        r.setLayoutX(735);
-        r.setWidth(165);
+        r.setLayoutX(748);
+        r.setWidth(170);
         r.setHeight(80);
         r.setArcHeight(20);
         r.setArcWidth(20);
