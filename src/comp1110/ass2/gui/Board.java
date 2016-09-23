@@ -698,12 +698,17 @@ public class Board extends Application {
 
     /*Function by Manal Mohania*/
     private void makeTempPlacement(ImageView iv, String placement){
-        if (!StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))){
-            return;
-        }
+//        if (!StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))){
+//            return;
+//        }
         controls.getChildren().remove(errormessage);
         // ImageView iv = new ImageView();
-        iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
+        if (StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))) {
+            iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
+        }
+        else {
+            iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_hx.png").toString()));
+        }
         iv.setRotate((((int) placement.charAt(3)) - 65) * 90);
         iv.setFitWidth(TILE_SIZE * 2);
         iv.setOpacity(0.8);
