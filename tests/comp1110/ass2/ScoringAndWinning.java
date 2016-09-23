@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 /*This class contains my tests for scoring and winner determination*/
 
 
-public class ScoringAndWinner {
+public class ScoringAndWinning {
 
     /*Tests for scoring*/
 

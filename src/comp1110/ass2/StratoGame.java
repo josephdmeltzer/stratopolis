@@ -1,12 +1,5 @@
 package comp1110.ass2;
 
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.text.Text;
-
 import static comp1110.ass2.AI.alphabeta;
 import static comp1110.ass2.Colour.*;
 import static comp1110.ass2.Pieces.getColours;
