@@ -338,7 +338,7 @@ public class Board extends Application {
 
         Rectangle r = new Rectangle();
         r.setLayoutY(50);
-        r.setLayoutX(748);
+        r.setLayoutX(735);
         r.setWidth(170);
         r.setHeight(80);
         r.setArcHeight(20);
