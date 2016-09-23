@@ -336,15 +336,28 @@ public class Board extends Application {
         menu.setLayoutX(760);
         menu.setLayoutY(600);
 
+
+        Rectangle r = new Rectangle();
+        r.setLayoutY(50);
+        r.setLayoutX(743);
+        r.setWidth(120);
+        r.setHeight(80);
+        r.setArcHeight(20);
+        r.setArcWidth(20);
+        r.setFill(Color.SANDYBROWN);
+        controls.getChildren().add(r);
+
         controls.getChildren().add(greenScore);
         greenScore.setLayoutY(100);
-        greenScore.setLayoutX(770);
+        greenScore.setLayoutX(750);
         greenScore.setFill(Color.GREEN);
+        greenScore.setFont(Font.font("Comic Sans", FontWeight.EXTRA_BOLD, 40));
 
         controls.getChildren().add(redScore);
-        redScore.setLayoutX(810);
+        redScore.setLayoutX(830);
         redScore.setLayoutY(100);
         redScore.setFill(Color.RED);
+        redScore.setFont(Font.font("Comic Sans", FontWeight.EXTRA_BOLD, 40));
 
     }
 
@@ -510,11 +523,13 @@ public class Board extends Application {
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
                         makeGUIPlacement(placement);
                         updateRedScore();
+                        updateGreenScore();
                         break;
                     case GREEN:
                         String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
                         makeGUIPlacement(placement2);
                         updateGreenScore();
+                        updateRedScore();
                         break;
                     case BLACK:
                         makeGUIPlacement("MMUA");
@@ -731,8 +746,9 @@ public class Board extends Application {
         greenScore.setText("" + score);
         controls.getChildren().add(greenScore);
         greenScore.setLayoutY(100);
-        greenScore.setLayoutX(770);
+        greenScore.setLayoutX(750);
         greenScore.setFill(Color.GREEN);
+        greenScore.setFont(Font.font("Comic Sans", FontWeight.EXTRA_BOLD, 40));
     }
 
     private void updateRedScore(){
@@ -741,9 +757,10 @@ public class Board extends Application {
         int score = StratoGame.getScoreForPlacement(placement, false);
         redScore.setText("" + score);
         controls.getChildren().add(redScore);
-        redScore.setLayoutX(810);
+        redScore.setLayoutX(830);
         redScore.setLayoutY(100);
         redScore.setFill(Color.RED);
+        redScore.setFont(Font.font("Comic Sans", FontWeight.EXTRA_BOLD, 40));
     }
 
     /*The method that makes a placement*/
