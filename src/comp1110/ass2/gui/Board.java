@@ -95,6 +95,7 @@ public class Board extends Application {
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
+    Text theScores = new Text();
 
     /*Various Groups that organise the screen*/
     private final Group root = new Group();
@@ -107,10 +108,9 @@ public class Board extends Application {
 
 
 
+    /*Function by Zhixian Wu*/
     private void initialSettings() {
         boardState  = new BoardState(BLACK, TwoPlayers);
-        playerG = new PlayerG();
-        playerR = new PlayerR();
 
         Text introtext = new Text("Choose playing mode");
 
@@ -157,6 +157,7 @@ public class Board extends Application {
         placementGrp.getChildren().addAll(vb);
     }
 
+    /*Function by Zhixian Wu*/
     private void getInstructions(){
         GridPane mainInstruc = new GridPane();
         mainInstruc.setLayoutY(50);
@@ -222,7 +223,11 @@ public class Board extends Application {
         root.getChildren().add(mainInstruc);
     }
 
+    /*Function by Zhixian Wu*/
     private void makePlayer(){
+        playerG = new PlayerG();
+        playerR = new PlayerR();
+
         /*Make the playing board*/
         makeBoard();
 
@@ -230,9 +235,9 @@ public class Board extends Application {
         makeControls();
 
         makeGUIPlacement("MMUA");
-
     }
 
+    /*Function mostly by Zhixian Wu*/
     private void makeControls(){
         /*Make the control pane as a GridPane. This is the stuff on the right*/
         GridPane playerControls = new GridPane();
@@ -315,7 +320,7 @@ public class Board extends Application {
         playerControls.setGridLinesVisible(false);
 
         /*A main menu button*/
-         Button menu = new Button("Main Menu");
+        Button menu = new Button("Main Menu");
         menu.setOnAction(event->{
             controls.getChildren().clear();
             placementGrp.getChildren().clear();
@@ -342,6 +347,8 @@ public class Board extends Application {
         redScore.setFill(Color.RED);
 
     }
+
+    /*Function mostly by Zhixian Wu, with lines changed by Manal Mohania (indicated below)*/
     private void makeBoard(){
         /*Note: the size of the tiles on the board are still 48x48 pixels */
         int size = (TILE_SIZE+1)*27;
@@ -393,7 +400,7 @@ public class Board extends Application {
             for (int j=1; j<27; j++){
                 int rectSize = TILE_SIZE-1;
                 Rectangle r = new Rectangle(rectSize, rectSize);
-                r.setFill(Color.web("rgb(230,228,240)"));
+                r.setFill(Color.web("rgb(230,228,221)")); /*Colour done by Manal Mohania*/
                 playingBoard.getChildren().add(r);
                 GridPane.setRowIndex(r,i);
                 GridPane.setColumnIndex(r,j);
@@ -486,11 +493,15 @@ public class Board extends Application {
     }
 
 
-
     /*The clickable panes for when there are two players*/
+    /*Function by Zhixian Wu and Manal Mohania.*/
+    /*Idea of how to recursively creates panes that remember what position they
+    were created for is from StackOverflow (URL in the originality statement)*/
     private void addPaneTwoPlayer(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
+
+        /*Event by Zhixian Wu*/
         pane.setOnMouseClicked(event -> {
                 char col = (char) (colIndex+64);
                 char row = (char) (rowIndex+64);
@@ -512,6 +523,7 @@ public class Board extends Application {
                 }
 
         });
+        /*Event by Manal Mohania*/
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex + 'A' - 1);
             char row = (char) (rowIndex + 'A' - 1);
@@ -528,17 +540,23 @@ public class Board extends Application {
             }
         });
 
+        /*Event by Manal Mohania*/
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
+
         clickablePanes.getChildren().add(pane);
         GridPane.setRowIndex(pane,rowIndex);
         GridPane.setColumnIndex(pane,colIndex);
     }
 
-    /*The clickable panes for when you are playing as green*/
+    /*The clickable panes for when the human player is Green*/
+    /*Function by Zhixian Wu and Manal Mohania.*/
+    /*Idea of how to recursively creates panes that remember what position they
+    were created for is from StackOverflow (URL in the originality statement)*/
     private void addPanePlayerGreen(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
 
+        /*Event by Manal Mohania*/
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex+64);
             char row = (char) (rowIndex+64);
@@ -547,8 +565,10 @@ public class Board extends Application {
             makeTempPlacement(iv, placement2);
         });
 
+        /*Event by Manal Mohania*/
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
+        /*Event by Zhixian Wu*/
         pane.setOnMousePressed(event -> {
             char col = (char) (colIndex+64);
             char row = (char) (rowIndex+64);
@@ -566,6 +586,7 @@ public class Board extends Application {
             }
         });
 
+        /*Event by Zhixian Wu*/
         pane.setOnMouseReleased(event -> {
             int length = boardState.moveHistory.length()-2;
 
@@ -575,13 +596,13 @@ public class Board extends Application {
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent = generateMove(boardState.moveHistory, redTile, greenTile);
                 makeGUIPlacement(opponent);
-                System.out.println("AI generates: "+opponent);
+                /*System.out.println("AI generates: "+opponent);
                 if (opponent=="") {
                     System.out.println("Empty string generated by AI");
-                }
-            } else{
+                }*/
+            } /*else{
                 System.out.println("AI did not move");
-            }
+            }*/
         });
 
         clickablePanes.getChildren().add(pane);
@@ -589,11 +610,15 @@ public class Board extends Application {
         GridPane.setColumnIndex(pane,colIndex);
     }
 
-    /*The clickable panes for when you are playing as red*/
+    /*The clickable panes for when the human player is Red*/
+    /*Function by Zhixian Wu and Manal Mohania.*/
+    /*Idea of how to recursively creates panes that remember what position they
+    were created for is from StackOverflow (URL in the originality statement)*/
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
 
+        /*Event by Manal Mohania*/
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex + 'A' - 1);
             char row = (char) (rowIndex + 'A' - 1);
@@ -602,8 +627,10 @@ public class Board extends Application {
             makeTempPlacement(iv, placement);
         });
 
+        /*Event by Manal Mohania*/
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
+        /*Event by Zhixian Wu*/
         pane.setOnMousePressed(event -> {
             char col = (char) (colIndex+64);
             char row = (char) (rowIndex+64);
@@ -622,6 +649,7 @@ public class Board extends Application {
 
         });
 
+        /*Event by Zhixian Wu*/
         pane.setOnMouseReleased(event -> {
             int length = boardState.moveHistory.length()-2;
 
@@ -631,13 +659,13 @@ public class Board extends Application {
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent = generateMove(boardState.moveHistory, greenTile,redTile);
                 makeGUIPlacement(opponent);
-                System.out.println("AI generates: "+opponent);
+                /*System.out.println("AI generates: "+opponent);
                 if (opponent=="") {
                     System.out.println("Empty string generated by AI");
-                }
-            } else{
+                }*/
+            } /*else{
                 System.out.println("AI did not move");
-            }
+            }*/
 
         });
 
@@ -646,12 +674,14 @@ public class Board extends Application {
         GridPane.setColumnIndex(pane,colIndex);
     }
 
+    /*Function by Manal Mohania*/
     private void removeTempPlacement(ImageView iv){
         if (iv == null)
             return;
         playingBoard.getChildren().remove(iv);
     }
 
+    /*Function by Manal Mohania*/
     private void makeTempPlacement(ImageView iv, String placement){
         if (!StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))){
             return;
@@ -717,11 +747,12 @@ public class Board extends Application {
     }
 
     /*The method that makes a placement*/
+    /*Function by Zhixian Wu*/
     private void makeGUIPlacement(String placement) {
         String tempMove = boardState.moveHistory.concat(placement);
         controls.getChildren().remove(errormessage);
         controls.getChildren().remove(aiThink);
-        System.out.println("Someone tried: "+tempMove);
+        /*System.out.println("Someone tried: "+tempMove);*/
 
         if (!StratoGame.isPlacementValid(tempMove)) {
             errormessage.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
@@ -778,19 +809,16 @@ public class Board extends Application {
                         ivr.setPreserveRatio(true);
                         ivr.setSmooth(true);
                         ivr.setCache(true);
-                    } else{ /*If red does not still have tiles left*/
+                    } else{ /*If red does not still have tiles left, say they're our of tiles*/
                         ivr.setRotate(0);
                         ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
                         ivr.setRotate(0);
                         playerR.getNextTile();
                     }
-                    if (boardState.playingMode==TwoPlayers){
-                        /*Update whose turn it is, and whose turn is bolded.*/
-                        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-                        redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
-                    }
-                    /*Update whose turn it is*/
+                    /*Update whose turn it is, and whose turn is bolded.*/
                     boardState.playerTurn = GREEN;
+                    greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                    redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
                     break;
                 case GREEN:
                     if (playerG.used_tiles<19){ /*If green still has tiles left*/
@@ -802,19 +830,16 @@ public class Board extends Application {
                         ivg.setPreserveRatio(true);
                         ivg.setSmooth(true);
                         ivg.setCache(true);
-                    } else{ /*If green does not still have tiles left*/
+                    } else{ /*If green does not still have tiles left, say they're our of tiles*/
                         ivg.setRotate(0);
                         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
                         ivg.setRotate(0);
                         playerG.getNextTile();
                     }
-                    if (boardState.playingMode==TwoPlayers){
-                        /*Update whose turn is bolded.*/
-                        greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
-                        redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-                    }
-                    /*Update whose turn it is*/
+                    /*Update whose turn it is, and whose turn is bolded.*/
                     boardState.playerTurn = RED;
+                    greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
+                    redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
                     break;
                 case BLACK:
                     boardState.playerTurn = GREEN;
@@ -842,6 +867,7 @@ public class Board extends Application {
     }
 
     /*Display the height at each position*/
+    /*Function by Zhixian Wu*/
     private void displayHeights(){
         heightLabels.getChildren().clear();
         int[][] heights = heightArray(boardState.moveHistory);

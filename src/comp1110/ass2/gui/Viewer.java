@@ -14,7 +14,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Node;
-import comp1110.ass2.gui.Setup;
 import comp1110.ass2.StratoGame;
 import comp1110.ass2.Pieces;
 
@@ -30,6 +29,8 @@ import static javafx.scene.layout.GridPane.getRowIndex;
  * class does not play a game, it just illustrates various piece
  * placements.
  */
+
+
 public class Viewer extends Application {
 
     /* board layout */
