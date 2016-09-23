@@ -2,19 +2,14 @@ package comp1110.ass2.gui;
 
 import comp1110.ass2.*;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -34,13 +29,10 @@ import static comp1110.ass2.PlayingMode.PlayerIsGreen;
 import static comp1110.ass2.PlayingMode.PlayerIsRed;
 import static comp1110.ass2.PlayingMode.TwoPlayers;
 import static comp1110.ass2.StratoGame.heightArray;
-import static comp1110.ass2.StratoGame.main;
 
 public class Board extends Application {
 
-    /*TODO: Add instructions*/
-
-    /*TODO: Add Main Menu button*/
+    /*TODO: Change instructions text so it actually tells you the instructions*/
 
     /*TODO: Better Game Over screen*/
 
@@ -49,7 +41,9 @@ public class Board extends Application {
     /*DONE:
     1. fixed tile placements so it's offset correctly
     2. the preview tiles update properly now
-    3. player's tile now appears immediately
+    3. player's tile now appears immediately, before the AI has finished thinking
+    4. there exists a working instructions button
+    5. main menu button done
      */
 
 /*OVERVIEW: The first function called by the stage is initialSettings(), which
@@ -150,9 +144,7 @@ public class Board extends Application {
         });
 
         Button instructions = new Button("How to Play");
-        instructions.setOnAction(event-> {
-            getInstructions();
-        });
+        instructions.setOnAction(event->  getInstructions() );
 
         VBox vb = new VBox();
         vb.getChildren().addAll(introtext,twoPlayer,playAsRed,playAsGreen,instructions);
@@ -166,7 +158,7 @@ public class Board extends Application {
     private void getInstructions(){
         GridPane mainInstruc = new GridPane();
         mainInstruc.setLayoutY(50);
-        mainInstruc.setLayoutX(100);
+        mainInstruc.setLayoutX(105);
 
         ScrollPane scroll = new ScrollPane();
 
@@ -175,31 +167,31 @@ public class Board extends Application {
                 " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
                 " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
                 " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
                 " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
                 " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
                 " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
                 " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
                 " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
                 " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
                 " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
                 " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
                 " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
                 " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
                 " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
                 " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
                 " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
@@ -217,9 +209,7 @@ public class Board extends Application {
         scroll.setPrefViewportWidth(700.0);
 
         Button exitBtn = new Button("X");
-        exitBtn.setOnAction(event-> {
-            root.getChildren().remove(mainInstruc);
-        });
+        exitBtn.setOnAction(event->  root.getChildren().remove(mainInstruc) );
 
         mainInstruc.getChildren().addAll(scroll,exitBtn);
         GridPane.setRowIndex(scroll,1);
@@ -318,8 +308,9 @@ public class Board extends Application {
 
         controls.getChildren().add(playerControls);
 
+
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
-        playerControls.setGridLinesVisible(true);
+        playerControls.setGridLinesVisible(false);
 
         /*A main menu button*/
          Button menu = new Button("Main Menu");
@@ -399,7 +390,7 @@ public class Board extends Application {
         }
 
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
-        playingBoard.setGridLinesVisible(true);
+        playingBoard.setGridLinesVisible(false);
 
         /*Layout*/
         playingBoard.setLayoutX(10);
@@ -425,20 +416,22 @@ public class Board extends Application {
         heightLabels.setLayoutY(10);
 
 
-
         /*A GridPane on top of playingBoard and heightLabels, laid out identically to playingBoard,
          holding the interactive tiles for the game*/
         clickablePanes.setPrefSize(675, 675);
         clickablePanes.setMaxSize(700, 700);
-        /*Determines the size of the grid rows and columns*/
-        for (int i = 0; i < 27; i++) {
-            RowConstraints row = new RowConstraints(TILE_SIZE+1);
-            clickablePanes.getRowConstraints().add(row);
+        if (blah){
+            /*Determines the size of the grid rows and columns*/
+            for (int i = 0; i < 27; i++) {
+                RowConstraints row = new RowConstraints(TILE_SIZE+1);
+                clickablePanes.getRowConstraints().add(row);
+            }
+            for (int i = 0; i < 27; i++) {
+                ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
+                clickablePanes.getColumnConstraints().add(column);
+            }
         }
-        for (int i = 0; i < 27; i++) {
-            ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
-            clickablePanes.getColumnConstraints().add(column);
-        }
+
         /*What kind of function the pane calls when clicked depends on the playingMode.
         * Instead of checking what the playingMode is everytime a pane is clicked,
         * we check it now and create different panes depending on the playingMode*/
@@ -548,10 +541,14 @@ public class Board extends Application {
             String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
             makeGUIPlacement(placement);
 
-            aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
-            controls.getChildren().add(aiThink);
-            aiThink.setLayoutX(740);
-            aiThink.setLayoutY(400);
+            int length = boardState.moveHistory.length()-2;
+            /*We only suggest the AI is thinking if it actually is, i.e. your move was valid, i.e. if the last move was yours*/
+            if ('K'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='T'){
+                aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+                controls.getChildren().add(aiThink);
+                aiThink.setLayoutX(740);
+                aiThink.setLayoutY(400);
+            }
         });
 
         pane.setOnMouseReleased(event -> {
@@ -599,10 +596,14 @@ public class Board extends Application {
             String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
             makeGUIPlacement(placement);
 
-            aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
-            controls.getChildren().add(aiThink);
-            aiThink.setLayoutX(740);
-            aiThink.setLayoutY(400);
+            int length = boardState.moveHistory.length()-2;
+            /*We only suggest the AI is thinking if it actually is, i.e. your move was valid, i.e. if the last move was yours*/
+            if ('A'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='J'){
+                aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+                controls.getChildren().add(aiThink);
+                aiThink.setLayoutX(740);
+                aiThink.setLayoutY(400);
+            }
 
         });
 
@@ -844,7 +845,6 @@ public class Board extends Application {
 
     }
 
-   /*This version definitely works. Please don't overwrite it.*/
 
     // FIXME Task 8: Implement a basic playable Strato Game in JavaFX that only allows pieces to be placed in valid places
 
