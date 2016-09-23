@@ -478,7 +478,7 @@ public class StratoGame {
      * @return the score for the requested player, given the placement
      */
 
-    static int getScoreForPlacement(String placement, boolean green) {
+    public static int getScoreForPlacement(String placement, boolean green) {
         // FIXME Task 7: determine the score for a player given a placement
 
         /*I have this here for the moment but will remove it once main gets implemented*/

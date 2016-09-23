@@ -93,6 +93,8 @@ public class Board extends Application {
     private Text redtxt = new Text("Red");
     private Text errormessage = new Text("Invalid move!!!");
     private Text aiThink = new Text("Thinking...");
+    private Text redScore = new Text("1");
+    private Text greenScore = new Text("1");
 
     /*Various Groups that organise the screen*/
     private final Group root = new Group();
@@ -328,6 +330,17 @@ public class Board extends Application {
         controls.getChildren().add(menu);
         menu.setLayoutX(760);
         menu.setLayoutY(600);
+
+        controls.getChildren().add(greenScore);
+        greenScore.setLayoutY(100);
+        greenScore.setLayoutX(770);
+        greenScore.setFill(Color.GREEN);
+
+        controls.getChildren().add(redScore);
+        redScore.setLayoutX(810);
+        redScore.setLayoutY(100);
+        redScore.setFill(Color.RED);
+
     }
     private void makeBoard(){
         /*Note: the size of the tiles on the board are still 48x48 pixels */
@@ -485,10 +498,12 @@ public class Board extends Application {
                     case RED:
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
                         makeGUIPlacement(placement);
+                        updateRedScore();
                         break;
                     case GREEN:
                         String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
                         makeGUIPlacement(placement2);
+                        updateGreenScore();
                         break;
                     case BLACK:
                         makeGUIPlacement("MMUA");
@@ -678,6 +693,27 @@ public class Board extends Application {
         }
 
 
+    }
+    private void updateGreenScore(){
+        String placement = boardState.moveHistory;
+        controls.getChildren().remove(greenScore);
+        int score = StratoGame.getScoreForPlacement(placement, true);
+        greenScore.setText("" + score);
+        controls.getChildren().add(greenScore);
+        greenScore.setLayoutY(100);
+        greenScore.setLayoutX(770);
+        greenScore.setFill(Color.GREEN);
+    }
+
+    private void updateRedScore(){
+        String placement = boardState.moveHistory;
+        controls.getChildren().remove(redScore); // don't forget to add red score and green score to controls
+        int score = StratoGame.getScoreForPlacement(placement, false);
+        redScore.setText("" + score);
+        controls.getChildren().add(redScore);
+        redScore.setLayoutX(810);
+        redScore.setLayoutY(100);
+        redScore.setFill(Color.RED);
     }
 
     /*The method that makes a placement*/
