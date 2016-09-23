@@ -95,7 +95,6 @@ public class Board extends Application {
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
-    Text theScores = new Text();
 
     /*Various Groups that organise the screen*/
     private final Group root = new Group();
@@ -521,14 +520,10 @@ public class Board extends Application {
                     case RED:
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
                         makeGUIPlacement(placement);
-                        updateRedScore();
-                        updateGreenScore();
                         break;
                     case GREEN:
                         String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
                         makeGUIPlacement(placement2);
-                        updateGreenScore();
-                        updateRedScore();
                         break;
                     case BLACK:
                         makeGUIPlacement("MMUA");
@@ -821,6 +816,10 @@ public class Board extends Application {
 
             /*Update the heights we're supposed to display*/
             displayHeights();
+
+            /*Update the scores displayed*/
+            updateRedScore();
+            updateGreenScore();
 
             /*Update the top tiles shown on the control panel, whose turn it is, and whose turn is bolded.*/
             switch (boardState.playerTurn) {
