@@ -94,6 +94,7 @@ public class Board extends Application {
     private Text greentxt = new Text("Green");
     private Text redtxt = new Text("Red");
     private Text errormessage = new Text("Invalid move!!!");
+    private Text aiThink = new Text("Thinking...");
 
     /*Various Groups that organise the screen*/
     private final Group root = new Group();
@@ -112,41 +113,32 @@ public class Board extends Application {
         placementGrp.getChildren().add(introtext);
 
         Button playAsGreen = new Button("Play as Green");
-        playAsGreen.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                placementGrp.getChildren().clear();
-                boardState.playingMode = PlayerIsGreen;
+        playAsGreen.setOnAction(event-> {
+            placementGrp.getChildren().clear();
+            boardState.playingMode = PlayerIsGreen;
 
-                makePlayer();
-            }
+            makePlayer();
         });
 
         Button playAsRed = new Button("Play as Red");
-        playAsRed.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                placementGrp.getChildren().clear();
-                boardState.playingMode = PlayerIsRed;
+        playAsRed.setOnAction(event-> {
+            placementGrp.getChildren().clear();
+            boardState.playingMode = PlayerIsRed;
 
-                makePlayer();
+            makePlayer();
 
                 /*Makes the opponent's move first*/
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                String opponent = generateMove(moveHistory, greenTile,redTile);
-                makeGUIPlacement(opponent);
-            }
+            char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+            char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+            String opponent = generateMove(moveHistory, greenTile,redTile);
+            makeGUIPlacement(opponent);
         });
 
         Button twoPlayer = new Button("Two players");
-        twoPlayer.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                placementGrp.getChildren().clear();
-                boardState.playingMode = TwoPlayers;
-                makePlayer();
-            }
+        twoPlayer.setOnAction(event-> {
+            placementGrp.getChildren().clear();
+            boardState.playingMode = TwoPlayers;
+            makePlayer();
         });
         VBox vb = new VBox();
         vb.getChildren().addAll(introtext,twoPlayer,playAsRed,playAsGreen);
@@ -208,21 +200,15 @@ public class Board extends Application {
 
         /*The buttons that rotates the tiles*/
         Button rotateG = new Button("Rotate");
-        rotateG.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                playerG.rotateTile();
-                ivg.setRotate((((int) (playerG.rotation)-65)*90));
-            }
+        rotateG.setOnAction(event-> {
+            playerG.rotateTile();
+            ivg.setRotate((((int) (playerG.rotation)-65)*90));
         });
 
         Button rotateR = new Button("Rotate");
-        rotateR.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                playerR.rotateTile();
-                ivr.setRotate((((int) (playerR.rotation)-65)*90));
-            }
+        rotateR.setOnAction(event-> {
+            playerR.rotateTile();
+            ivr.setRotate((((int) (playerR.rotation)-65)*90));
         });
 
         /*Adding the nodes. Which ones we add depends on the playingMode*/
@@ -454,11 +440,16 @@ public class Board extends Application {
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
         pane.setOnMousePressed(event -> {
-                char col = (char) (colIndex+64);
-                char row = (char) (rowIndex+64);
+            char col = (char) (colIndex+64);
+            char row = (char) (rowIndex+64);
 
-                String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
-                makeGUIPlacement(placement);
+            String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+            makeGUIPlacement(placement);
+
+            aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+            controls.getChildren().add(aiThink);
+            aiThink.setLayoutX(740);
+            aiThink.setLayoutY(400);
         });
 
         pane.setOnMouseReleased(event -> {
@@ -500,11 +491,16 @@ public class Board extends Application {
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
         pane.setOnMousePressed(event -> {
-                char col = (char) (colIndex+64);
-                char row = (char) (rowIndex+64);
+            char col = (char) (colIndex+64);
+            char row = (char) (rowIndex+64);
 
-                String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
-                makeGUIPlacement(placement);
+            String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+            makeGUIPlacement(placement);
+
+            aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+            controls.getChildren().add(aiThink);
+            aiThink.setLayoutX(740);
+            aiThink.setLayoutY(400);
 
         });
 
@@ -585,6 +581,7 @@ public class Board extends Application {
     private void makeGUIPlacement(String placement) {
         String tempMove = moveHistory.concat(placement);
         controls.getChildren().remove(errormessage);
+        controls.getChildren().remove(aiThink);
         System.out.println("Someone tried: "+tempMove);
 
         if (!StratoGame.isPlacementValid(tempMove)) {
@@ -633,9 +630,9 @@ public class Board extends Application {
             /*Update the top tiles shown on the control panel, whose turn it is, and whose turn is bolded.*/
             switch (boardState.playerTurn) {
                 case RED:
-                    /*Update the red player's tile index*/
-                    playerR.getNextTile();
                     if (playerR.used_tiles<19){ /*If red still has tiles left*/
+                        /*Update the red player's tile index*/
+                        playerR.getNextTile();
                         /*Update the top red tile shown*/
                         ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
                         ivr.setFitWidth(80);
@@ -646,6 +643,7 @@ public class Board extends Application {
                         ivr.setRotate(0);
                         ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
                         ivr.setRotate(0);
+                        playerR.getNextTile();
                     }
                     if (boardState.playingMode==TwoPlayers){
                         /*Update whose turn it is, and whose turn is bolded.*/
@@ -656,9 +654,9 @@ public class Board extends Application {
                     boardState.playerTurn = GREEN;
                     break;
                 case GREEN:
-                    /*Update the red player's tile index*/
-                    playerG.getNextTile();
                     if (playerG.used_tiles<19){ /*If green still has tiles left*/
+                        /*Update the red player's tile index*/
+                        playerG.getNextTile();
                         /*Update the top green tile shown*/
                         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
                         ivg.setFitWidth(80);
@@ -669,6 +667,7 @@ public class Board extends Application {
                         ivg.setRotate(0);
                         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
                         ivg.setRotate(0);
+                        playerG.getNextTile();
                     }
                     if (boardState.playingMode==TwoPlayers){
                         /*Update whose turn is bolded.*/
