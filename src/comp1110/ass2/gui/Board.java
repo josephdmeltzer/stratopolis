@@ -35,6 +35,20 @@ import static comp1110.ass2.StratoGame.heightArray;
 
 public class Board extends Application {
 
+    /*TODO: Add instructions*/
+
+    /*TODO: Add Main Menu button*/
+
+    /*TODO: Better Game Over screen*/
+
+    /*TODO: Get rid of A-Z labels (at end)*/
+
+    /*DONE:
+    1. fixed tile placements so it's offset correctly
+    2. the preview tiles update properly now
+    3. player's tile now appears immediately
+     */
+
 /*OVERVIEW: The first function called by the stage is initialSettings(), which
 * creates the first screen with three buttons to choose the playing mode.*/
 
@@ -79,7 +93,7 @@ public class Board extends Application {
     private ImageView ivr = new ImageView();
     private Text greentxt = new Text("Green");
     private Text redtxt = new Text("Red");
-    private Text errormessage = new Text("Error: Invalid move");
+    private Text errormessage = new Text("Invalid move!!!");
 
     /*Various Groups that organise the screen*/
     private final Group root = new Group();
@@ -230,8 +244,8 @@ public class Board extends Application {
         GridPane.setColumnIndex(redtxt,1);
         GridPane.setRowIndex(redtxt,2);
 
-        playerControls.setLayoutX((TILE_SIZE+1)*27+65);
-        playerControls.setLayoutY(50);
+        playerControls.setLayoutX((TILE_SIZE+1)*27+60);
+        playerControls.setLayoutY(100);
 
         playerControls.setHgap(10);
         playerControls.setVgap(10);
@@ -249,11 +263,11 @@ public class Board extends Application {
 
         /*determines the size of the rows and columns of the playing board*/
         for (int i = 0; i < 27; i++) {
-            RowConstraints row = new RowConstraints(TILE_SIZE);
+            RowConstraints row = new RowConstraints(TILE_SIZE+1);
             playingBoard.getRowConstraints().add(row);
         }
         for (int i = 0; i < 27; i++) {
-            ColumnConstraints column = new ColumnConstraints(TILE_SIZE);
+            ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
             playingBoard.getColumnConstraints().add(column);
         }
 
@@ -302,8 +316,6 @@ public class Board extends Application {
         playingBoard.setGridLinesVisible(false);
 
         /*Layout*/
-        playingBoard.setHgap(1);
-        playingBoard.setVgap(1);
         playingBoard.setLayoutX(10);
         playingBoard.setLayoutY(10);
 
@@ -313,16 +325,14 @@ public class Board extends Application {
         heightLabels.setMaxSize(700, 700);
         /*Determines the size of the grid rows and columns*/
         for (int i = 0; i < 27; i++) {
-            RowConstraints row = new RowConstraints(TILE_SIZE);
+            RowConstraints row = new RowConstraints(TILE_SIZE+1);
             heightLabels.getRowConstraints().add(row);
         }
         for (int i = 0; i < 27; i++) {
-            ColumnConstraints column = new ColumnConstraints(TILE_SIZE);
+            ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
             heightLabels.getColumnConstraints().add(column);
         }
         /*Layout*/
-        heightLabels.setHgap(1);
-        heightLabels.setVgap(1);
         heightLabels.setLayoutX(10);
         heightLabels.setLayoutY(10);
 
@@ -334,11 +344,11 @@ public class Board extends Application {
         clickablePanes.setMaxSize(700, 700);
         /*Determines the size of the grid rows and columns*/
         for (int i = 0; i < 27; i++) {
-            RowConstraints row = new RowConstraints(TILE_SIZE);
+            RowConstraints row = new RowConstraints(TILE_SIZE+1);
             clickablePanes.getRowConstraints().add(row);
         }
         for (int i = 0; i < 27; i++) {
-            ColumnConstraints column = new ColumnConstraints(TILE_SIZE);
+            ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
             clickablePanes.getColumnConstraints().add(column);
         }
         /*What kind of function the pane calls when clicked depends on the playingMode.
@@ -371,8 +381,6 @@ public class Board extends Application {
             }
         }
         /*Layout*/
-        clickablePanes.setHgap(1);
-        clickablePanes.setVgap(1);
         clickablePanes.setLayoutX(10);
         clickablePanes.setLayoutY(10);
 
@@ -389,9 +397,7 @@ public class Board extends Application {
     private void addPaneTwoPlayer(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
-        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
+        pane.setOnMouseClicked(event -> {
                 char col = (char) (colIndex+64);
                 char row = (char) (rowIndex+64);
                 switch (boardState.playerTurn){
@@ -408,7 +414,7 @@ public class Board extends Application {
                         boardState.playerTurn = GREEN;
                         break;
                 }
-            }
+
         });
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex + 'A' - 1);
@@ -447,31 +453,32 @@ public class Board extends Application {
 
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
-        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
+        pane.setOnMousePressed(event -> {
                 char col = (char) (colIndex+64);
                 char row = (char) (rowIndex+64);
 
                 String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
-                String tempMove = moveHistory.concat(placement);
                 makeGUIPlacement(placement);
+        });
 
-                /*The AI only makes its move if your move was valid*/
-                if (StratoGame.isPlacementValid(tempMove)){
-                    char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                    char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                    String opponent = generateMove(moveHistory, redTile, greenTile);
-                    makeGUIPlacement(opponent);
-                    System.out.println("AI generates: "+opponent);
-                    if (opponent=="") {
-                        System.out.println("Empty string generated by AI");
-                    }
-                } else{
-                    System.out.println("AI did not move");
+        pane.setOnMouseReleased(event -> {
+            int length = moveHistory.length()-2;
+
+            /*The AI only makes its move if your move was valid, i.e. if the last move was yours*/
+            if ('K'<=moveHistory.charAt(length) && moveHistory.charAt(length)<='T'){
+                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                String opponent = generateMove(moveHistory, redTile, greenTile);
+                makeGUIPlacement(opponent);
+                System.out.println("AI generates: "+opponent);
+                if (opponent=="") {
+                    System.out.println("Empty string generated by AI");
                 }
+            } else{
+                System.out.println("AI did not move");
             }
         });
+
         clickablePanes.getChildren().add(pane);
         GridPane.setRowIndex(pane,rowIndex);
         GridPane.setColumnIndex(pane,colIndex);
@@ -492,32 +499,34 @@ public class Board extends Application {
 
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
-        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
+        pane.setOnMousePressed(event -> {
                 char col = (char) (colIndex+64);
                 char row = (char) (rowIndex+64);
 
                 String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
-                String tempMove = moveHistory.concat(placement);
                 makeGUIPlacement(placement);
 
-                /*The AI only makes its move if your move was valid*/
-                System.out.println("tempMove: "+tempMove);
-                if (StratoGame.isPlacementValid(tempMove)){
-                    char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                    char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                    String opponent = generateMove(moveHistory, greenTile,redTile);
-                    makeGUIPlacement(opponent);
-                    System.out.println("AI generates: "+opponent);
-                    if (opponent=="") {
-                        System.out.println("Empty string generated by AI");
-                    }
-                } else{
-                    System.out.println("AI did not move");
-                }
-            }
         });
+
+        pane.setOnMouseReleased(event -> {
+            int length = moveHistory.length()-2;
+
+            /*The AI only makes its move if your move was valid, i.e. if the last move was yours*/
+            if ('A'<=moveHistory.charAt(length) && moveHistory.charAt(length)<='J'){
+                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                String opponent = generateMove(moveHistory, greenTile,redTile);
+                makeGUIPlacement(opponent);
+                System.out.println("AI generates: "+opponent);
+                if (opponent=="") {
+                    System.out.println("Empty string generated by AI");
+                }
+            } else{
+                System.out.println("AI did not move");
+            }
+
+        });
+
         clickablePanes.getChildren().add(pane);
         GridPane.setRowIndex(pane,rowIndex);
         GridPane.setColumnIndex(pane,colIndex);
@@ -542,6 +551,8 @@ public class Board extends Application {
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
+        GridPane.setHalignment(iv, HPos.CENTER);
+        GridPane.setValignment(iv, VPos.CENTER);
         playingBoard.getChildren().add(iv);
 
         /*What do these two do?*/
@@ -579,7 +590,7 @@ public class Board extends Application {
         if (!StratoGame.isPlacementValid(tempMove)) {
             errormessage.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
             controls.getChildren().add(errormessage);
-            errormessage.setLayoutX(710);
+            errormessage.setLayoutX(740);
             errormessage.setLayoutY(300);
         } else {
             /*create the image that'll go on the board*/
@@ -593,6 +604,8 @@ public class Board extends Application {
             playingBoard.getChildren().add(iv1);
             GridPane.setRowSpan(iv1, 2);
             GridPane.setColumnSpan(iv1, 2);
+            GridPane.setHalignment(iv1, HPos.CENTER);
+            GridPane.setValignment(iv1, VPos.CENTER);
             /*Place the image, in the correct rotation, in the correct place on the board*/
             switch (placement.charAt(3)) {
                 case 'A':
@@ -620,6 +633,8 @@ public class Board extends Application {
             /*Update the top tiles shown on the control panel, whose turn it is, and whose turn is bolded.*/
             switch (boardState.playerTurn) {
                 case RED:
+                    /*Update the red player's tile index*/
+                    playerR.getNextTile();
                     if (playerR.used_tiles<19){ /*If red still has tiles left*/
                         /*Update the top red tile shown*/
                         ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
@@ -637,12 +652,12 @@ public class Board extends Application {
                         greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
                         redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
                     }
-                    /*Update the red player's tile index*/
-                    playerR.getNextTile();
                     /*Update whose turn it is*/
                     boardState.playerTurn = GREEN;
                     break;
                 case GREEN:
+                    /*Update the red player's tile index*/
+                    playerG.getNextTile();
                     if (playerG.used_tiles<19){ /*If green still has tiles left*/
                         /*Update the top green tile shown*/
                         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
@@ -660,8 +675,6 @@ public class Board extends Application {
                         greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
                         redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
                     }
-                    /*Update the red player's tile index*/
-                    playerG.getNextTile();
                     /*Update whose turn it is*/
                     boardState.playerTurn = RED;
                     break;
@@ -692,14 +705,15 @@ public class Board extends Application {
 
     /*Display the height at each position*/
     private void displayHeights(){
+        heightLabels.getChildren().clear();
         int[][] heights = heightArray(moveHistory);
         for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
                 String tall = Integer.toString(heights[i-1][j-1]);
-                if (heights[i-1][j-1]!=0){
+                if (heights[i-1][j-1]>1){
                     Text label1 = new Text(tall);
-                    label1.setFill(Color.GREY);
-                    label1.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+                    label1.setFill(Color.WHITE);
+                    label1.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
                     heightLabels.getChildren().add(label1);
                     GridPane.setRowIndex(label1,j);
                     GridPane.setColumnIndex(label1,i);
@@ -729,14 +743,8 @@ public class Board extends Application {
 
     }
 
-   /*This version definately works. Please don't overwrite it.*/
+   /*This version definitely works. Please don't overwrite it.*/
 
-    // FIXME Task 8: Implement a basic playable Strato Game in JavaFX that only allows pieces to be placed in valid places
 
-    // FIXME Task 9: Implement scoring
-
-    // FIXME Task 11: Implement a game that can play valid moves (even if they are weak moves)
-
-    // FIXME Task 12: Implement a game that can play good moves
 
 }
