@@ -7,10 +7,16 @@ package comp1110.ass2;
 public class BoardState {
     public Colour playerTurn;
     public PlayingMode playingMode;
+    public String moveHistory;
 
     public BoardState(Colour colour, PlayingMode mode){
         this.playerTurn = colour;
         this.playingMode = mode;
+        this.moveHistory = "";
+    }
+
+    public void updateMoves(String placement){
+        this.moveHistory = this.moveHistory + placement;
     }
 
 }
