@@ -301,7 +301,7 @@ public class Board extends Application {
         GridPane.setRowIndex(redtxt,2);
 
         playerControls.setLayoutX((TILE_SIZE+1)*27+60);
-        playerControls.setLayoutY(100);
+        playerControls.setLayoutY(200);
 
         playerControls.setHgap(10);
         playerControls.setVgap(10);
@@ -691,7 +691,7 @@ public class Board extends Application {
             errormessage.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
             controls.getChildren().add(errormessage);
             errormessage.setLayoutX(740);
-            errormessage.setLayoutY(300);
+            errormessage.setLayoutY(400);
         } else {
             /*create the image that'll go on the board*/
             ImageView iv1 = new ImageView();
