@@ -9,6 +9,8 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,6 +34,7 @@ import static comp1110.ass2.PlayingMode.PlayerIsGreen;
 import static comp1110.ass2.PlayingMode.PlayerIsRed;
 import static comp1110.ass2.PlayingMode.TwoPlayers;
 import static comp1110.ass2.StratoGame.heightArray;
+import static comp1110.ass2.StratoGame.main;
 
 public class Board extends Application {
 
@@ -77,16 +80,17 @@ public class Board extends Application {
  modified by functions, instead of being created by functions  because they
  need to be accessible by many different functions.*/
 
+    private Boolean blah = true;
+
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
     private static final String URI_BASE = "assets/";
     private static final int TILE_SIZE = 24;
 
-    /*Some initial conditions*/
-    private BoardState boardState  = new BoardState(BLACK, TwoPlayers);
-    private PlayerG playerG = new PlayerG();
-    private PlayerR playerR = new PlayerR();
-    private String moveHistory = "";
+    /*Some fields for initial conditions*/
+    private BoardState boardState;
+    private PlayerG playerG;
+    private PlayerR playerR;
 
     /*Nodes that need to be accessable by many functions*/
     private ImageView ivg = new ImageView();
@@ -108,6 +112,10 @@ public class Board extends Application {
 
 
     private void initialSettings() {
+        boardState  = new BoardState(BLACK, TwoPlayers);
+        playerG = new PlayerG();
+        playerR = new PlayerR();
+
         Text introtext = new Text("Choose playing mode");
 
         placementGrp.getChildren().add(introtext);
@@ -130,7 +138,7 @@ public class Board extends Application {
                 /*Makes the opponent's move first*/
             char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
             char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-            String opponent = generateMove(moveHistory, greenTile,redTile);
+            String opponent = generateMove(boardState.moveHistory, greenTile,redTile);
             makeGUIPlacement(opponent);
         });
 
@@ -140,8 +148,14 @@ public class Board extends Application {
             boardState.playingMode = TwoPlayers;
             makePlayer();
         });
+
+        Button instructions = new Button("How to Play");
+        instructions.setOnAction(event-> {
+            getInstructions();
+        });
+
         VBox vb = new VBox();
-        vb.getChildren().addAll(introtext,twoPlayer,playAsRed,playAsGreen);
+        vb.getChildren().addAll(introtext,twoPlayer,playAsRed,playAsGreen,instructions);
         vb.setSpacing(10);
         vb.setLayoutX(300);
         vb.setLayoutY(150);
@@ -149,13 +163,79 @@ public class Board extends Application {
         placementGrp.getChildren().addAll(vb);
     }
 
+    private void getInstructions(){
+        GridPane mainInstruc = new GridPane();
+        mainInstruc.setLayoutY(50);
+        mainInstruc.setLayoutX(100);
+
+        ScrollPane scroll = new ScrollPane();
+
+        Text instructions = new Text("Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
+                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
+                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
+                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
+                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
+                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
+                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
+                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
+                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
+                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
+                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
+                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
+                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
+                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
+                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
+                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
+                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
+                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
+                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
+                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum");
+
+        instructions.setFont(Font.font("Arial", 16));
+
+        instructions.setWrappingWidth(680);
+
+        scroll.setContent(instructions);
+
+        scroll.setPrefViewportHeight(500.0);
+        scroll.setPrefViewportWidth(700.0);
+
+        Button exitBtn = new Button("X");
+        exitBtn.setOnAction(event-> {
+            root.getChildren().remove(mainInstruc);
+        });
+
+        mainInstruc.getChildren().addAll(scroll,exitBtn);
+        GridPane.setRowIndex(scroll,1);
+        GridPane.setColumnIndex(scroll,0);
+        GridPane.setRowIndex(exitBtn,0);
+        GridPane.setColumnIndex(exitBtn,1);
+
+        root.getChildren().add(mainInstruc);
+    }
 
     private void makePlayer(){
-        /*Makes the controls for the game*/
-        makeControls();
-
-        /*Make the playing board, separately from the controls*/
+        /*Make the playing board*/
         makeBoard();
+
+        /*Makes the controls for the game, separately from the board*/
+        makeControls();
 
         makeGUIPlacement("MMUA");
 
@@ -239,7 +319,24 @@ public class Board extends Application {
         controls.getChildren().add(playerControls);
 
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
-        playerControls.setGridLinesVisible(false);
+        playerControls.setGridLinesVisible(true);
+
+        /*A main menu button*/
+         Button menu = new Button("Main Menu");
+        menu.setOnAction(event->{
+            controls.getChildren().clear();
+            placementGrp.getChildren().clear();
+            playingBoard.getChildren().clear();
+            heightLabels.getChildren().clear();
+            clickablePanes.getChildren().clear();
+
+            blah = false;
+
+            initialSettings();
+        });
+        controls.getChildren().add(menu);
+        menu.setLayoutX(760);
+        menu.setLayoutY(600);
     }
     private void makeBoard(){
         /*Note: the size of the tiles on the board are still 48x48 pixels */
@@ -247,15 +344,18 @@ public class Board extends Application {
         playingBoard.setPrefSize(size, size);
         playingBoard.setMaxSize(size, size);
 
-        /*determines the size of the rows and columns of the playing board*/
-        for (int i = 0; i < 27; i++) {
-            RowConstraints row = new RowConstraints(TILE_SIZE+1);
-            playingBoard.getRowConstraints().add(row);
+        if (blah){
+            /*determines the size of the rows and columns of the playing board*/
+            for (int i = 0; i < 27; i++) {
+                RowConstraints row = new RowConstraints(TILE_SIZE+1);
+                playingBoard.getRowConstraints().add(row);
+            }
+            for (int i = 0; i < 27; i++) {
+                ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
+                playingBoard.getColumnConstraints().add(column);
+            }
         }
-        for (int i = 0; i < 27; i++) {
-            ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
-            playingBoard.getColumnConstraints().add(column);
-        }
+
 
         /*Adds labels for the rows and columns: A,B,C, etc.*/
         for (int i=1;i<27;i++){
@@ -299,7 +399,7 @@ public class Board extends Application {
         }
 
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
-        playingBoard.setGridLinesVisible(false);
+        playingBoard.setGridLinesVisible(true);
 
         /*Layout*/
         playingBoard.setLayoutX(10);
@@ -309,14 +409,16 @@ public class Board extends Application {
          that shows the height of the tile on that position*/
         heightLabels.setPrefSize(675, 675);
         heightLabels.setMaxSize(700, 700);
-        /*Determines the size of the grid rows and columns*/
-        for (int i = 0; i < 27; i++) {
-            RowConstraints row = new RowConstraints(TILE_SIZE+1);
-            heightLabels.getRowConstraints().add(row);
-        }
-        for (int i = 0; i < 27; i++) {
-            ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
-            heightLabels.getColumnConstraints().add(column);
+        if (blah){
+            /*Determines the size of the grid rows and columns*/
+            for (int i = 0; i < 27; i++) {
+                RowConstraints row = new RowConstraints(TILE_SIZE+1);
+                heightLabels.getRowConstraints().add(row);
+            }
+            for (int i = 0; i < 27; i++) {
+                ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
+                heightLabels.getColumnConstraints().add(column);
+            }
         }
         /*Layout*/
         heightLabels.setLayoutX(10);
@@ -453,13 +555,13 @@ public class Board extends Application {
         });
 
         pane.setOnMouseReleased(event -> {
-            int length = moveHistory.length()-2;
+            int length = boardState.moveHistory.length()-2;
 
             /*The AI only makes its move if your move was valid, i.e. if the last move was yours*/
-            if ('K'<=moveHistory.charAt(length) && moveHistory.charAt(length)<='T'){
+            if ('K'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='T'){
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                String opponent = generateMove(moveHistory, redTile, greenTile);
+                String opponent = generateMove(boardState.moveHistory, redTile, greenTile);
                 makeGUIPlacement(opponent);
                 System.out.println("AI generates: "+opponent);
                 if (opponent=="") {
@@ -505,13 +607,13 @@ public class Board extends Application {
         });
 
         pane.setOnMouseReleased(event -> {
-            int length = moveHistory.length()-2;
+            int length = boardState.moveHistory.length()-2;
 
             /*The AI only makes its move if your move was valid, i.e. if the last move was yours*/
-            if ('A'<=moveHistory.charAt(length) && moveHistory.charAt(length)<='J'){
+            if ('A'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='J'){
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                String opponent = generateMove(moveHistory, greenTile,redTile);
+                String opponent = generateMove(boardState.moveHistory, greenTile,redTile);
                 makeGUIPlacement(opponent);
                 System.out.println("AI generates: "+opponent);
                 if (opponent=="") {
@@ -535,7 +637,7 @@ public class Board extends Application {
     }
 
     private void makeTempPlacement(ImageView iv, String placement){
-        if (!StratoGame.isPlacementValid(moveHistory.concat(placement))){
+        if (!StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))){
             return;
         }
         controls.getChildren().remove(errormessage);
@@ -579,7 +681,7 @@ public class Board extends Application {
 
     /*The method that makes a placement*/
     private void makeGUIPlacement(String placement) {
-        String tempMove = moveHistory.concat(placement);
+        String tempMove = boardState.moveHistory.concat(placement);
         controls.getChildren().remove(errormessage);
         controls.getChildren().remove(aiThink);
         System.out.println("Someone tried: "+tempMove);
@@ -622,7 +724,7 @@ public class Board extends Application {
                     GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 64 - 1));
                     break;
             }
-            moveHistory = tempMove;
+            boardState.updateMoves(placement);
 
             /*Update the heights we're supposed to display*/
             displayHeights();
@@ -683,9 +785,9 @@ public class Board extends Application {
             }
 
             /*Checks if the game is over. If it is, we clear the board and display the winner.*/
-            if (moveHistory.length() >= MAX_TILES*8+2) {
+            if (boardState.moveHistory.length() >= MAX_TILES*8+2) {
                 placementGrp.getChildren().clear();
-                if (Scoring.getWinner(moveHistory)){
+                if (Scoring.getWinner(boardState.moveHistory)){
                     Text score = new Text("Green Wins!");
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
                     placementGrp.getChildren().add(score);
@@ -705,7 +807,7 @@ public class Board extends Application {
     /*Display the height at each position*/
     private void displayHeights(){
         heightLabels.getChildren().clear();
-        int[][] heights = heightArray(moveHistory);
+        int[][] heights = heightArray(boardState.moveHistory);
         for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
                 String tall = Integer.toString(heights[i-1][j-1]);
