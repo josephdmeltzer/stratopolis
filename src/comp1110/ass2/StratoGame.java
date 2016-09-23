@@ -40,6 +40,7 @@ public class StratoGame {
      * @param placement A string describing a placement of one or more tiles
      * @return True if the placement is well-formed
      */
+    /* Method by Manal Mohania and Joseph Meltzer */
      static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 4: determine whether a placement is well-formed
         if (placement == null) return false;
@@ -364,6 +365,7 @@ public class StratoGame {
         return true;
     }
 
+    /* Method by Joseph Meltzer */
     private static boolean tileStraddle(String placement) {
         int[][] tileTable = new int[26][26];
 
@@ -409,6 +411,7 @@ public class StratoGame {
         return getWinner(placement);
     }
 
+    /* Method by Joseph Meltzer */
     private static boolean areColoursAlright(String placement){
         Colour[][] colourTable = new Colour[26][26];
         colourTable[12][12] = RED;
@@ -497,6 +500,7 @@ public class StratoGame {
      * @param opponentsPiece The piece your opponent will be asked to play next ('A' to 'T' or 0 if last move).
      * @return A string indicating a valid tile placement that represents your move.
      */
+    /* Method by Joseph Meltzer */
     public static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
 //        String bestMove = "";

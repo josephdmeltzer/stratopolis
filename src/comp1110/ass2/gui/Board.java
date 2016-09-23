@@ -91,7 +91,7 @@ public class Board extends Application {
     private ImageView ivr = new ImageView();
     private Text greentxt = new Text("Green");
     private Text redtxt = new Text("Red");
-    private Text errormessage = new Text("Invalid move!!!");
+    private Text errormessage = new Text("Invalid move!");
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
@@ -336,11 +336,10 @@ public class Board extends Application {
         menu.setLayoutX(760);
         menu.setLayoutY(600);
 
-
         Rectangle r = new Rectangle();
         r.setLayoutY(50);
-        r.setLayoutX(743);
-        r.setWidth(120);
+        r.setLayoutX(735);
+        r.setWidth(165);
         r.setHeight(80);
         r.setArcHeight(20);
         r.setArcWidth(20);
@@ -348,16 +347,16 @@ public class Board extends Application {
         controls.getChildren().add(r);
 
         controls.getChildren().add(greenScore);
-        greenScore.setLayoutY(100);
         greenScore.setLayoutX(750);
+        greenScore.setLayoutY(103);
         greenScore.setFill(Color.GREEN);
-        greenScore.setFont(Font.font("Comic Sans", FontWeight.EXTRA_BOLD, 40));
+        greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
 
         controls.getChildren().add(redScore);
         redScore.setLayoutX(830);
-        redScore.setLayoutY(100);
+        redScore.setLayoutY(103);
         redScore.setFill(Color.RED);
-        redScore.setFont(Font.font("Comic Sans", FontWeight.EXTRA_BOLD, 40));
+        redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
 
     }
 
@@ -697,6 +696,7 @@ public class Board extends Application {
     }
 
     /*Function by Manal Mohania*/
+    /*Minor edits by Joseph Meltzer*/
     private void makeTempPlacement(ImageView iv, String placement){
 //        if (!StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))){
 //            return;
@@ -705,13 +705,14 @@ public class Board extends Application {
         // ImageView iv = new ImageView();
         if (StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))) {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
+            iv.setOpacity(0.8);
         }
         else {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_hx.png").toString()));
+            iv.setOpacity(0.5);
         }
         iv.setRotate((((int) placement.charAt(3)) - 65) * 90);
         iv.setFitWidth(TILE_SIZE * 2);
-        iv.setOpacity(0.8);
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
@@ -744,16 +745,18 @@ public class Board extends Application {
 
 
     }
+    /* These functions by Manal Mohania */
+    /* Some minor edits by Joseph Meltzer */
     private void updateGreenScore(){
         String placement = boardState.moveHistory;
         controls.getChildren().remove(greenScore);
         int score = StratoGame.getScoreForPlacement(placement, true);
         greenScore.setText("" + score);
         controls.getChildren().add(greenScore);
-        greenScore.setLayoutY(100);
         greenScore.setLayoutX(750);
+        greenScore.setLayoutY(103);
         greenScore.setFill(Color.GREEN);
-        greenScore.setFont(Font.font("Comic Sans", FontWeight.EXTRA_BOLD, 40));
+        greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
     }
 
     private void updateRedScore(){
@@ -763,9 +766,9 @@ public class Board extends Application {
         redScore.setText("" + score);
         controls.getChildren().add(redScore);
         redScore.setLayoutX(830);
-        redScore.setLayoutY(100);
+        redScore.setLayoutY(103);
         redScore.setFill(Color.RED);
-        redScore.setFont(Font.font("Comic Sans", FontWeight.EXTRA_BOLD, 40));
+        redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
     }
 
     /*The method that makes a placement*/
