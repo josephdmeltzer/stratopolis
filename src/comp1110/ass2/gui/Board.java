@@ -95,7 +95,6 @@ public class Board extends Application {
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
-    private Text score = new Text("SCORES");
 
     /*Various Groups that organise the screen*/
     private final Group root = new Group();
@@ -346,6 +345,7 @@ public class Board extends Application {
         r.setFill(Color.SANDYBROWN);
         controls.getChildren().add(r);
 
+        Text score = new Text("SCORES");
         score.setLayoutX(790);
         score.setLayoutY(65);
         controls.getChildren().add(score);
@@ -777,7 +777,7 @@ public class Board extends Application {
     /**
      * The next two functions update the score of the green and the red players respectively.
      *
-     * These functions by Manal Mohania
+     * These functions were written by Manal Mohania
      * Some minor edits by Joseph Meltzer
      * */
 

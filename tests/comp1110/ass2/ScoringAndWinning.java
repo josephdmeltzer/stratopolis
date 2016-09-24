@@ -12,7 +12,9 @@ import static org.junit.Assert.assertTrue;
  * Created by manalmohania on 2/09/2016.
  */
 
-/*This class contains my tests for scoring and winner determination*/
+/**
+ * All the tests in this section were created by Manal Mohania
+ * */
 
 
 public class ScoringAndWinning {
