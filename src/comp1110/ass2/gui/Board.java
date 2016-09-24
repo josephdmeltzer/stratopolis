@@ -817,7 +817,7 @@ public class Board extends Application {
             errormessage.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
             controls.getChildren().add(errormessage);
             errormessage.setLayoutX(740);
-            errormessage.setLayoutY(400);
+            errormessage.setLayoutY(450);
         } else {
             /*create the image that'll go on the board*/
             ImageView iv1 = new ImageView();
