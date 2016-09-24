@@ -693,11 +693,26 @@ public class Board extends Application {
     /*Function by Manal Mohania*/
     /*Minor edits by Joseph Meltzer*/
     private void makeTempPlacement(ImageView iv, String placement){
-//        if (!StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))){
-//            return;
-//        }
+
+
+        /*The following ensure that the piece does not fall out of the board*/
+        if (placement.charAt(0) == 'Z' && (placement.charAt(3) == 'A' || placement.charAt(3) == 'D')){
+            return;
+        }
+
+        if (placement.charAt(0) == 'A' && (placement.charAt(3) == 'B' || placement.charAt(3) == 'D')){
+            return;
+        }
+
+        if (placement.charAt(1) == 'Z' && (placement.charAt(3) == 'A' || placement.charAt(3) == 'B')){
+            return;
+        }
+
+        if (placement.charAt(1) == 'A' && (placement.charAt(3) == 'C' || placement.charAt(3) == 'D')){
+            return;
+        }
+
         controls.getChildren().remove(errormessage);
-        // ImageView iv = new ImageView();
         if (StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))) {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
             iv.setOpacity(0.8);
@@ -715,7 +730,6 @@ public class Board extends Application {
         GridPane.setValignment(iv, VPos.CENTER);
         playingBoard.getChildren().add(iv);
 
-        /*What do these two do?*/
         GridPane.setRowSpan(iv, 2);
         GridPane.setColumnSpan(iv, 2);
 
@@ -911,10 +925,6 @@ public class Board extends Application {
             }
         }
     }
-
-
-
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
