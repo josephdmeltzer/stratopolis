@@ -946,6 +946,7 @@ public class Board extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Stratopolis");
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "icon.png").toString())));
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
 
         root.getChildren().add(controls);
