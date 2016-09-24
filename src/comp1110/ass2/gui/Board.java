@@ -410,7 +410,7 @@ public class Board extends Application {
         }
 
         /*Makes the board background black using CSS*/
-        playingBoard.setStyle("-fx-background-color: black");
+        playingBoard.setStyle("-fx-background-color: white");
         /*Creates white squares on a black background for the board*/
         for (int i=1; i<27;i++){
             for (int j=1; j<27; j++){
