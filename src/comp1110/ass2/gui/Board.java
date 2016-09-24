@@ -711,19 +711,19 @@ public class Board extends Application {
 
 
         /*The following ensure that the piece does not fall out of the board*/
-        if (placement.charAt(0) == 'Z' && (placement.charAt(3) == 'A' || placement.charAt(3) == 'D')){
+        if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'D'))){
             return;
         }
 
-        if (placement.charAt(0) == 'A' && (placement.charAt(3) == 'B' || placement.charAt(3) == 'D')){
+        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'D'))){
             return;
         }
 
-        if (placement.charAt(1) == 'Z' && (placement.charAt(3) == 'A' || placement.charAt(3) == 'B')){
+        if ((placement.charAt(1) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'B'))){
             return;
         }
 
-        if (placement.charAt(1) == 'A' && (placement.charAt(3) == 'C' || placement.charAt(3) == 'D')){
+        if ((placement.charAt(1) == 'A') && ((placement.charAt(3) == 'C') || (placement.charAt(3) == 'D'))){
             return;
         }
 
