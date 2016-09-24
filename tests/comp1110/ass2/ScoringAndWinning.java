@@ -19,15 +19,17 @@ import static org.junit.Assert.assertTrue;
 
 public class ScoringAndWinning {
 
-    /*Tests for scoring*/
+    /** Tests for scoring */
 
-    /*
+    /**
     * Properties of score-
     * 1. Score >= 0
     * 2. Total Score <= ((n + 1)/2)*(-1 + 3n), where n is the number of pieces on board
     * 3. We know final scores in some strings
     * 4. Max possible score for a certain colour is 450. Not sure if it can be achieved.
     * 5. Score(RED) <= (1 + 2n)*(1 + (n + 1)/2), where n is the number of pieces on board except U
+     *
+     * The following tests check if these 5 properties of the score are satisfied
     */
 
     @Test
@@ -76,16 +78,20 @@ public class ScoringAndWinning {
     }
 
 
-    /*Tests for winner determination*/
+    /** Tests for winner determination
+        The placement string must be of max possible length
+        Assumes the scoring methods work correctly
+     */
 
-    /*The placement string must be of max possible length*/
-    /*Assumes the scoring methods work correctly*/
-
-    /*
+    /**
     * Properties of winner-
     * 1. Score (RED) > Score (Green) => FALSE
     * 2. SCORE (GREEN) > Score (RED) => TRUE
     * 3. Winner of a symmetrical game must be randomly chosen
+     *
+     * The next test checks properties 1 and 2
+     *
+     * The one after that checks property 3
     * */
 
     @Test
@@ -108,7 +114,9 @@ public class ScoringAndWinning {
     * 5. To ensure symmetry of board available, nothing should go into the rightmost column
     * */
 
-    /*returns "" if original string does not satisfy condition 5*/
+    /** This method creates a symmetric placement of tiles
+     * using the technique mentioned above
+     * */
     private static String createSymmetric(String original){
         String x = "";
         if (original.length() != 4)
@@ -144,6 +152,7 @@ public class ScoringAndWinning {
         return "" + oppCol + oppRow + oppPiece + oppOr;
     }
 
+    /** Given a char array s, the function shuffles it and returns the result */
     private static char[] shuffle(char[] s){
         int pos = 0;
         int len = s.length;
@@ -172,7 +181,7 @@ public class ScoringAndWinning {
         return shuffled;
     }
 
-    /*This test checks if the winner of a symmetrical board is random*/
+    /** THis test checks that the winner of a symmetrical board is random */
     @Test
     public void testSymmetricPlacement(){
 
