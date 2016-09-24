@@ -7,6 +7,10 @@ import static comp1110.ass2.Colour.*;
  * Created by manalmohania on 11/08/2016.
  */
 
+/**
+ * This class contains the internal representations of the pieces and any associated functions
+ * Developed by Manal Mohania and Joseph Meltzer
+ * */
 /*This enum contains a representation of the pieces and any associated functions*/
 public enum Pieces {
     A (RED, BLACK, BLACK),
@@ -39,9 +43,6 @@ public enum Pieces {
         colours[2] = c;
     }
 
-    /*public Colour[] getColours(Pieces piece){
-        return piece.colours;
-    }*/
 
     public static Colour[] getColours(char piece) { return Pieces.valueOf(""+piece).colours; }
 }

@@ -88,7 +88,14 @@ public class StratoGame {
         return areColoursAlright(placement);
     }
 
-    /*This method assumes that the placement string is valid*/
+    /**
+     * Convert a placement string to a 26x26 array of colours
+     *
+     * @param placement: A _valid_ placement string
+     * @return a 26 x 26 array of colours
+     *
+     * function written by Manal Mohania
+     * */
     static Colour[][] colourArray(String placement){
         Colour[][] coverage = new Colour[26][26];
         coverage[12][12] = RED;
@@ -127,7 +134,14 @@ public class StratoGame {
         return coverage;
     }
 
-    /*and so does this*/
+    /**
+     * Convert a placement string to a 26x26 array of heights
+     *
+     * @param placement: A _valid_ placement string
+     * @return a 26 x 26 array of heights
+     *
+     * function written by Manal Mohania
+     * */
     public static int[][] heightArray(String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
@@ -157,6 +171,17 @@ public class StratoGame {
         return coverage;
     }
 
+    /**
+     * This method is called internally from isPlacementAdjacent.
+     * Checks if a given piece is dangling on the placements that are already made
+     *
+     * @param piece: the piece which is being checked for the overhanging
+     * @param placement: the placement string of the previous placements
+     *
+     * @return true iff the piece is not overhanging
+     *
+     * function written by Manal Mohania
+     * */
     private static boolean isOnTop(String piece, String placement){
         int[][] coverage;
         coverage = heightArray(placement);
@@ -198,11 +223,15 @@ public class StratoGame {
     }
 
     /**
-     *  This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
-    *
-    * To make this method more efficient the call to isOnTop can be removed and the code can be adjusted here.
-    * Saves the copying of a 26x26 array numerous times.
-    * */
+     * This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
+     *
+     * @param placement a placement string
+     * @return true iff tiles are adjacent and there is no overhanging
+     *
+     * To make this method more efficient the call to isOnTop can be removed and the code can be adjusted here.
+     *
+     * function written by Manal Mohania
+    */
 
     private static boolean isPlacementAdjacent(String placement){
         /*
@@ -323,6 +352,15 @@ public class StratoGame {
         return true;
     }
 
+    /**
+     * Check if the tiles don't fall out of the board
+     *
+     * @param placement a placement string
+     * @return true iff each tile falls within the board range
+     *
+     * function written by Manal Mohania
+     * */
+
     private static boolean checkBounds(String placement){
         /*Inspect the positions of the origins of the pieces*/
 
@@ -406,6 +444,8 @@ public class StratoGame {
      * Currently, the method does not say if green has won by scoring higher points or by virtue of luck.
      * Adding that functionality should be fairly simple though.
      * NOTE: THE PLACEMENT STRING IS ASSUMED TO BE VALID
+     *
+     * function written by Manal Mohania
      * */
     static boolean greenHasWon(String placement){
         return getWinner(placement);
@@ -479,6 +519,8 @@ public class StratoGame {
      * @param green True if the score for the green player is requested,
      *              otherwise the score for the red player should be returned
      * @return the score for the requested player, given the placement
+     *
+     * function written by Manal Mohania
      */
 
     public static int getScoreForPlacement(String placement, boolean green) {

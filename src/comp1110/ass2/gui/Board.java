@@ -350,17 +350,17 @@ public class Board extends Application {
         score.setLayoutY(65);
         controls.getChildren().add(score);
 
-        controls.getChildren().add(greenScore);
         greenScore.setLayoutX(750);
         greenScore.setLayoutY(103);
         greenScore.setFill(Color.GREEN);
         greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
+        controls.getChildren().add(greenScore);
 
-        controls.getChildren().add(redScore);
         redScore.setLayoutX(830);
         redScore.setLayoutY(103);
         redScore.setFill(Color.RED);
         redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
+        controls.getChildren().add(redScore);
 
     }
 
