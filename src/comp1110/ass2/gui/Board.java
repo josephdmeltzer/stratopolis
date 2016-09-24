@@ -944,7 +944,8 @@ public class Board extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("StratoGame Board");
+        primaryStage.setTitle("Stratopolis");
+        primaryStage.setResizable(false);
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
 
         root.getChildren().add(controls);
