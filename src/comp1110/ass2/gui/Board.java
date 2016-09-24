@@ -95,6 +95,7 @@ public class Board extends Application {
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
+    private Text score = new Text("SCORES");
 
     /*Various Groups that organise the screen*/
     private final Group root = new Group();
@@ -344,6 +345,10 @@ public class Board extends Application {
         r.setArcWidth(20);
         r.setFill(Color.SANDYBROWN);
         controls.getChildren().add(r);
+
+        score.setLayoutX(790);
+        score.setLayoutY(65);
+        controls.getChildren().add(score);
 
         controls.getChildren().add(greenScore);
         greenScore.setLayoutX(750);
@@ -683,15 +688,26 @@ public class Board extends Application {
         GridPane.setColumnIndex(pane,colIndex);
     }
 
-    /*Function by Manal Mohania*/
+    /**
+     * This function removes the temporary placement created due to mouseover (if any)
+     * Function by Manal Mohania
+     * */
     private void removeTempPlacement(ImageView iv){
         if (iv == null)
             return;
         playingBoard.getChildren().remove(iv);
     }
 
-    /*Function by Manal Mohania*/
-    /*Minor edits by Joseph Meltzer*/
+    /**
+     * This function
+     * 1. creates a temporary placement upon mouseover - the placement pieces are of different opacity
+     *    depending upon the validity of the placement
+     * 2. ensures that the individual piece does not lie outside the board when making the placement
+     * 3. removes error messages if a valid placement is reached
+     *
+     * Function by Manal Mohania
+     * Minor edits by Joseph Meltzer
+   */
     private void makeTempPlacement(ImageView iv, String placement){
 
 
@@ -712,6 +728,7 @@ public class Board extends Application {
             return;
         }
 
+        /*remove error messages, if any. And set image according to the validity of the placement*/
         controls.getChildren().remove(errormessage);
         if (StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))) {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
@@ -721,6 +738,8 @@ public class Board extends Application {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_hx.png").toString()));
             iv.setOpacity(0.5);
         }
+
+        /* set up the piece */
         iv.setRotate((((int) placement.charAt(3)) - 65) * 90);
         iv.setFitWidth(TILE_SIZE * 2);
         iv.setPreserveRatio(true);
@@ -733,6 +752,7 @@ public class Board extends Application {
         GridPane.setRowSpan(iv, 2);
         GridPane.setColumnSpan(iv, 2);
 
+        /* Ensure correct rotation and correct coordinates for the piece */
         switch (placement.charAt(3)) {
             case 'A':
                 GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' + 1));
@@ -754,8 +774,13 @@ public class Board extends Application {
 
 
     }
-    /* These functions by Manal Mohania */
-    /* Some minor edits by Joseph Meltzer */
+    /**
+     * The next two functions update the score of the green and the red players respectively.
+     *
+     * These functions by Manal Mohania
+     * Some minor edits by Joseph Meltzer
+     * */
+
     private void updateGreenScore(){
         String placement = boardState.moveHistory;
         controls.getChildren().remove(greenScore);
@@ -770,7 +795,7 @@ public class Board extends Application {
 
     private void updateRedScore(){
         String placement = boardState.moveHistory;
-        controls.getChildren().remove(redScore); // don't forget to add red score and green score to controls
+        controls.getChildren().remove(redScore);
         int score = StratoGame.getScoreForPlacement(placement, false);
         redScore.setText("" + score);
         controls.getChildren().add(redScore);
