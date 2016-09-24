@@ -80,6 +80,7 @@ public class Board extends Application {
     private static final int BOARD_HEIGHT = 700;
     private static final String URI_BASE = "assets/";
     private static final int TILE_SIZE = 24;
+    private static final int BOARD_SIZE = 26;
 
     /*Some fields for initial conditions*/
     private BoardState boardState;
@@ -236,12 +237,12 @@ public class Board extends Application {
         makeGUIPlacement("MMUA");
     }
 
-    /*Function mostly by Zhixian Wu*/
+    /*Function mostly by Zhixian Wu, with the running score by Manal Mohania*/
     private void makeControls(){
         /*Make the control pane as a GridPane. This is the stuff on the right*/
         GridPane playerControls = new GridPane();
-        playerControls.setPrefSize(120, 650);
-        playerControls.setMaxSize(120, 650);
+        playerControls.setPrefSize(120, 200);
+        playerControls.setMaxSize(120, 200);
 
         /*The text you see on the right*/
         if (boardState.playingMode==PlayerIsRed){
@@ -261,14 +262,14 @@ public class Board extends Application {
 
         /*The tiles on display on the right*/
         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
-        ivg.setRotate((((int) (playerG.rotation)-65)*90));
+        ivg.setRotate((((int) (playerG.rotation)-'A')*90));
         ivg.setFitWidth(80);
         ivg.setPreserveRatio(true);
         ivg.setSmooth(true);
         ivg.setCache(true);
 
         ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
-        ivr.setRotate((((int) (playerR.rotation)-65)*90));
+        ivr.setRotate((((int) (playerR.rotation)-'A')*90));
         ivr.setFitWidth(80);
         ivr.setPreserveRatio(true);
         ivr.setSmooth(true);
@@ -278,13 +279,13 @@ public class Board extends Application {
         Button rotateG = new Button("Rotate");
         rotateG.setOnAction(event-> {
             playerG.rotateTile();
-            ivg.setRotate((((int) (playerG.rotation)-65)*90));
+            ivg.setRotate((((int) (playerG.rotation)-'A')*90));
         });
 
         Button rotateR = new Button("Rotate");
         rotateR.setOnAction(event-> {
             playerR.rotateTile();
-            ivr.setRotate((((int) (playerR.rotation)-65)*90));
+            ivr.setRotate((((int) (playerR.rotation)-'A')*90));
         });
 
         /*Adding the nodes. Which ones we add depends on the playingMode*/
@@ -306,7 +307,7 @@ public class Board extends Application {
         GridPane.setColumnIndex(redtxt,1);
         GridPane.setRowIndex(redtxt,2);
 
-        playerControls.setLayoutX((TILE_SIZE+1)*27+60);
+        playerControls.setLayoutX((TILE_SIZE+1)*BOARD_SIZE+85);
         playerControls.setLayoutY(200);
 
         playerControls.setHgap(10);
@@ -332,9 +333,10 @@ public class Board extends Application {
             initialSettings();
         });
         controls.getChildren().add(menu);
-        menu.setLayoutX(800);
-        menu.setLayoutY(660);
+        menu.setLayoutX(835);
+        menu.setLayoutY(650);
 
+        /*Scores by Manal Mohania*/
         Rectangle r = new Rectangle();
         r.setLayoutY(50);
         r.setLayoutX(735);
@@ -366,54 +368,30 @@ public class Board extends Application {
 
     /*Function mostly by Zhixian Wu, with lines changed by Manal Mohania (indicated below)*/
     private void makeBoard(){
-        /*Note: the size of the tiles on the board are still 48x48 pixels */
-        int size = (TILE_SIZE+1)*27;
+        int size = (TILE_SIZE + 1) * BOARD_SIZE;
+        int offset = (BOARD_HEIGHT - size) / 2;
         playingBoard.setPrefSize(size, size);
         playingBoard.setMaxSize(size, size);
 
         if (blah){
             /*determines the size of the rows and columns of the playing board*/
-            for (int i = 0; i < 27; i++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
                 RowConstraints row = new RowConstraints(TILE_SIZE+1);
                 playingBoard.getRowConstraints().add(row);
             }
-            for (int i = 0; i < 27; i++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
                 ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
                 playingBoard.getColumnConstraints().add(column);
             }
         }
 
 
-        /*Adds labels for the rows and columns: A,B,C, etc.*/
-        for (int i=1;i<27;i++){
-            String dummy = Character.toString( (char) (64+i) );
-
-            /*Adds the row of labels for the positions*/
-            Text label1 = new Text(dummy);
-            label1.setFill(Color.WHITE);
-            label1.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-            playingBoard.getChildren().add(label1);
-            GridPane.setRowIndex(label1,0);
-            GridPane.setColumnIndex(label1,i);
-            GridPane.setHalignment(label1, HPos.CENTER);
-            GridPane.setValignment(label1, VPos.CENTER);
-
-            /*Adds the column of labels for the positions*/
-            Text label2 = new Text(dummy);
-            label2.setFill(Color.WHITE);
-            label2.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
-            playingBoard.getChildren().add(label2);
-            GridPane.setRowIndex(label2,i);
-            GridPane.setColumnIndex(label2,0);
-            GridPane.setHalignment(label2, HPos.CENTER);
-            GridPane.setValignment(label2, VPos.CENTER);
-        }
 
         /*Makes the board background black using CSS*/
         playingBoard.setStyle("-fx-background-color: white");
         /*Creates white squares on a black background for the board*/
-        for (int i=1; i<27;i++){
-            for (int j=1; j<27; j++){
+        for (int i=0; i<BOARD_SIZE;i++){
+            for (int j=0; j<BOARD_SIZE; j++){
                 int rectSize = TILE_SIZE-1;
                 Rectangle r = new Rectangle(rectSize, rectSize);
                 r.setFill(Color.web("rgb(230,228,221)")); /*Colour done by Manal Mohania*/
@@ -429,40 +407,40 @@ public class Board extends Application {
         playingBoard.setGridLinesVisible(false);
 
         /*Layout*/
-        playingBoard.setLayoutX(10);
-        playingBoard.setLayoutY(10);
+        playingBoard.setLayoutX(offset);
+        playingBoard.setLayoutY(offset);
 
         /*An GridPane on top of playingBoard, laid out identically to playingBoard
          that shows the height of the tile on that position*/
-        heightLabels.setPrefSize(675, 675);
-        heightLabels.setMaxSize(700, 700);
+        heightLabels.setPrefSize(size, size);
+        heightLabels.setMaxSize(size, size);
         if (blah){
             /*Determines the size of the grid rows and columns*/
-            for (int i = 0; i < 27; i++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
                 RowConstraints row = new RowConstraints(TILE_SIZE+1);
                 heightLabels.getRowConstraints().add(row);
             }
-            for (int i = 0; i < 27; i++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
                 ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
                 heightLabels.getColumnConstraints().add(column);
             }
         }
         /*Layout*/
-        heightLabels.setLayoutX(10);
-        heightLabels.setLayoutY(10);
+        heightLabels.setLayoutX(offset);
+        heightLabels.setLayoutY(offset);
 
 
         /*A GridPane on top of playingBoard and heightLabels, laid out identically to playingBoard,
          holding the interactive tiles for the game*/
-        clickablePanes.setPrefSize(675, 675);
-        clickablePanes.setMaxSize(700, 700);
+        clickablePanes.setPrefSize(size, size);
+        clickablePanes.setMaxSize(size, size);
         if (blah){
             /*Determines the size of the grid rows and columns*/
-            for (int i = 0; i < 27; i++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
                 RowConstraints row = new RowConstraints(TILE_SIZE+1);
                 clickablePanes.getRowConstraints().add(row);
             }
-            for (int i = 0; i < 27; i++) {
+            for (int i = 0; i < BOARD_SIZE; i++) {
                 ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
                 clickablePanes.getColumnConstraints().add(column);
             }
@@ -472,16 +450,16 @@ public class Board extends Application {
         * Instead of checking what the playingMode is everytime a pane is clicked,
         * we check it now and create different panes depending on the playingMode*/
         if (boardState.playingMode==PlayerIsGreen) {
-            for (int i=1; i<27;i++){
-                for (int j=1; j<27; j++){
+            for (int i=0; i<BOARD_SIZE;i++){
+                for (int j=0; j<BOARD_SIZE; j++){
                     addPanePlayerGreen(i,j);
                     addPanePlayerGreen(j,i);
                 }
             }
         }
         if (boardState.playingMode==PlayerIsRed) {
-            for (int i=1; i<27;i++){
-                for (int j=1; j<27; j++){
+            for (int i=0; i<BOARD_SIZE;i++){
+                for (int j=0; j<BOARD_SIZE; j++){
                 /*Creates the clickable panes of the board*/
                     addPanePlayerRed(i,j);
                     addPanePlayerRed(j,i);
@@ -489,8 +467,8 @@ public class Board extends Application {
             }
         }
         if (boardState.playingMode==TwoPlayers) {
-            for (int i=1; i<27;i++){
-                for (int j=1; j<27; j++){
+            for (int i=0; i<BOARD_SIZE;i++){
+                for (int j=0; j<BOARD_SIZE; j++){
                 /*Creates the clickable panes of the board*/
                     addPaneTwoPlayer(i,j);
                     addPaneTwoPlayer(j,i);
@@ -498,8 +476,8 @@ public class Board extends Application {
             }
         }
         /*Layout*/
-        clickablePanes.setLayoutX(10);
-        clickablePanes.setLayoutY(10);
+        clickablePanes.setLayoutX(offset);
+        clickablePanes.setLayoutY(offset);
 
         /*The must be added in this order so the heights show on top of the tiles
         * and the interactive panes are on top of all of them.*/
@@ -519,8 +497,8 @@ public class Board extends Application {
 
         /*Event by Zhixian Wu*/
         pane.setOnMouseClicked(event -> {
-                char col = (char) (colIndex+64);
-                char row = (char) (rowIndex+64);
+                char col = (char) (colIndex+'A');
+                char row = (char) (rowIndex+'A');
                 switch (boardState.playerTurn){
                     case RED:
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
@@ -539,8 +517,8 @@ public class Board extends Application {
         });
         /*Event by Manal Mohania*/
         pane.setOnMouseEntered(event -> {
-            char col = (char) (colIndex + 'A' - 1);
-            char row = (char) (rowIndex + 'A' - 1);
+            char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');
 
             switch (boardState.playerTurn){
                 case RED:
@@ -572,8 +550,8 @@ public class Board extends Application {
 
         /*Event by Manal Mohania*/
         pane.setOnMouseEntered(event -> {
-            char col = (char) (colIndex+64);
-            char row = (char) (rowIndex+64);
+            char col = (char) (colIndex+'A');
+            char row = (char) (rowIndex+'A');
 
             String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
             makeTempPlacement(iv, placement2);
@@ -584,8 +562,8 @@ public class Board extends Application {
 
         /*Event by Zhixian Wu*/
         pane.setOnMousePressed(event -> {
-            char col = (char) (colIndex+64);
-            char row = (char) (rowIndex+64);
+            char col = (char) (colIndex+'A');
+            char row = (char) (rowIndex+'A');
 
             String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
             makeGUIPlacement(placement);
@@ -634,8 +612,8 @@ public class Board extends Application {
 
         /*Event by Manal Mohania*/
         pane.setOnMouseEntered(event -> {
-            char col = (char) (colIndex + 'A' - 1);
-            char row = (char) (rowIndex + 'A' - 1);
+            char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');
 
             String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeTempPlacement(iv, placement);
@@ -646,8 +624,8 @@ public class Board extends Application {
 
         /*Event by Zhixian Wu*/
         pane.setOnMousePressed(event -> {
-            char col = (char) (colIndex+64);
-            char row = (char) (rowIndex+64);
+            char col = (char) (colIndex+'A');
+            char row = (char) (rowIndex+'A');
 
             String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
             System.out.println("Red tried: " + placement);
@@ -676,9 +654,10 @@ public class Board extends Application {
                 /*System.out.println("AI generates: "+opponent);
                 if (opponent=="") System.out.println("Empty string generated by AI");*/
                 makeGUIPlacement(opponent);
-            } /*else{
-                System.out.println("AI did not move");
-            }*/
+            } else{
+                /*System.out.println("AI did not move");*/
+                controls.getChildren().remove(aiThink);
+            }
 
         });
 
@@ -715,7 +694,7 @@ public class Board extends Application {
             return;
         }
 
-        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'D'))){
+        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'C'))){
             return;
         }
 
@@ -739,7 +718,7 @@ public class Board extends Application {
         }
 
         /* set up the piece */
-        iv.setRotate((((int) placement.charAt(3)) - 65) * 90);
+        iv.setRotate((((int) placement.charAt(3)) - 'A') * 90);
         iv.setFitWidth(TILE_SIZE * 2);
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
@@ -754,20 +733,20 @@ public class Board extends Application {
         /* Ensure correct rotation and correct coordinates for the piece */
         switch (placement.charAt(3)) {
             case 'A':
-                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' + 1));
-                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' + 1));
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
                 break;
             case 'B':
-                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
-                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' + 1));
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' - 1));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
                 break;
             case 'C':
-                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
-                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' - 1));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' - 1));
                 break;
             case 'D':
-                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' + 1));
-                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
+                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
+                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' - 1));
                 break;
         }
 
@@ -786,8 +765,9 @@ public class Board extends Application {
         int score = StratoGame.getScoreForPlacement(placement, true);
         greenScore.setText("" + score);
         controls.getChildren().add(greenScore);
-        greenScore.setLayoutX(750);
-        greenScore.setLayoutY(103);
+        int offset = (Integer.toString(score)).length() * 10;
+        greenScore.setLayoutX(785-offset);
+        greenScore.setLayoutY(107);
         greenScore.setFill(Color.GREEN);
         greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
     }
@@ -798,8 +778,9 @@ public class Board extends Application {
         int score = StratoGame.getScoreForPlacement(placement, false);
         redScore.setText("" + score);
         controls.getChildren().add(redScore);
-        redScore.setLayoutX(830);
-        redScore.setLayoutY(103);
+        int offset = (Integer.toString(score)).length() * 10;
+        redScore.setLayoutX(865 - offset);
+        redScore.setLayoutY(107);
         redScore.setFill(Color.RED);
         redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
     }
@@ -809,7 +790,7 @@ public class Board extends Application {
     private void makeGUIPlacement(String placement) {
         controls.getChildren().remove(errormessage);
         controls.getChildren().remove(aiThink);
-        /*if (placement=="") System.out.println("Someone tried an empty string");*/
+        System.out.println("Someone tried: " + placement);
 
         String tempMove = boardState.moveHistory.concat(placement);
         if (!StratoGame.isPlacementValid(tempMove)) { /*If the attempted move is invalid*/
@@ -821,8 +802,8 @@ public class Board extends Application {
             /*create the image that'll go on the board*/
             ImageView iv1 = new ImageView();
             iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_b.png").toString()));
-            iv1.setRotate((((int) placement.charAt(3)) - 65) * 90);
-            iv1.setFitWidth(TILE_SIZE*2);
+            iv1.setRotate((((int) placement.charAt(3)) - 'A') * 90);
+            iv1.setFitWidth(TILE_SIZE * 2);
             iv1.setPreserveRatio(true);
             iv1.setSmooth(true);
             iv1.setCache(true);
@@ -834,20 +815,20 @@ public class Board extends Application {
             /*Place the image, in the correct rotation, in the correct place on the board*/
             switch (placement.charAt(3)) {
                 case 'A':
-                    GridPane.setColumnIndex(iv1, (((int) placement.charAt(0)) - 64));
-                    GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 64));
+                    GridPane.setColumnIndex(iv1, (((int) placement.charAt(0)) - 'A'));
+                    GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 'A'));
                     break;
                 case 'B':
-                    GridPane.setColumnIndex(iv1, (((int) placement.charAt(0)) - 64 - 1));
-                    GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 64));
+                    GridPane.setColumnIndex(iv1, (((int) placement.charAt(0)) - 'A' - 1));
+                    GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 'A'));
                     break;
                 case 'C':
-                    GridPane.setColumnIndex(iv1, (((int) placement.charAt(0)) - 64 - 1));
-                    GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 64 - 1));
+                    GridPane.setColumnIndex(iv1, (((int) placement.charAt(0)) - 'A' - 1));
+                    GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 'A' - 1));
                     break;
                 case 'D':
-                    GridPane.setColumnIndex(iv1, (((int) placement.charAt(0)) - 64));
-                    GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 64 - 1));
+                    GridPane.setColumnIndex(iv1, (((int) placement.charAt(0)) - 'A'));
+                    GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 'A' - 1));
                     break;
             }
             boardState.updateMoves(placement);
@@ -933,10 +914,10 @@ public class Board extends Application {
     private void displayHeights(){
         heightLabels.getChildren().clear();
         int[][] heights = heightArray(boardState.moveHistory);
-        for (int i=1; i<27;i++){
-            for (int j=1; j<27; j++){
-                String tall = Integer.toString(heights[i-1][j-1]);
-                if (heights[i-1][j-1]>1){
+        for (int i=0; i<BOARD_SIZE;i++){
+            for (int j=0; j<BOARD_SIZE; j++){
+                String tall = Integer.toString(heights[i][j]);
+                if (heights[i][j]>1){
                     Text label1 = new Text(tall);
                     label1.setFill(Color.WHITE);
                     label1.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
