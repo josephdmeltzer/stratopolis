@@ -388,7 +388,8 @@ public class Board extends Application {
 
 
         /*Makes the board background black using CSS*/
-        playingBoard.setStyle("-fx-background-color: white");
+        playingBoard.setStyle("-fx-background-color: black");
+
         /*Creates white squares on a black background for the board*/
         for (int i=0; i<BOARD_SIZE;i++){
             for (int j=0; j<BOARD_SIZE; j++){
@@ -402,6 +403,16 @@ public class Board extends Application {
                 GridPane.setValignment(r, VPos.CENTER);
             }
         }
+        /*Give the board thicker edges*/
+        Rectangle thickBorder = new Rectangle();
+        thickBorder.setWidth(size+8);
+        thickBorder.setHeight(size+8);
+        thickBorder.setArcHeight(7);
+        thickBorder.setArcWidth(7);
+        thickBorder.setFill(Color.BLACK);
+        thickBorder.setLayoutX(offset-4);
+        thickBorder.setLayoutY(offset-4);
+        placementGrp.getChildren().add(thickBorder);
 
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
         playingBoard.setGridLinesVisible(false);
