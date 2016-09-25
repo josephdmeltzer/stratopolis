@@ -3,6 +3,7 @@ package comp1110.ass2;
 import org.junit.Test;
 
 import static comp1110.ass2.AI.alphabeta;
+import static comp1110.ass2.Scoring.getScore;
 import static comp1110.ass2.StratoGame.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -59,7 +60,7 @@ public class AITestByJoseph {
         for (char i = 'K'; i<='T'; i++) {
             for (String placement : greenTestPlacements){
                 if (isPlacementWellFormed(placement+"AA"+i+"A")) {
-                    String ab = alphabeta(placement, i, 'A', 1, -100, 1000, true, true).move;
+                    String ab = alphabeta(placement, i, 'A', 1, 0, -100, 1000, true, true).move;
                     String og = oldGenerator(placement, i, 'A');
                     assertTrue("With placement "+placement+", AB gave "+ab+", old gave "+og, ab.equals(og));
                 }
@@ -68,7 +69,7 @@ public class AITestByJoseph {
         for (char i = 'A'; i<='J'; i++) {
             for (String placement : redTestPlacements){
                 if (isPlacementWellFormed(placement+"AA"+i+"A")) {
-                    String ab = alphabeta(placement, i, 'A', 1, -100, 1000, true, false).move;
+                    String ab = alphabeta(placement, i, 'A', 1, 0, -100, 1000, true, false).move;
                     String og = oldGenerator(placement, i, 'A');
                     assertTrue("With placement "+placement+", AB gave "+ab+", old gave "+og, ab.equals(og));
                 }
@@ -101,6 +102,83 @@ public class AITestByJoseph {
         }
         return bestMove;
     }
+
+    public static class moveScore {
+        public String move;
+        private int score;
+
+        moveScore(String move, int score) {
+            this.move = move;
+            this.score = score;
+        }
+    }
+
+    @Test
+    public void testProbIsAB() {
+        for (char i = 'K'; i<='T'; i++) {
+            for (String placement : greenTestPlacements){
+                if (isPlacementWellFormed(placement+"AA"+i+"A")) {
+                    String pb = alphabeta(placement, i, 'A', 2, 0, -100, 1000, true, true).move;
+                    String og = alphabeta2(placement, i, 'A', 2, -100, 1000, true, true).move;
+                    assertTrue("With placement "+placement+", Prob gave "+pb+", AB gave "+og, pb.equals(og));
+                }
+            }
+        }
+        for (char i = 'A'; i<='J'; i++) {
+            for (String placement : redTestPlacements){
+                if (isPlacementWellFormed(placement+"AA"+i+"A")) {
+                    String pb = alphabeta(placement, i, 'A', 2, 0, -100, 1000, true, false).move;
+                    String og = alphabeta2(placement, i, 'A', 2, -100, 1000, true, false).move;
+                    assertTrue("With placement "+placement+", Prob gave "+pb+", AB gave "+og, pb.equals(og));
+                }
+            }
+        }
+    }
+
+    public static moveScore alphabeta2(String placement, char piece, char opiece, int depth, int a, int b, boolean maximising, boolean initialGreen) {
+        if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
+        if (maximising) {
+            int bestScore = -100;
+            String bestMove = "c";
+            for (char x : checkOrder) {
+                for (char y : checkOrder) {
+                    for (char o='A'; o<='D'; o++) {
+                        if (isPlacementValid(placement+x+y+piece+o)) {
+                            moveScore ab = new moveScore("" + x + y + piece + o, alphabeta2(placement + x + y + piece + o, opiece, piece, depth - 1, a, b, false, initialGreen).score);
+                            if (ab.score > bestScore) {
+                                bestScore = ab.score;
+                                bestMove = ab.move;
+                            }
+                            a = Math.max(a, bestScore);
+                            if (b <= a) break;
+                        }
+                    }
+                }
+            }
+            return new moveScore(bestMove, bestScore);
+        }
+        else {
+            int bestScore = 1000;
+            String bestMove = "";
+            for (char x : checkOrder) {
+                for (char y : checkOrder) {
+                    for (char o='A'; o<='D'; o++) {
+                        if (isPlacementValid(placement+x+y+piece+o)) {
+                            moveScore ab = new moveScore("" + x + y + piece + o, alphabeta2(placement + x + y + piece + o, opiece, piece, depth - 1, a, b, true, initialGreen).score);
+                            if (ab.score < bestScore) {
+                                bestScore = ab.score;
+                                bestMove = ab.move;
+                            }
+                            b = Math.min(b, bestScore);
+                            if (b <= a) break;
+                        }
+                    }
+                }
+            }
+            return new moveScore(bestMove, bestScore);
+        }
+    }
+
 
     static final String greenTestPlacements[] = {
             "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBLOFAKJLAPPABQKMCJNECRLRBLQGBNPKBLPHDPRPBJOFAMRRDOKHCMINCOTGAQITDTIIBRPKCKIDCRSOBTPCCSRQASGCAQKPBQUADPRLCQNJAIPSBGOIB",
