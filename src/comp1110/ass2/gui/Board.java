@@ -684,6 +684,7 @@ public class Board extends Application {
     private void removeTempPlacement(ImageView iv){
         if (iv == null)
             return;
+
         playingBoard.getChildren().remove(iv);
     }
 
