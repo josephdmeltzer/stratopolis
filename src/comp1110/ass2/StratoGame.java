@@ -246,33 +246,30 @@ public class StratoGame {
 
             if (coverage[col][row] != 0){
 
-                int idx1 = col;
-                int idx2 = row;
-
                 String piece = placement.substring(i, i + 4);
 
                 if (piece.charAt(3) == 'A') {
-                    if (idx1 == 25 || idx2 == 25){return false;}
+                    if (col == 25 || row == 25){return false;}
 
-                    if (!(coverage[1 + idx1][idx2] == coverage[idx1][1 + idx2] && coverage[1 + idx1][idx2] == coverage[idx1][idx2])) {
+                    if (!(coverage[1 + col][row] == coverage[col][1 + row] && coverage[1 + col][row] == coverage[col][row])) {
                         return false;
                     }
                 }
                 else if (piece.charAt(3) == 'B') {
-                    if (idx1 == 0 || idx2 == 25){return false;}
-                    if (!(coverage[idx1][idx2] == coverage[-1 + idx1][idx2] && coverage[-1 + idx1][idx2] == coverage[idx1][1 + idx2])) {
+                    if (col == 0 || row == 25){return false;}
+                    if (!(coverage[col][row] == coverage[-1 + col][row] && coverage[-1 + col][row] == coverage[col][1 + row])) {
                         return false;
                     }
                 }
                 else if (piece.charAt(3) == 'C') {
-                    if (idx1 == 0 || idx2 == 0){return false;}
-                    if (!(coverage[-1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2])) {
+                    if (col == 0 || row == 0){return false;}
+                    if (!(coverage[-1 + col][row] == coverage[col][row] && coverage[col][row] == coverage[col][-1 + row])) {
                         return false;
                     }
                 }
                 else if (piece.charAt(3) == 'D') {
-                    if (idx1 == 25 || idx2 == 0){return false;}
-                    if (!(coverage[1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2]))
+                    if (col == 25 || row == 0){return false;}
+                    if (!(coverage[1 + col][row] == coverage[col][row] && coverage[col][row] == coverage[col][-1 + row]))
                         return false;
                 }
                 continue;
