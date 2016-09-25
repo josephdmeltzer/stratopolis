@@ -81,9 +81,8 @@ public class ScoringAndWinning {
     /** Tests for winner determination
         The placement string must be of max possible length
         Assumes the scoring methods work correctly
-     */
 
-    /**
+
     * Properties of winner-
     * 1. Score (RED) > Score (Green) => FALSE
     * 2. SCORE (GREEN) > Score (RED) => TRUE
