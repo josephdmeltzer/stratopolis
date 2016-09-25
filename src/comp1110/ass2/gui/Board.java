@@ -533,11 +533,11 @@ public class Board extends Application {
 
             switch (boardState.playerTurn){
                 case RED:
-                    String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+                    String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
                     makeTempPlacement(iv, placement);
                     break;
                 case GREEN:
-                    String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+                    String placement2 = "" + col + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
                     makeTempPlacement(iv, placement2);
                     break;
             }
@@ -564,8 +564,8 @@ public class Board extends Application {
             char col = (char) (colIndex+'A');
             char row = (char) (rowIndex+'A');
 
-            String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
-            makeTempPlacement(iv, placement2);
+            String placement = "" + col + row + playerG.available_tiles.get(playerG.used_tiles) + playerG.rotation;
+            makeTempPlacement(iv, placement);
         });
 
         /*Event by Manal Mohania*/
@@ -626,7 +626,7 @@ public class Board extends Application {
             char col = (char) (colIndex + 'A');
             char row = (char) (rowIndex + 'A');
 
-            String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+            String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeTempPlacement(iv, placement);
         });
 
