@@ -745,20 +745,20 @@ public class Board extends Application {
         /* Ensure correct rotation and correct coordinates for the piece */
         switch (placement.charAt(3)) {
             case 'A':
-                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
-                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
+                GridPane.setColumnIndex(iv, placement.charAt(0) - 'A');
+                GridPane.setRowIndex(iv, placement.charAt(1) - 'A');
                 break;
             case 'B':
-                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' - 1));
-                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A'));
+                GridPane.setColumnIndex(iv, placement.charAt(0) - 'A' - 1);
+                GridPane.setRowIndex(iv, placement.charAt(1) - 'A');
                 break;
             case 'C':
-                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A' - 1));
-                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' - 1));
+                GridPane.setColumnIndex(iv, placement.charAt(0) - 'A' - 1);
+                GridPane.setRowIndex(iv, placement.charAt(1) - 'A' - 1);
                 break;
             case 'D':
-                GridPane.setColumnIndex(iv, (((int) placement.charAt(0)) - 'A'));
-                GridPane.setRowIndex(iv, (((int) placement.charAt(1)) - 'A' - 1));
+                GridPane.setColumnIndex(iv, placement.charAt(0) - 'A');
+                GridPane.setRowIndex(iv, placement.charAt(1) - 'A' - 1);
                 break;
         }
 
