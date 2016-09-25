@@ -177,7 +177,7 @@ public class StratoGame {
      *
      * function written by Manal Mohania
      * */
-    /*private static boolean isOnTop(String piece, String placement){
+    private static boolean isOnTop(String piece, String placement){
         int[][] coverage;
         coverage = heightArray(placement);
 
@@ -215,7 +215,7 @@ public class StratoGame {
             System.out.println("call from isPlacementAdjacent - should not reach here");
         }
         return true;
-    }*/
+    }
 
     /**
      * This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
@@ -245,32 +245,8 @@ public class StratoGame {
             int row = placement.charAt(i + 1) - 'A';
 
             if (coverage[col][row] != 0){
-
-                String piece = placement.substring(i, i + 4);
-
-                if (piece.charAt(3) == 'A') {
-                    if (col == 25 || row == 25){return false;}
-
-                    if (!(coverage[1 + col][row] == coverage[col][1 + row] && coverage[1 + col][row] == coverage[col][row])) {
-                        return false;
-                    }
-                }
-                else if (piece.charAt(3) == 'B') {
-                    if (col == 0 || row == 25){return false;}
-                    if (!(coverage[col][row] == coverage[-1 + col][row] && coverage[-1 + col][row] == coverage[col][1 + row])) {
-                        return false;
-                    }
-                }
-                else if (piece.charAt(3) == 'C') {
-                    if (col == 0 || row == 0){return false;}
-                    if (!(coverage[-1 + col][row] == coverage[col][row] && coverage[col][row] == coverage[col][-1 + row])) {
-                        return false;
-                    }
-                }
-                else if (piece.charAt(3) == 'D') {
-                    if (col == 25 || row == 0){return false;}
-                    if (!(coverage[1 + col][row] == coverage[col][row] && coverage[col][row] == coverage[col][-1 + row]))
-                        return false;
+                if (!(isOnTop(placement.substring(i, i + 4), placement.substring(0, i)))) {
+                    return false;
                 }
                 continue;
             }
