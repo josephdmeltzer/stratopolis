@@ -14,11 +14,6 @@ import static comp1110.ass2.Scoring.getWinner;
  * (http://boardgamegeek.com/boardgame/125022/stratopolis)
  */
 public class StratoGame {
-    public static void main(String[] args) {
-        String move = generateMove("MMUA", 'A', 'K');
-        System.out.println(move);
-        System.out.println("test");
-    }
 
     static boolean isTilePlacementWellFormed(String tilePlacement) {
         if (tilePlacement.length() != 4) {
