@@ -768,7 +768,7 @@ public class Board extends Application {
      * The next two functions update the score of the green and the red players respectively.
      *
      * These functions were written by Manal Mohania
-     * Some minor edits by Joseph Meltzer
+     * Some minor edits by Joseph Meltzer and Zhixian Wu
      * */
 
     private void updateGreenScore(){
