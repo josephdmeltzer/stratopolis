@@ -177,7 +177,7 @@ public class StratoGame {
      *
      * function written by Manal Mohania
      * */
-    private static boolean isOnTop(String piece, String placement){
+    /*private static boolean isOnTop(String piece, String placement){
         int[][] coverage;
         coverage = heightArray(placement);
 
@@ -215,7 +215,7 @@ public class StratoGame {
             System.out.println("call from isPlacementAdjacent - should not reach here");
         }
         return true;
-    }
+    }*/
 
     /**
      * This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
@@ -245,8 +245,35 @@ public class StratoGame {
             int row = placement.charAt(i + 1) - 'A';
 
             if (coverage[col][row] != 0){
-                if (!(isOnTop(placement.substring(i, i + 4), placement.substring(0, i)))) {
-                    return false;
+
+                int idx1 = col;
+                int idx2 = row;
+
+                String piece = placement.substring(i, i + 4);
+
+                if (piece.charAt(3) == 'A') {
+                    if (idx1 == 25 || idx2 == 25){return false;}
+
+                    if (!(coverage[1 + idx1][idx2] == coverage[idx1][1 + idx2] && coverage[1 + idx1][idx2] == coverage[idx1][idx2])) {
+                        return false;
+                    }
+                }
+                else if (piece.charAt(3) == 'B') {
+                    if (idx1 == 0 || idx2 == 25){return false;}
+                    if (!(coverage[idx1][idx2] == coverage[-1 + idx1][idx2] && coverage[-1 + idx1][idx2] == coverage[idx1][1 + idx2])) {
+                        return false;
+                    }
+                }
+                else if (piece.charAt(3) == 'C') {
+                    if (idx1 == 0 || idx2 == 0){return false;}
+                    if (!(coverage[-1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2])) {
+                        return false;
+                    }
+                }
+                else if (piece.charAt(3) == 'D') {
+                    if (idx1 == 25 || idx2 == 0){return false;}
+                    if (!(coverage[1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2]))
+                        return false;
                 }
                 continue;
             }
