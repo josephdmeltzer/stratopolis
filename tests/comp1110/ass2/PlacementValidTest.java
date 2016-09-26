@@ -1,6 +1,8 @@
 package comp1110.ass2;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.Timeout;
 
 import java.util.Random;
 
@@ -18,6 +20,9 @@ import static org.junit.Assert.assertTrue;
  */
 public class PlacementValidTest {
 
+    @Rule
+    public Timeout globalTimeout = Timeout.millis(500);
+
     @Test
     public void testEmpty() {
         assertFalse("Null placement string is not OK, but passed", StratoGame.isPlacementValid(null));
@@ -30,6 +35,7 @@ public class PlacementValidTest {
 
         for (int i = 0; i < PLACEMENTS.length; i++) {
             String p = PLACEMENTS[i];
+            assertTrue("Placement '" + p + "' is valid, but failed ", StratoGame.isPlacementValid(p));
             for (int j = 0; j < BASE_ITERATIONS / 4; j++) {
                 int end = 1 + r.nextInt((p.length()/4) - 1);
                 String test = p.substring(0, 4*end);
