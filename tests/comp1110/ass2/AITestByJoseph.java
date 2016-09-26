@@ -3,6 +3,7 @@ package comp1110.ass2;
 import org.junit.Test;
 
 import static comp1110.ass2.AI.alphabeta;
+import static comp1110.ass2.AI.checkOrder;
 import static comp1110.ass2.Scoring.getScore;
 import static comp1110.ass2.StratoGame.*;
 import static org.junit.Assert.assertFalse;
@@ -14,8 +15,8 @@ import java.util.Random;
  * Created by Joseph Meltzer on 13/09/2016.
  */
 public class AITestByJoseph {
-    // For each sample placement, generate a move with every possible piece and ensure that the move is not an empty string.
     @Test
+    /* Test that every generated move is not empty. */
     public void testNonEmpty() {
         for (char i = 'K'; i<='T'; i++) {
             assertFalse("Placement MMUA with piece " + i + " gave an empty string", generateMove("MMUA", i, 'A') == "");
@@ -35,6 +36,7 @@ public class AITestByJoseph {
     }
 
     @Test
+    /* Test that every generated move is valid on its placement */
     public void testValid() {
         for (char i = 'K'; i<='T'; i++) {
             assertTrue("Placement MMUA with piece " + i + " generated an invalid piece", isPlacementValid("MMUA"+generateMove("MMUA", i, 'A')));
@@ -53,9 +55,8 @@ public class AITestByJoseph {
         }
     }
 
-    // For each sample placement and every possible piece, ensure that the Alphabeta function with depth 1
-    // returns the same result as  the original, more naive code.
     @Test
+    /* Test that the Alpha-Beta generator with depth set to 1 returns the same result as the old naive generator */
     public void testAlphaBetaAtDepth1() {
         for (char i = 'K'; i<='T'; i++) {
             for (String placement : greenTestPlacements){
@@ -79,6 +80,7 @@ public class AITestByJoseph {
 
     static char[] checkOrder = {'M','L','N','K','O','J','P','I','Q','H','R','G','S','F','T','E','U','D','V','C','W','B','X','A','Y','Z'};
 
+    /* Generator that searches only immediately available moves */
     public static String oldGenerator(String placement, char piece, char oppPiece) {
         String bestMove = "";
         int bestScore = -100;
@@ -103,7 +105,8 @@ public class AITestByJoseph {
         return bestMove;
     }
 
-    public static class moveScore {
+    /* moveScore nested class, required in the use of the AB and probabilistic generators */
+        public static class moveScore {
         public String move;
         private int score;
 
@@ -114,6 +117,7 @@ public class AITestByJoseph {
     }
 
     @Test
+    /* Test that the Probabilistic generator with 0 levels of probabilistic search is equivalent to the previous Alpha-Beta generator. */
     public void testProbIsAB() {
         for (char i = 'K'; i<='T'; i++) {
             for (String placement : greenTestPlacements){
@@ -135,6 +139,7 @@ public class AITestByJoseph {
         }
     }
 
+    /* Alpha-beta generator */
     public static moveScore alphabeta2(String placement, char piece, char opiece, int depth, int a, int b, boolean maximising, boolean initialGreen) {
         if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
         if (maximising) {
@@ -179,7 +184,7 @@ public class AITestByJoseph {
         }
     }
 
-
+    /* Test placements, from TestUtility. */
     static final String greenTestPlacements[] = {
             "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBLOFAKJLAPPABQKMCJNECRLRBLQGBNPKBLPHDPRPBJOFAMRRDOKHCMINCOTGAQITDTIIBRPKCKIDCRSOBTPCCSRQASGCAQKPBQUADPRLCQNJAIPSBGOIB",
             "MMUAMLODKNJDLPTDKOBBJNOCJMBAOLPALJEDJPNBQLFAHNNCLKHBLRLCNKHDHKKBKSGANKQAMJDBOJQDQOACKVPCPNACOPMDJOIAPLLBHJDCJLMDGIFCFOTDJXCCRPSCHVGAGQRDJVCBSNKBEIECLLRCIZID",
@@ -223,6 +228,7 @@ public class AITestByJoseph {
             "MMUANNODMLFCPOLBLKHCPQMBPTEDJJTAQVGCMPLDILEAPMRCRSABOSNCKPCDPQSCRWGBMNPAQMADSSKAJQBCRPQCSXHAHRTAJHFBGMNAPSDDPXQCJNIAIPSCPKIDFNOBFLBAOVRCTQCAEMKCPYJANTMBFPDB",
     };
 
+    /* Test placements, adapted from TestUtility so that the next move is for the red player */
     static final String redTestPlacements[] = {
             "MMUANLOBLNBCONSCKLDAPOTCMLEBPLMBKNJDOLNBLOFAKJLAPPABQKMCJNECRLRBLQGBNPKBLPHDPRPBJOFAMRRDOKHCMINCOTGAQITDTIIBRPKCKIDCRSOBTPCCSRQASGCAQKPBQUADPRLCQNJAIPSB",
             "MMUAMLODKNJDLPTDKOBBJNOCJMBAOLPALJEDJPNBQLFAHNNCLKHBLRLCNKHDHKKBKSGANKQAMJDBOJQDQOACKVPCPNACOPMDJOIAPLLBHJDCJLMDGIFCFOTDJXCCRPSCHVGAGQRDJVCBSNKBEIECLLRC",

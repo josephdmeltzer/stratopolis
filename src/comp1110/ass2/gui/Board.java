@@ -137,6 +137,7 @@ public class Board extends Application {
             char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
             char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
             String opponent;
+            /* Condition for using the probabilistic AI. pAI is only really playable for the last 1 move. */
             if (AI.piecesLeft(boardState.moveHistory, true).size() <= 1) {
                 opponent = generateMove(boardState.moveHistory, greenTile, redTile);
             }
@@ -606,6 +607,7 @@ public class Board extends Application {
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent;
+                /* Condition for using the probabilistic AI. pAI is only really playable for the last 1 move. */
                 if (AI.piecesLeft(boardState.moveHistory, false).size() <= 1) {
                     opponent = generateMove(boardState.moveHistory, redTile, greenTile);
                 }
@@ -676,6 +678,7 @@ public class Board extends Application {
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent;
+                /* Condition for using the probabilistic AI. pAI is only really playable for the last 1 move. */
                 if (AI.piecesLeft(boardState.moveHistory, true).size() <= 1) {
                     opponent = generateMove(boardState.moveHistory, greenTile, redTile);
                 }

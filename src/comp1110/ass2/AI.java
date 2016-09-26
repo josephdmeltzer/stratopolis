@@ -15,20 +15,7 @@ import static comp1110.ass2.StratoGame.isPlacementValid;
 
 /*Implementated by Joseph Meltzer*/
 public class AI {
-    /**
-     * The moveScore (nested) class is an object which combines a move and its score.
-     */
-
-//    public static class moveScore {
-//        public String move;
-//        private int score;
-//
-//        moveScore(String move, int score) {
-//            this.move = move;
-//            this.score = score;
-//        }
-//    }
-
+    /* The moveScore (nested) class is an object which combines a move and its score. */
     public static class moveScore {
         public String move;
         public float score;
@@ -39,24 +26,24 @@ public class AI {
         }
     }
 
+    /* The checking order for tiles: Begin in the middle and move out, since valid and good moves are most likely to be in the middle */
     static char[] checkOrder = {'M','L','N','K','O','J','P','I','Q','H','R','G','S','F','T','E','U','D','V','C','W','B','X','A','Y','Z'};
 
     /**
      * Use alpha-beta pruning to find the best score of all possible moves.
-     * @param placement  The board state with which to test each move
-     * @param piece      The piece available to the current player
-     * @param opiece     The piece available to the other player
-     * @param depth      The depth of nested moves to search
-     * @param prob       How many layers of probabilistic moves to search
-     * @param a          Alpha value: minimum obtainable score
-     * @param b          Beta value: maximum obtainable score
-     * @param maximising Whether the current player is green or not (red)
-     * @return           a moveScore object containing the best score,
-     *                   and the four letter move that corresponds to it
+     * @param placement    The board state with which to test each move
+     * @param piece        The piece available to the current player
+     * @param opiece       The piece available to the other player
+     * @param depth        The depth of nested moves to search
+     * @param prob         How many layers of probabilistic moves to search
+     * @param a            Alpha value: minimum obtainable score
+     * @param b            Beta value: maximum obtainable score
+     * @param maximising   Whether the current player is green or not (red)
+     * @param initialGreen Whether the player executing this function is green or not (red)
+     * @return             A moveScore object containing the best score,
+     *                     and the four letter move that corresponds to it
      */
-
     public static moveScore alphabeta(String placement, char piece, char opiece, int depth, int prob, float a, float b, boolean maximising, boolean initialGreen) {
-//        if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
         if (depth==0) return new moveScore("", average(placement,piecesLeft(placement,maximising==initialGreen),prob,a,b,maximising,initialGreen));
         if (maximising) {
             float bestScore = -100;
@@ -100,7 +87,19 @@ public class AI {
         }
     }
 
-    public static moveScore probMM(String placement, char piece, int depth, float a, float b, boolean maximising, boolean initialGreen) {
+    /**
+     * Use alpha-beta pruning to search for the best move, taking expected values (averages) when the piece is unknown.
+     * @param placement     The board state with which to test each move
+     * @param piece         The piece available to the current player
+     * @param depth         The depth of nested moves to search
+     * @param a             Alpha value: minimum obtainable score
+     * @param b             Beta value: maximum obtainable score
+     * @param maximising    Whether the current player is green or not (red)
+     * @param initialGreen  Whether the player executing this function is green or not (red)
+     * @return              A moveScore object that contains the best score,
+     *                      and the four letter move that corresponds to it.
+     */
+    public static moveScore probAB(String placement, char piece, int depth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0) return new moveScore ("", average(placement,piecesLeft(placement, maximising==initialGreen), 0, a, b, maximising, initialGreen));
         if (maximising) {
             float bestScore = -100.0f;
@@ -109,6 +108,7 @@ public class AI {
                 for (char y : checkOrder) {
                     for (char o='A'; o<='D'; o++) {
                         if (isPlacementValid(placement+x+y+piece+o)) {
+                            /* Instead of a recursive call to probAB, instead take the average of probABs with all possible pieces */
                             moveScore mS = new moveScore(""+x+y+piece+o, average(placement+x+y+piece+o, piecesLeft(placement+x+y+piece+o, false), depth-1, a, b, false, initialGreen));
                             if (mS.score > bestScore) {
                                 bestScore = mS.score;
@@ -129,6 +129,7 @@ public class AI {
                 for (char y : checkOrder) {
                     for (char o='A'; o<='D'; o++) {
                         if (isPlacementValid(placement+x+y+piece+o)) {
+                            /* Instead of a recursive call to probAB, instead take the average of probABs with all possible pieces */
                             moveScore mS = new moveScore(""+x+y+piece+o, average(placement+x+y+piece+o, piecesLeft(placement+x+y+piece+o, true), depth-1, a, b, true, initialGreen));
                             if (mS.score < bestScore) {
                                 bestScore = mS.score;
@@ -144,17 +145,33 @@ public class AI {
         }
     }
 
-
+    /**
+     * Calculate an average of scores given a placement and possible available tiles for that placement
+     * @param placement     The placement to test scores on
+     * @param pieceArray    A list of pieces whose appearance is still possible
+     * @param depth         Depth: pass-through from above
+     * @param a             Alpha: pass-through from above
+     * @param b             Beta:  pass-through from above
+     * @param maximising    Whether the current player is green or not (red)
+     * @param initialGreen  Whether the player executing this function is green or not (red)
+     * @return              The expected value of the score given the board state and available moves.
+     */
     public static float average(String placement, ArrayList<Character> pieceArray, int depth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0 || pieceArray.size()==0) return getScore(placement, initialGreen)-getScore(placement, !initialGreen);
         float counter = 0.0f;
         ArrayList<Character> noDupsPieces = new ArrayList<>(new HashSet<>(pieceArray));
         for (Character piece : pieceArray) {
-            counter = counter + probMM(placement, piece, depth, a, b, maximising, initialGreen).score;
+            counter = counter + probAB(placement, piece, depth, a, b, maximising, initialGreen).score;
         }
         return counter/pieceArray.size();
     }
 
+    /**
+     * Create a list of available pieces for a particular player from a board state.
+     * @param placement     The board state to evaluate
+     * @param green         Whether or not the desired pieces belong to the green player
+     * @return              A list of pieces (with duplicates when necessary) that can be played by the chosen player.
+     */
     public static ArrayList<Character> piecesLeft(String placement, boolean green) {
         if (green) {
             ArrayList<Character> piecesG = new ArrayList<>();
@@ -183,5 +200,4 @@ public class AI {
             return piecesR;
         }
     }
-
 }

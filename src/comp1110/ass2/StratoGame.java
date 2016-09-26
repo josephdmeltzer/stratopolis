@@ -537,18 +537,31 @@ public class StratoGame {
      * @param opponentsPiece The piece your opponent will be asked to play next ('A' to 'T' or 0 if last move).
      * @return A string indicating a valid tile placement that represents your move.
      */
-    /* Method by Joseph Meltzer */
+    /* Method by Joseph Meltzer:
+       Search two deterministic levels and one probabilistic level into the game tree.
+       Computation time is around 1 minute at the start of the game, runs into excess of 20 at the end of the game.
+       Since even 1 minute of wait time is unreasonable, this generator is used only for the very last move.
+       Computation speed will be improved with efficiency changes to isPlacementValid and its constituents,
+       the tile search range, and tile search order.
+       Once computation time is down to a reasonable level, this generator will be used exclusively when
+       the AI difficulty is set to 'Hard'. (To be implemented)
+       */
     public static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
         boolean green = (piece>='K' && piece<='T');
         return alphabeta(placement, piece, opponentsPiece, 2, 1, -100, 1000, true, green).move;
     }
 
+    /* Previous version of the generateMove function: used as a faster, but less powerful generator.
+    *  Its computation time is around 1 second, or less, per move.
+    *  Will be used exclusively when the AI difficulty setting is set to 'Medium'. (To be implemented)*/
     public static String genMoveMedium(String placement, char piece, char opponentsPiece) {
         boolean green = (piece>='K' && piece<='T');
         return alphabeta(placement, piece, opponentsPiece, 2, 0, -100, 1000, true, green).move;
     }
-
+    /* Even older version of the generateMove function. Only looks at the immediately available moves.
+       Seemingly instant computation time.
+       Will be used exclusively when the AI difficulty setting is set to 'Easy'. (To be implemented)*/
     public static String genMoveEasy(String placement, char piece, char opponentsPiece) {
         String bestMove = "";
         int bestScore = 0;
@@ -572,5 +585,4 @@ public class StratoGame {
         }
         return bestMove;
     }
-
 }
