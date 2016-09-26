@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static comp1110.ass2.Scoring.getScore;
-import static comp1110.ass2.StratoGame.getScoreForPlacement;
 import static comp1110.ass2.StratoGame.isPlacementValid;
 
 /**
@@ -32,7 +31,7 @@ public class AI {
 
     public static class moveScore {
         public String move;
-        private float score;
+        public float score;
 
         moveScore(String move, float score) {
             this.move = move;
@@ -58,10 +57,10 @@ public class AI {
 
     public static moveScore alphabeta(String placement, char piece, char opiece, int depth, int prob, float a, float b, boolean maximising, boolean initialGreen) {
 //        if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
-        if (depth==0) return new moveScore("", average(placement,piecesLeft(placement,true),prob,true,initialGreen));
+        if (depth==0) return new moveScore("", average(placement,piecesLeft(placement,maximising==initialGreen),prob,a,b,maximising,initialGreen));
         if (maximising) {
             float bestScore = -100;
-            String bestMove = "c";
+            String bestMove = "x";
             for (char x : checkOrder) {
                 for (char y : checkOrder) {
                     for (char o='A'; o<='D'; o++) {
@@ -101,8 +100,8 @@ public class AI {
         }
     }
 
-    public static moveScore probMM(String placement, char piece, int depth, boolean maximising, boolean initialGreen) {
-        if (depth==0) return new moveScore ("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
+    public static moveScore probMM(String placement, char piece, int depth, float a, float b, boolean maximising, boolean initialGreen) {
+        if (depth==0) return new moveScore ("", average(placement,piecesLeft(placement, maximising==initialGreen), 0, a, b, maximising, initialGreen));
         if (maximising) {
             float bestScore = -100.0f;
             String bestMove = "";
@@ -110,11 +109,13 @@ public class AI {
                 for (char y : checkOrder) {
                     for (char o='A'; o<='D'; o++) {
                         if (isPlacementValid(placement+x+y+piece+o)) {
-                            moveScore mS = new moveScore(""+x+y+piece+o, average(placement+x+y+piece+o, piecesLeft(placement, true), depth-1, false, initialGreen));
+                            moveScore mS = new moveScore(""+x+y+piece+o, average(placement+x+y+piece+o, piecesLeft(placement+x+y+piece+o, false), depth-1, a, b, false, initialGreen));
                             if (mS.score > bestScore) {
                                 bestScore = mS.score;
                                 bestMove = mS.move;
                             }
+                            a = Math.max(a, bestScore);
+                            if (b <= a) break;
                         }
                     }
                 }
@@ -128,11 +129,13 @@ public class AI {
                 for (char y : checkOrder) {
                     for (char o='A'; o<='D'; o++) {
                         if (isPlacementValid(placement+x+y+piece+o)) {
-                            moveScore mS = new moveScore(""+x+y+piece+o, average(placement+x+y+piece+o, piecesLeft(placement, false), depth-1, true, initialGreen));
+                            moveScore mS = new moveScore(""+x+y+piece+o, average(placement+x+y+piece+o, piecesLeft(placement+x+y+piece+o, true), depth-1, a, b, true, initialGreen));
                             if (mS.score < bestScore) {
                                 bestScore = mS.score;
                                 bestMove = mS.move;
                             }
+                            b = Math.min(b, bestScore);
+                            if (b <= a) break;
                         }
                     }
                 }
@@ -142,12 +145,12 @@ public class AI {
     }
 
 
-    public static float average(String placement, ArrayList<Character> pieceArray, int depth, boolean maximising, boolean initialGreen) {
-        if (depth==0) return getScoreForPlacement(placement, initialGreen)-getScoreForPlacement(placement, !initialGreen);
+    public static float average(String placement, ArrayList<Character> pieceArray, int depth, float a, float b, boolean maximising, boolean initialGreen) {
+        if (depth==0 || pieceArray.size()==0) return getScore(placement, initialGreen)-getScore(placement, !initialGreen);
         float counter = 0.0f;
         ArrayList<Character> noDupsPieces = new ArrayList<>(new HashSet<>(pieceArray));
-        for (Character piece : noDupsPieces) {
-            counter = counter + probMM(placement, piece, depth, maximising, initialGreen).score;
+        for (Character piece : pieceArray) {
+            counter = counter + probMM(placement, piece, depth, a, b, maximising, initialGreen).score;
         }
         return counter/pieceArray.size();
     }
