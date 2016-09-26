@@ -76,7 +76,7 @@ public class Board extends Application {
  modified by functions, instead of being created by functions  because they
  need to be accessible by many different functions.*/
 
-    private Boolean blah = true;
+
 
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
@@ -107,6 +107,8 @@ public class Board extends Application {
     private GridPane heightLabels = new GridPane();
     private GridPane clickablePanes = new GridPane();
 
+    /*A counter that tells you if this is the first game played*/
+    private Boolean firstGame = true;
 
 
 
@@ -118,6 +120,8 @@ public class Board extends Application {
 
         placementGrp.getChildren().add(introtext);
 
+        /*Each of these buttons tell the game if you want a two player game, or
+        * to play as green or red against an AI*/
         Button playAsGreen = new Button("Play as Green");
         playAsGreen.setOnAction(event-> {
             placementGrp.getChildren().clear();
@@ -154,9 +158,11 @@ public class Board extends Application {
             makePlayer();
         });
 
+        /*A button that created a scrolling text node that displays the instructions*/
         Button instructions = new Button("How to Play");
         instructions.setOnAction(event->  getInstructions() );
 
+        /*Layout*/
         VBox vb = new VBox();
         vb.getChildren().addAll(introtext,twoPlayer,playAsRed,playAsGreen,instructions);
         vb.setSpacing(10);
@@ -166,7 +172,7 @@ public class Board extends Application {
         placementGrp.getChildren().addAll(vb);
     }
 
-    /*Function by Zhixian Wu*/
+    /*Function by Zhixian Wu. This function displays the instructions when called.*/
     private void getInstructions(){
         GridPane mainInstruc = new GridPane();
         mainInstruc.setLayoutY(50);
@@ -253,7 +259,7 @@ public class Board extends Application {
         playerControls.setPrefSize(120, 200);
         playerControls.setMaxSize(120, 200);
 
-        /*The text you see on the right*/
+        /*The text labeling Green and Red's tiles, which you see on the right*/
         if (boardState.playingMode==PlayerIsRed){
             greentxt.setFill(Color.GREEN);
             greentxt.setFont(Font.font("Verdana", 14));
@@ -269,7 +275,7 @@ public class Board extends Application {
         }
 
 
-        /*The tiles on display on the right*/
+        /*The tiles at the "top" of each player's "stack", displayed on the right*/
         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
         ivg.setRotate((((int) (playerG.rotation)-'A')*90));
         ivg.setFitWidth(80);
@@ -284,7 +290,7 @@ public class Board extends Application {
         ivr.setSmooth(true);
         ivr.setCache(true);
 
-        /*The buttons that rotates the tiles*/
+        /*The buttons that rotate the tiles*/
         Button rotateG = new Button("Rotate");
         rotateG.setOnAction(event-> {
             playerG.rotateTile();
@@ -297,7 +303,7 @@ public class Board extends Application {
             ivr.setRotate((((int) (playerR.rotation)-'A')*90));
         });
 
-        /*Adding the nodes. Which ones we add depends on the playingMode*/
+        /*Adding the nodes. We may omit the a rotate button depending on the playingMode*/
         if (boardState.playingMode==TwoPlayers) playerControls.getChildren().addAll(greentxt,redtxt,rotateG,rotateR,ivg,ivr);
         if (boardState.playingMode==PlayerIsGreen) playerControls.getChildren().addAll(greentxt,redtxt,rotateG,ivg,ivr);
         if (boardState.playingMode==PlayerIsRed) playerControls.getChildren().addAll(greentxt,redtxt,rotateR,ivg,ivr);
@@ -337,7 +343,7 @@ public class Board extends Application {
             heightLabels.getChildren().clear();
             clickablePanes.getChildren().clear();
 
-            blah = false;
+            firstGame = false;
 
             initialSettings();
         });
@@ -375,14 +381,14 @@ public class Board extends Application {
 
     }
 
-    /*Function mostly by Zhixian Wu, with lines changed by Manal Mohania (indicated below)*/
+    /*Function mostly by Zhixian Wu, with minor changes by Manal Mohania (indicated below)*/
     private void makeBoard(){
         int size = (TILE_SIZE + 1) * BOARD_SIZE;
         int offset = (BOARD_HEIGHT - size) / 2;
         playingBoard.setPrefSize(size, size);
         playingBoard.setMaxSize(size, size);
 
-        if (blah){
+        if (firstGame){
             /*determines the size of the rows and columns of the playing board*/
             for (int i = 0; i < BOARD_SIZE; i++) {
                 RowConstraints row = new RowConstraints(TILE_SIZE+1);
@@ -412,7 +418,7 @@ public class Board extends Application {
                 GridPane.setValignment(r, VPos.CENTER);
             }
         }
-        /*Give the board thicker edges*/
+        /*Give the board thicker outer edges*/
         Rectangle thickBorder = new Rectangle();
         thickBorder.setWidth(size+8);
         thickBorder.setHeight(size+8);
@@ -434,7 +440,7 @@ public class Board extends Application {
          that shows the height of the tile on that position*/
         heightLabels.setPrefSize(size, size);
         heightLabels.setMaxSize(size, size);
-        if (blah){
+        if (firstGame){
             /*Determines the size of the grid rows and columns*/
             for (int i = 0; i < BOARD_SIZE; i++) {
                 RowConstraints row = new RowConstraints(TILE_SIZE+1);
@@ -454,7 +460,7 @@ public class Board extends Application {
          holding the interactive tiles for the game*/
         clickablePanes.setPrefSize(size, size);
         clickablePanes.setMaxSize(size, size);
-        if (blah){
+        if (firstGame){
             /*Determines the size of the grid rows and columns*/
             for (int i = 0; i < BOARD_SIZE; i++) {
                 RowConstraints row = new RowConstraints(TILE_SIZE+1);
@@ -515,7 +521,7 @@ public class Board extends Application {
         Pane pane = new Pane();
         ImageView iv = new ImageView();
 
-        /*Event by Zhixian Wu*/
+        /*Event by Zhixian Wu, this makes the player's move when they click on a pane*/
         pane.setOnMouseClicked(event -> {
                 char col = (char) (colIndex+'A');
                 char row = (char) (rowIndex+'A');
@@ -535,7 +541,7 @@ public class Board extends Application {
                 }
 
         });
-        /*Event by Manal Mohania*/
+        /*Event by Manal Mohania, this creates the preview piece*/
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex + 'A');
             char row = (char) (rowIndex + 'A');
@@ -552,7 +558,7 @@ public class Board extends Application {
             }
         });
 
-        /*Event by Manal Mohania*/
+        /*Event by Manal Mohania, this removes the preview piece*/
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
         clickablePanes.getChildren().add(pane);
@@ -568,7 +574,7 @@ public class Board extends Application {
         Pane pane = new Pane();
         ImageView iv = new ImageView();
 
-        /*Event by Manal Mohania*/
+        /*Event by Manal Mohania, this adds the preview piece*/
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex+'A');
             char row = (char) (rowIndex+'A');
@@ -577,10 +583,10 @@ public class Board extends Application {
             makeTempPlacement(iv, placement);
         });
 
-        /*Event by Manal Mohania*/
+        /*Event by Manal Mohania, this removes the preview piece*/
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
-        /*Event by Zhixian Wu*/
+        /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
             char col = (char) (colIndex+'A');
             char row = (char) (rowIndex+'A');
@@ -589,7 +595,8 @@ public class Board extends Application {
             makeGUIPlacement(placement);
 
             int length = boardState.moveHistory.length()-2;
-            /*We only suggest the AI is thinking if it actually is, i.e. your move was valid, i.e. if the last move was yours*/
+            /*We only suggest the AI is thinking if it actually is, i.e. your move was valid,
+             i.e. if the last move in moveHistory was yours*/
             if ('K'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='T'){
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
@@ -598,16 +605,17 @@ public class Board extends Application {
             }
         });
 
-        /*Event by Zhixian Wu*/
+        /*Event by Zhixian Wu and Joseph Meltzer. This event causes the AI to make its move when the mouse is released.*/
         pane.setOnMouseReleased(event -> {
             int length = boardState.moveHistory.length()-2;
 
-            /*The AI only makes its move if your move was valid, i.e. if the last move was yours*/
+            /*Zhixian Wu: The AI only makes its move if your move was valid, i.e. if the
+            last move in moveHistory was yours*/
             if ('K'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='T'){
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent;
-                /* Condition for using the probabilistic AI. pAI is only really playable for the last 1 move. */
+                /* Joseph Meltzer: Condition for using the probabilistic AI. AI is only really playable for the last 1 move. */
                 if (AI.piecesLeft(boardState.moveHistory, false).size() <= 1) {
                     opponent = generateMove(boardState.moveHistory, redTile, greenTile);
                 }
@@ -637,7 +645,7 @@ public class Board extends Application {
         Pane pane = new Pane();
         ImageView iv = new ImageView();
 
-        /*Event by Manal Mohania*/
+        /*Event by Manal Mohania, the adds the preview piece*/
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex + 'A');
             char row = (char) (rowIndex + 'A');
@@ -646,10 +654,10 @@ public class Board extends Application {
             makeTempPlacement(iv, placement);
         });
 
-        /*Event by Manal Mohania*/
+        /*Event by Manal Mohania, this removes the preview piece*/
         pane.setOnMouseExited(event -> removeTempPlacement(iv));
 
-        /*Event by Zhixian Wu*/
+        /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
             char col = (char) (colIndex+'A');
             char row = (char) (rowIndex+'A');
@@ -659,7 +667,8 @@ public class Board extends Application {
             makeGUIPlacement(placement);
 
             int length = boardState.moveHistory.length()-2;
-            /*We only suggest the AI is thinking if it actually is, i.e. your move was valid, i.e. if the last move was yours*/
+            /*We only suggest the AI is thinking if it actually is, i.e. if your
+            move was valid, i.e. if the last move in moveHistory was yours*/
             if ('A'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='J'){
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
@@ -669,11 +678,15 @@ public class Board extends Application {
 
         });
 
-        /*Event by Zhixian Wu*/
+        /*Event by Zhixian Wu. This event causes the AI to make its move when the mouse is released.*/
         pane.setOnMouseReleased(event -> {
             int length = boardState.moveHistory.length()-2;
 
-            /*The AI only makes its move if your move was valid, i.e. if the last move was yours. The last condition checks if the game is not over yet*/
+            /*The first two conditions check if your move was valid,
+            by checking if the last move in moveHistory was yours.
+            The AI only makes its move if your move was valid.
+              The last condition checks if the game is not over yet,
+            so te AI doesn't try to make a move after the game is over*/
             if ('A'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='J' && boardState.moveHistory.length()<MAX_TILES*8){
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
@@ -825,7 +838,7 @@ public class Board extends Application {
     private void makeGUIPlacement(String placement) {
         controls.getChildren().remove(errormessage);
         controls.getChildren().remove(aiThink);
-        System.out.println("Someone tried: " + placement);
+        System.out.println("Someone tried: " + placement); /*For debugging purposes*/
 
         String tempMove = boardState.moveHistory.concat(placement);
         if (!StratoGame.isPlacementValid(tempMove)) { /*If the attempted move is invalid*/
@@ -843,8 +856,10 @@ public class Board extends Application {
             iv1.setSmooth(true);
             iv1.setCache(true);
             playingBoard.getChildren().add(iv1);
+                /*make sure it spans two rows and columns*/
             GridPane.setRowSpan(iv1, 2);
             GridPane.setColumnSpan(iv1, 2);
+               /*make sure it's centered*/
             GridPane.setHalignment(iv1, HPos.CENTER);
             GridPane.setValignment(iv1, VPos.CENTER);
             /*Place the image, in the correct rotation, in the correct place on the board*/
@@ -908,7 +923,7 @@ public class Board extends Application {
                         ivg.setPreserveRatio(true);
                         ivg.setSmooth(true);
                         ivg.setCache(true);
-                    } else{ /*If green does not still have tiles left, say they're our of tiles*/
+                    } else{ /*If green does not still have tiles left, say they're out of tiles*/
                         ivg.setRotate(0);
                         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
                         ivg.setRotate(0);
@@ -927,13 +942,14 @@ public class Board extends Application {
             /*Checks if the game is over. If it is, we clear the board and display the winner.*/
             if (boardState.moveHistory.length() > MAX_TILES*8) {
                 placementGrp.getChildren().clear();
+                /*If green wins*/
                 if (Scoring.getWinner(boardState.moveHistory)){
                     Text score = new Text("Green Wins!");
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
                     placementGrp.getChildren().add(score);
                     score.setLayoutX(300);
                     score.setLayoutY(300);
-                } else{
+                } else{ /*if red wins*/
                     Text score = new Text("Red Wins!");
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
                     placementGrp.getChildren().add(score);
@@ -947,8 +963,11 @@ public class Board extends Application {
     /*Display the height at each position*/
     /*Function by Zhixian Wu*/
     private void displayHeights(){
+        /*Clear existing heights*/
         heightLabels.getChildren().clear();
+        /*Make 2D array of the height at each position*/
         int[][] heights = heightArray(boardState.moveHistory);
+        /*Recursively go through each tile and label its height*/
         for (int i=0; i<BOARD_SIZE;i++){
             for (int j=0; j<BOARD_SIZE; j++){
                 String tall = Integer.toString(heights[i][j]);
