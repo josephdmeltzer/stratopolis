@@ -137,7 +137,7 @@ public class Board extends Application {
             char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
             char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
             String opponent;
-            if (AI.piecesLeft(boardState.moveHistory, true).size() <= 5) {
+            if (AI.piecesLeft(boardState.moveHistory, true).size() <= 1) {
                 opponent = generateMove(boardState.moveHistory, greenTile, redTile);
             }
             else {
@@ -606,7 +606,7 @@ public class Board extends Application {
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent;
-                if (AI.piecesLeft(boardState.moveHistory, false).size() <= 5) {
+                if (AI.piecesLeft(boardState.moveHistory, false).size() <= 2) {
                     opponent = generateMove(boardState.moveHistory, redTile, greenTile);
                 }
                 else {
@@ -676,7 +676,7 @@ public class Board extends Application {
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent;
-                if (AI.piecesLeft(boardState.moveHistory, true).size() <= 5) {
+                if (AI.piecesLeft(boardState.moveHistory, true).size() <= 2) {
                     opponent = generateMove(boardState.moveHistory, greenTile, redTile);
                 }
                 else {
