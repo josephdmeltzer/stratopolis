@@ -511,6 +511,8 @@ public class Board extends Application {
     /*Function by Zhixian Wu and Manal Mohania.*/
     /*Idea of how to recursively creates panes that remember what position they
     were created for is from StackOverflow (URL in the C-u5807060 originality statement)*/
+    /*@param colIndex   The column the pane is on
+    * @param rowIndex   The row the pane is on*/
     private void addPaneTwoPlayer(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -564,6 +566,8 @@ public class Board extends Application {
     /*Function by Zhixian Wu and Manal Mohania.*/
     /*Idea of how to recursively creates panes that remember what position they
     were created for is from StackOverflow (URL in the in the C-u5807060 originality statement)*/
+    /*@param colIndex   The column the pane is on
+    * @param rowIndex   The row the pane is on*/
     private void addPanePlayerGreen(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -635,6 +639,8 @@ public class Board extends Application {
     /*Function by Zhixian Wu and Manal Mohania.*/
     /*Idea of how to recursively creates panes that remember what position they
     were created for is from StackOverflow (URL in the in the C-u5807060 originality statement)*/
+    /*@param colIndex   The column the pane is on
+    * @param rowIndex   The row the pane is on*/
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -711,6 +717,7 @@ public class Board extends Application {
      * This function removes the temporary placement created due to mouseover (if any)
      * Function by Manal Mohania
      * */
+    /*@param iv   The preview image to be removed*/
     private void removeTempPlacement(ImageView iv){
         if (iv == null)
             return;
@@ -728,6 +735,8 @@ public class Board extends Application {
      * Function by Manal Mohania
      * Minor edits by Joseph Meltzer
    */
+    /*@param iv          The preview image to be added
+    * @param placement   The placement string*/
     private void makeTempPlacement(ImageView iv, String placement){
 
 
@@ -807,8 +816,8 @@ public class Board extends Application {
         int score = StratoGame.getScoreForPlacement(placement, true);
         greenScore.setText("" + score);
         controls.getChildren().add(greenScore);
-        int offset = (Integer.toString(score)).length() * 10;
-        greenScore.setLayoutX(785-offset);
+        int offset = (Integer.toString(score)).length() * 15;
+        greenScore.setLayoutX(790-offset);
         greenScore.setLayoutY(107);
         greenScore.setFill(Color.GREEN);
         greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
@@ -820,8 +829,8 @@ public class Board extends Application {
         int score = StratoGame.getScoreForPlacement(placement, false);
         redScore.setText("" + score);
         controls.getChildren().add(redScore);
-        int offset = (Integer.toString(score)).length() * 10;
-        redScore.setLayoutX(865 - offset);
+        int offset = (Integer.toString(score)).length() * 15;
+        redScore.setLayoutX(870 - offset);
         redScore.setLayoutY(107);
         redScore.setFill(Color.RED);
         redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
@@ -829,6 +838,7 @@ public class Board extends Application {
 
     /*The method that makes a placement*/
     /*Function by Zhixian Wu*/
+    /* @param placement   The placement string*/
     private void makeGUIPlacement(String placement) {
         controls.getChildren().remove(errormessage);
         controls.getChildren().remove(aiThink);
