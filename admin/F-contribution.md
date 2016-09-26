@@ -1,4 +1,4 @@
-We declare that the work toward our submission of Stage B was distributed among the group members as follows:
+We declare that the work toward our submission of Stage F was distributed among the group members as follows:
 
 * u6019071 100/3
 * u6060661 100/3

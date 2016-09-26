@@ -38,18 +38,11 @@ public class Board extends Application {
 
     /*TODO: Better Game Over screen*/
 
-    /*TODO: Get rid of A-Z labels (at end)*/
 
-    /*DONE:
-    1. fixed tile placements so it's offset correctly
-    2. the preview tiles update properly now
-    3. player's tile now appears immediately, before the AI has finished thinking
-    4. there exists a working instructions button
-    5. main menu button done
-     */
 
 /*OVERVIEW: The first function called by the stage is initialSettings(), which
-* creates the first screen with three buttons to choose the playing mode.*/
+* creates the first screen with three buttons to choose the playing mode.
+* (And a button to tell you how to play the game)*/
 
 /*The buttons set a variable called playingMode as PlayerIsRed, PlayerIsGreen,
 * or TwoPlayer. Then they all call makePlayer(). If the player is red, it also
@@ -58,7 +51,7 @@ public class Board extends Application {
 /*makePlayer() calls makeControls() and makeBoard()*/
 
 /*makeControls() is pretty much the same for all playing modes, except it omits
-* a "Rotate" button if it's single-player. makeControls() calls makeBoard()*/
+* a "Rotate" button if it's single-player. */
 
 /*makeBoard() is pretty much the same again. The big difference is that
 * depending on which playingMode it is, it calls different addPane function:
@@ -70,7 +63,8 @@ public class Board extends Application {
 * When a pane is clicked, the two player version of the function makes a
 * move based on whose turn it is.
 * The one player version makes the player's move and calls the AI with the
-* appropriate input on which player it is supposed to be.*/
+* appropriate input on which player it is supposed to be.
+* 'addPane' also holds the events for the previews of tile placements*/
 
 /*Many of the buttons, text, and images were defined as class fields to be
  modified by functions, instead of being created by functions  because they
@@ -84,12 +78,12 @@ public class Board extends Application {
     private static final int TILE_SIZE = 24;
     private static final int BOARD_SIZE = 26;
 
-    /*Some fields for initial conditions*/
+    /*Some fields for initial conditions.*/
     private BoardState boardState;
     private PlayerG playerG;
     private PlayerR playerR;
 
-    /*Nodes that need to be accessible by many functions*/
+    /*Nodes that need to be accessible by many functions.*/
     private ImageView ivg = new ImageView();
     private ImageView ivr = new ImageView();
     private Text greentxt = new Text("Green");
@@ -99,7 +93,7 @@ public class Board extends Application {
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
 
-    /*Various Groups that organise the screen*/
+    /*Various Groups that organise the screen.*/
     private final Group root = new Group();
     private final Group controls = new Group();
     private final Group placementGrp = new Group();
@@ -107,7 +101,7 @@ public class Board extends Application {
     private GridPane heightLabels = new GridPane();
     private GridPane clickablePanes = new GridPane();
 
-    /*A counter that tells you if this is the first game played*/
+    /*A counter that tells you if this is the first game played.*/
     private Boolean firstGame = true;
 
 
@@ -334,7 +328,7 @@ public class Board extends Application {
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
         playerControls.setGridLinesVisible(false);
 
-        /*A main menu button*/
+        /*A main menu button. It clears the current game and calls initialSettings()*/
         Button menu = new Button("Main Menu");
         menu.setOnAction(event->{
             controls.getChildren().clear();
@@ -516,7 +510,7 @@ public class Board extends Application {
     /*The clickable panes for when there are two players*/
     /*Function by Zhixian Wu and Manal Mohania.*/
     /*Idea of how to recursively creates panes that remember what position they
-    were created for is from StackOverflow (URL in the originality statement)*/
+    were created for is from StackOverflow (URL in the C-u5807060 originality statement)*/
     private void addPaneTwoPlayer(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -569,7 +563,7 @@ public class Board extends Application {
     /*The clickable panes for when the human player is Green*/
     /*Function by Zhixian Wu and Manal Mohania.*/
     /*Idea of how to recursively creates panes that remember what position they
-    were created for is from StackOverflow (URL in the originality statement)*/
+    were created for is from StackOverflow (URL in the in the C-u5807060 originality statement)*/
     private void addPanePlayerGreen(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -640,7 +634,7 @@ public class Board extends Application {
     /*The clickable panes for when the human player is Red*/
     /*Function by Zhixian Wu and Manal Mohania.*/
     /*Idea of how to recursively creates panes that remember what position they
-    were created for is from StackOverflow (URL in the originality statement)*/
+    were created for is from StackOverflow (URL in the in the C-u5807060 originality statement)*/
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
