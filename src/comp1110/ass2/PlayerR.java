@@ -10,7 +10,7 @@ import static comp1110.ass2.Colour.RED;
  * Created by manalmohania on 11/08/2016.
  */
 
-/*Player A*/
+/*Implemented by Zhixian Wu*/
 
 public class PlayerR extends Player {
     public static Colour playerColour = RED;

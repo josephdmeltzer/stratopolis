@@ -10,7 +10,7 @@ import static comp1110.ass2.Colour.GREEN;
  * Created by manalmohania on 11/08/2016.
  */
 
-/*Player A*/
+/*Implemented by Zhixian Wu*/
 
 public class PlayerG extends Player {
     public static Colour playerColour = GREEN;
@@ -48,5 +48,6 @@ public class PlayerG extends Player {
         this.used_tiles = 0;
         this.rotation = 'A';
     }
+
 
 }

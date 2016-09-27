@@ -1,12 +1,5 @@
 package comp1110.ass2;
 
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.text.Text;
-
 import static comp1110.ass2.AI.alphabeta;
 import static comp1110.ass2.Colour.*;
 import static comp1110.ass2.Pieces.getColours;
@@ -21,11 +14,6 @@ import static comp1110.ass2.Scoring.getWinner;
  * (http://boardgamegeek.com/boardgame/125022/stratopolis)
  */
 public class StratoGame {
-    public static void main(String[] args) {
-        String move = generateMove("MMUA", 'A', 'K');
-        System.out.println(move);
-        System.out.println("test");
-    }
 
     static boolean isTilePlacementWellFormed(String tilePlacement) {
         if (tilePlacement.length() != 4) {
@@ -47,6 +35,7 @@ public class StratoGame {
      * @param placement A string describing a placement of one or more tiles
      * @return True if the placement is well-formed
      */
+    /* Method by Manal Mohania and Joseph Meltzer */
      static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 4: determine whether a placement is well-formed
         if (placement == null) return false;
@@ -94,7 +83,14 @@ public class StratoGame {
         return areColoursAlright(placement);
     }
 
-    /*This method assumes that the placement string is valid*/
+    /**
+     * Convert a placement string to a 26x26 array of colours
+     *
+     * @param placement: A _valid_ placement string
+     * @return a 26 x 26 array of colours
+     *
+     * function written by Manal Mohania
+     * */
     static Colour[][] colourArray(String placement){
         Colour[][] coverage = new Colour[26][26];
         coverage[12][12] = RED;
@@ -133,7 +129,14 @@ public class StratoGame {
         return coverage;
     }
 
-    /*and so does this*/
+    /**
+     * Convert a placement string to a 26x26 array of heights
+     *
+     * @param placement: A _valid_ placement string
+     * @return a 26 x 26 array of heights
+     *
+     * function written by Manal Mohania
+     * */
     public static int[][] heightArray(String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
@@ -163,6 +166,17 @@ public class StratoGame {
         return coverage;
     }
 
+    /**
+     * This method is called internally from isPlacementAdjacent.
+     * Checks if a given piece is dangling on the placements that are already made
+     *
+     * @param piece: the piece which is being checked for the overhanging
+     * @param placement: the placement string of the previous placements
+     *
+     * @return true iff the piece is not overhanging
+     *
+     * function written by Manal Mohania
+     * */
     private static boolean isOnTop(String piece, String placement){
         int[][] coverage;
         coverage = heightArray(placement);
@@ -204,11 +218,15 @@ public class StratoGame {
     }
 
     /**
-     *  This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
-    *
-    * To make this method more efficient the call to isOnTop can be removed and the code can be adjusted here.
-    * Saves the copying of a 26x26 array numerous times.
-    * */
+     * This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
+     *
+     * @param placement a placement string
+     * @return true iff tiles are adjacent and there is no overhanging
+     *
+     * To make this method more efficient the call to isOnTop can be removed and the code can be adjusted here.
+     *
+     * function written by Manal Mohania
+    */
 
     private static boolean isPlacementAdjacent(String placement){
         /*
@@ -329,6 +347,15 @@ public class StratoGame {
         return true;
     }
 
+    /**
+     * Check if the tiles don't fall out of the board
+     *
+     * @param placement a placement string
+     * @return true iff each tile falls within the board range
+     *
+     * function written by Manal Mohania
+     * */
+
     private static boolean checkBounds(String placement){
         /*Inspect the positions of the origins of the pieces*/
 
@@ -371,6 +398,7 @@ public class StratoGame {
         return true;
     }
 
+    /* Method by Joseph Meltzer */
     private static boolean tileStraddle(String placement) {
         int[][] tileTable = new int[26][26];
 
@@ -411,11 +439,14 @@ public class StratoGame {
      * Currently, the method does not say if green has won by scoring higher points or by virtue of luck.
      * Adding that functionality should be fairly simple though.
      * NOTE: THE PLACEMENT STRING IS ASSUMED TO BE VALID
+     *
+     * function written by Manal Mohania
      * */
     static boolean greenHasWon(String placement){
         return getWinner(placement);
     }
 
+    /* Method by Joseph Meltzer */
     private static boolean areColoursAlright(String placement){
         Colour[][] colourTable = new Colour[26][26];
         colourTable[12][12] = RED;
@@ -483,9 +514,11 @@ public class StratoGame {
      * @param green True if the score for the green player is requested,
      *              otherwise the score for the red player should be returned
      * @return the score for the requested player, given the placement
+     *
+     * function written by Manal Mohania
      */
 
-    static int getScoreForPlacement(String placement, boolean green) {
+    public static int getScoreForPlacement(String placement, boolean green) {
         // FIXME Task 7: determine the score for a player given a placement
 
         /*I have this here for the moment but will remove it once main gets implemented*/
@@ -504,31 +537,52 @@ public class StratoGame {
      * @param opponentsPiece The piece your opponent will be asked to play next ('A' to 'T' or 0 if last move).
      * @return A string indicating a valid tile placement that represents your move.
      */
+    /* Method by Joseph Meltzer:
+       Search two deterministic levels and one probabilistic level into the game tree.
+       Computation time is around 1 minute at the start of the game, runs into excess of 20 at the end of the game.
+       Since even 1 minute of wait time is unreasonable, this generator is used only for the very last move.
+       Computation speed will be improved with efficiency changes to isPlacementValid and its constituents,
+       the tile search range, and tile search order.
+       Once computation time is down to a reasonable level, this generator will be used exclusively when
+       the AI difficulty is set to 'Hard'. (To be implemented)
+       */
     public static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
-//        String bestMove = "";
-//        int bestScore = 0;
-//        for (char x='A'; x<='Z'; x++) {
-//            for (char y='A'; y<='Z'; y++) {
-//                for (char o='A'; o<='D'; o++) {
-//                    if (piece>='A' && piece <='J') {
-//                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)>bestScore ) {
-//                            bestMove = ""+x+y+piece+o;
-//                            bestScore = getScoreForPlacement(placement + x + y + piece + o, false);
-//                        }
-//                    }
-//                    if (piece>='K' && piece <='T') {
-//                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true)>bestScore ) {
-//                            bestMove = ""+x+y+piece+o;
-//                            bestScore = getScoreForPlacement(placement + x + y + piece + o, true);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return bestMove;
         boolean green = (piece>='K' && piece<='T');
-        return alphabeta(placement, piece, opponentsPiece, 2, -100, 1000, true, green).move;
+        return alphabeta(placement, piece, opponentsPiece, 2, 1, -100, 1000, true, green).move;
     }
 
+    /* Previous version of the generateMove function: used as a faster, but less powerful generator.
+    *  Its computation time is around 1 second, or less, per move.
+    *  Will be used exclusively when the AI difficulty setting is set to 'Medium'. (To be implemented)*/
+    public static String genMoveMedium(String placement, char piece, char opponentsPiece) {
+        boolean green = (piece>='K' && piece<='T');
+        return alphabeta(placement, piece, opponentsPiece, 2, 0, -100, 1000, true, green).move;
+    }
+    /* Even older version of the generateMove function. Only looks at the immediately available moves.
+       Seemingly instant computation time.
+       Will be used exclusively when the AI difficulty setting is set to 'Easy'. (To be implemented)*/
+    public static String genMoveEasy(String placement, char piece, char opponentsPiece) {
+        String bestMove = "";
+        int bestScore = 0;
+        for (char x='A'; x<='Z'; x++) {
+            for (char y='A'; y<='Z'; y++) {
+                for (char o='A'; o<='D'; o++) {
+                    if (piece>='A' && piece <='J') {
+                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)>bestScore ) {
+                            bestMove = ""+x+y+piece+o;
+                            bestScore = getScoreForPlacement(placement + x + y + piece + o, false);
+                        }
+                    }
+                    if (piece>='K' && piece <='T') {
+                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true)>bestScore ) {
+                            bestMove = ""+x+y+piece+o;
+                            bestScore = getScoreForPlacement(placement + x + y + piece + o, true);
+                        }
+                    }
+                }
+            }
+        }
+        return bestMove;
+    }
 }
