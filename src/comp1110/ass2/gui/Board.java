@@ -8,9 +8,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -344,6 +346,26 @@ public class Board extends Application {
         controls.getChildren().add(menu);
         menu.setLayoutX(835);
         menu.setLayoutY(650);
+
+        /*Changes have been made from this line onwards*/
+        menu.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        DropShadow shadow = new DropShadow();
+
+        menu.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            menu.setEffect(shadow);
+        });
+        menu.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            menu.setEffect(null);
+        });
+
+
+
 
         /*Scores by Manal Mohania*/
         Rectangle r = new Rectangle();
