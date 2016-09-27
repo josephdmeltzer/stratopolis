@@ -11,8 +11,10 @@ import java.util.List;
 /**
  * Created by Aftran261 on 14/09/2016.
  */
+/*By Zhixian Wu*/
 public class PlayerTestByZhixian {
 
+    /*Checks if the player is created with the correct number of tiles*/
     @Test
     public void testPlayerInitialCreationNumberOfTiles() {
         PlayerG playerG = new PlayerG();
@@ -21,6 +23,7 @@ public class PlayerTestByZhixian {
         assertTrue("Red Player does not have " + MAX_TILES + " tiles", playerR.available_tiles.size() == MAX_TILES);
     }
 
+    /*Checks if Green has tiles from K-U and Red from A-J*/
     @Test
     public void testPlayerInitialCreationTilesOfPlayers() {
         PlayerG playerG = new PlayerG();
@@ -44,6 +47,7 @@ public class PlayerTestByZhixian {
         }
     }
 
+    /*Checks if the player at creation has rotation from A to D*/
     @Test
     public void testPlayerInitialCreationRotation() {
         PlayerG playerG = new PlayerG();
@@ -51,10 +55,9 @@ public class PlayerTestByZhixian {
         assertFalse("Green Player's rotation out of bounds when it was first created", playerG.rotation>'D' || playerG.rotation<'A');
         assertFalse("Red Player's rotation out of bounds when it was first created", playerR.rotation>'D' || playerR.rotation<'A');
 
-        assertFalse("Green Player's tile counter is not supposed to be negative", playerG.used_tiles<0);
-        assertFalse("Red Player's tile counter is not supposed to be negative", playerR.used_tiles<0);
     }
 
+    /*Rotates the tiles 5 times, checking the rotation is from a to D each time*/
     @Test
     public void testRotateTileRange() {
         Player playerG = new PlayerG();
@@ -67,6 +70,7 @@ public class PlayerTestByZhixian {
         }
     }
 
+    /*Rotates the tiles 5 times, checking the next rotation is the right one each time*/
     @Test
     public void testRotateTileOrder() {
         Player playerG = new PlayerG();
@@ -103,10 +107,15 @@ public class PlayerTestByZhixian {
         }
     }
 
+    /*Calls getNextTile MAX_TILES+3 times, checking that the used_tiles counter doesn't go out of bounds each time*/
     @Test
     public void testGetTileRange() {
         Player playerG = new PlayerG();
         Player playerR = new PlayerR();
+
+        assertFalse("Green Player's tile counter is not supposed to be negative", playerG.used_tiles<0);
+        assertFalse("Red Player's tile counter is not supposed to be negative", playerR.used_tiles<0);
+
         for (int i=1; i<MAX_TILES+4; i++){
             playerG.getNextTile();
             assertTrue("Green Player's tile counter eventually goes out of bounds", playerG.used_tiles<MAX_TILES);
@@ -115,5 +124,6 @@ public class PlayerTestByZhixian {
             assertTrue("Red Player's tile counter eventually goes out of bounds", playerR.used_tiles<MAX_TILES);
             assertFalse("Red Player's tile counter is not supposed to be negative", playerR.used_tiles<0);
         }
+
     }
 }
