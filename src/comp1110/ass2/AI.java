@@ -219,25 +219,25 @@ public class AI {
             o = placement.charAt(i+3);
             if (o=='A') {
                 for (int j= 0;j<=1;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(Math.max(65,tiley-1)));
-                for (int j=-1;j<=2;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+tiley);
-                for (int j=-1;j<=1;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(tiley+1));
+                for (int j=-1;j<=2;j+=3) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+tiley);
+                for (int j=-1;j<=1;j+=2) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(tiley+1));
                 tiles.add(""+tilex+(char)(Math.min(90,tiley+2)));
             }
             if (placement.charAt(i+3)=='B') {
                 for (int j=-1;j<=0;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(Math.max(65,tiley-1)));
-                for (int j=-2;j<=1;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+tiley);
-                for (int j=-1;j<=1;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(tiley+1));
+                for (int j=-2;j<=1;j+=3) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+tiley);
+                for (int j=-1;j<=1;j+=2) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(tiley+1));
                 tiles.add(""+tilex+(char)(Math.min(90,tiley+2)));
             }
             if (placement.charAt(i+3)=='C') {
-                for (int j=-1;j<=1;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(tiley-1));
-                for (int j=-2;j<=1;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+tiley);
+                for (int j=-1;j<=1;j+=2) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(tiley-1));
+                for (int j=-2;j<=1;j+=3) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+tiley);
                 for (int j=-1;j<=0;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(Math.min(90,tiley+1)));
                 tiles.add(""+tilex+(char)(Math.max(65,tiley-2)));
             }
             if (placement.charAt(i+3)=='D') {
-                for (int j=-1;j<=1;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(tiley-1));
-                for (int j=-1;j<=2;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+tiley);
+                for (int j=-1;j<=1;j+=2) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(tiley-1));
+                for (int j=-1;j<=2;j+=3) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+tiley);
                 for (int j=0;j<=1;j++) tiles.add(""+(char)(Math.min(90,Math.max(65,tilex+j)))+(char)(Math.min(90,tiley+1)));
                 tiles.add(""+tilex+(char)(Math.max(65,tiley-2)));
             }
