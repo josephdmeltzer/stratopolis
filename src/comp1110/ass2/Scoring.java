@@ -23,7 +23,7 @@ public final class Scoring {
     *  Do NOT add any methods to try and access/write to them. */
     /*private static int[][] flags = new int[BOARD_SIZE][BOARD_SIZE];*/
     private static Colour[][] colours;
-    private static Colour[][] colours2;
+    private static Colour[][] colours2 = new Colour[26][26];
     private static int[][] heights = new int[BOARD_SIZE][BOARD_SIZE];
     private static int[][] candidates = new int[400][2]; // An upper bound for the number of contiguous regions of a certain colour
     private static boolean winnerByChance; // If this bool is true, you'll know that the winner has been determined by chance.
