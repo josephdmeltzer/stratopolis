@@ -185,7 +185,13 @@ public final class Scoring {
     static int getScore(String placement, boolean green) {
 
         colours = colourArray(placement);
-        colours2 = colourArray(placement);
+
+        for (int i = 0; i < 26; i++){
+            for (int j = 0; j < 26; j++){
+                colours2[i][j] = colours[i][j];
+            }
+        }
+        /* colours2 = colourArray(placement); */
         heights = heightArray(placement);
 
 

@@ -166,7 +166,7 @@ public class StratoGame {
         return coverage;
     }
 
-    /*Exploit the fact that a tile on top, must completely lie within the boundaries formed by other placements*/
+    /*Exploit the fact that a tile on top must completely lie within the boundaries formed by other placements*/
     private static boolean isPlacementAdjacent2(String placement){
 
         int coverage[][] = new int[26][26];
