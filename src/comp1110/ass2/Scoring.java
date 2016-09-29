@@ -188,19 +188,7 @@ public final class Scoring {
         colours2 = colourArray(placement);
         heights = heightArray(placement);
 
-        /*for (int i = 0; i < BOARD_SIZE; i++){
-            for (int j = 0; j < BOARD_SIZE; j++){
-                System.out.println("i: " + i + " j: " + j + " " + heights[i][j]);
-            }
-        }*/
 
-        /*
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                flags[i][j] = 0;
-            }
-        }
-        */
         int k = 0;
 
         /*reset candidate values to 0*/
@@ -209,12 +197,7 @@ public final class Scoring {
             candidates[i][1] = 0;
         }
 
-        /*
-        flags[12][12] = 1;
-        flags[12][13] = 1;
-        */
-
-        // check if colour is the required one and corresponding flag is 0. If yes, proceed to find the corresponding score
+        // check if colour is the required one. If yes, proceed to find the corresponding score
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
