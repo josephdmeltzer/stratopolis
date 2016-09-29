@@ -25,7 +25,8 @@ public final class Scoring {
     private static Colour[][] colours;
     private static Colour[][] colours2 = new Colour[26][26];
     private static int[][] heights = new int[BOARD_SIZE][BOARD_SIZE];
-    private static int[][] candidates = new int[400][2]; // An upper bound for the number of contiguous regions of a certain colour
+    private static final int REGIONS = 36;
+    private static int[][] candidates = new int[REGIONS][2]; // An upper bound for the number of contiguous regions of a certain colour
     private static boolean winnerByChance; // If this bool is true, you'll know that the winner has been determined by chance.
 
     /**
@@ -37,8 +38,8 @@ public final class Scoring {
     public static boolean getWinner(String placement) {
 
         winnerByChance = false;
-        int[][] greenStuff = new int[400][2];
-        int[][] redStuff = new int[400][2];
+        int[][] greenStuff = new int[REGIONS][2];
+        int[][] redStuff = new int[REGIONS][2];
 
         /*1. call getScore for green
         * 2. have a copy of the candidates
@@ -49,7 +50,7 @@ public final class Scoring {
         * 7. Base case - rand value*/
         int greenScore = getScore(placement, true);
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             greenStuff[i][0] = candidates[i][0];
             greenStuff[i][1] = candidates[i][1];
             if (candidates[i][0] == 0)
@@ -68,7 +69,7 @@ public final class Scoring {
 
         /*At this point we know that both are tied up till now*/
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             redStuff[i][0] = candidates[i][0];
             redStuff[i][1] = candidates[i][1];
             if (candidates[i][0] == 0)
@@ -92,13 +93,13 @@ public final class Scoring {
         int redMax = 0;
         int greenMax = 0;
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             redMax = redMax > red[i][0] ? redMax : red[i][0];
             if (red[i][0] == 0)
                 break;
         }
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             greenMax = greenMax > green[i][0] ? greenMax : green[i][0];
             if (green[i][0] == 0)
                 break;
@@ -107,13 +108,13 @@ public final class Scoring {
         int redH = 0;
         int greenH = 0;
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             if (red[i][0] == 0)
                 break;
             redH = (red[i][0] == redMax && red[i][1] > redH ? red[i][1] : redH);
         }
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             if (green[i][0] == 0)
                 break;
             greenH = (green[i][0] == greenMax && green[i][1] > greenH ? green[i][1] : greenH);
@@ -122,7 +123,7 @@ public final class Scoring {
         /*remove max and shift everything*/
         int flag = 0;
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             if (red[i][0] == redMax && red[i][1] == redH) {
                 if (flag == 0) {
                     flag = 1;
@@ -143,7 +144,7 @@ public final class Scoring {
         /*same thing with the green array*/
         flag = 0;
 
-        for (int j = 0; j < 400; j++) {
+        for (int j = 0; j < REGIONS; j++) {
             if (green[j][0] == greenMax && green[j][1] == greenH) {
                 if (flag == 0) {
                     flag += 1; // Fooled IntelliJ into stop complaining about duplicated code. Remove that `+` and you'll see what I mean
@@ -187,18 +188,15 @@ public final class Scoring {
         colours = colourArray(placement);
 
         for (int i = 0; i < 26; i++){
-            for (int j = 0; j < 26; j++){
-                colours2[i][j] = colours[i][j];
-            }
+            System.arraycopy(colours[i], 0, colours2[i], 0, 26);
         }
-        /* colours2 = colourArray(placement); */
+        
         heights = heightArray(placement);
-
-
+        
         int k = 0;
 
         /*reset candidate values to 0*/
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             candidates[i][0] = 0;
             candidates[i][1] = 0;
         }
@@ -224,14 +222,14 @@ public final class Scoring {
         int maxArea = 1;
         int maxHeight = 1;
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             // System.out.println(i + "\t" + candidates[i][0] + "\t" + candidates[i][1]);
             if (candidates[i][0] == 0)
                 break;
             maxArea = (candidates[i][0] > maxArea ? candidates[i][0] : maxArea);
         }
 
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < REGIONS; i++) {
             if (candidates[i][0] == 0)
                 break;
             maxHeight = (candidates[i][0] == maxArea && candidates[i][1] > maxHeight ? candidates[i][1] : maxHeight);
