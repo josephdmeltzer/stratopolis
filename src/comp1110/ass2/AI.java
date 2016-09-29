@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 import static comp1110.ass2.Scoring.getScore;
@@ -117,7 +118,6 @@ public class AI {
                     }
                 }
             }
-            System.out.println(bestMove);
             return new moveScore(bestMove, bestScore);
         }
         else {
@@ -164,9 +164,10 @@ public class AI {
             return x;
         }
         float counter = 0.0f;
-//        ArrayList<Character> noDupsPieces = new ArrayList<>(new HashSet<>(pieceArray));
-        for (Character piece : pieceArray) {
-            counter = counter + probAB(placement, piece, depth, a, b, maximising, initialGreen).score;
+        ArrayList<Character> noDupsPieces = new ArrayList<>(new HashSet<>(pieceArray));
+        for (Character piece : noDupsPieces) {
+            if(Collections.frequency(pieceArray, piece)>1) counter = counter + 2 * probAB(placement, piece, depth, a, b, maximising, initialGreen).score;
+            else counter = counter + 2 * probAB(placement, piece, depth, a, b, maximising, initialGreen).score;
         }
         return counter/pieceArray.size();
     }
