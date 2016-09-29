@@ -1,11 +1,7 @@
 package comp1110.ass2;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static comp1110.ass2.Scoring.getScore;
 import static comp1110.ass2.StratoGame.isPlacementValid;
@@ -160,7 +156,7 @@ public class AI {
     public static float average(String placement, ArrayList<Character> pieceArray, int depth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0 || pieceArray.size()==0) return getScore(placement, initialGreen)-getScore(placement, !initialGreen);
         float counter = 0.0f;
-        ArrayList<Character> noDupsPieces = new ArrayList<>(new HashSet<>(pieceArray));
+//        ArrayList<Character> noDupsPieces = new ArrayList<>(new HashSet<>(pieceArray));
         for (Character piece : pieceArray) {
             counter = counter + probAB(placement, piece, depth, a, b, maximising, initialGreen).score;
         }
@@ -247,12 +243,5 @@ public class AI {
             }
         }
         return tiles;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(validTiles("MMUA"));
-        System.out.println(validTiles("MMUANLOB"));
-        System.out.println('A'+1-1);
-        System.out.println('Z'+1-1);
     }
 }
