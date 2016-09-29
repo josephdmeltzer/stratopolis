@@ -16,8 +16,8 @@ public class PlayerG extends Player {
     public static Colour playerColour = GREEN;
     public List available_tiles;
 
+    //this generates a valid list of tiles
     private List movesG(){
-        //this generates a valid list of tiles
         ArrayList<Character> moves = new ArrayList<>();
         moves.add('K');
         moves.add('L');
@@ -42,6 +42,7 @@ public class PlayerG extends Player {
         Collections.shuffle(moves);
         return moves;
     }
+    /*Constructor for the class*/
     public PlayerG(){
         this.available_tiles = movesG();
         this.playerColour = GREEN;
