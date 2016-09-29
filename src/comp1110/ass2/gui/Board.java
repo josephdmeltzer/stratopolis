@@ -130,60 +130,154 @@ public class Board extends Application {
             gameState.greenPlayer = HUMAN;
             greenText.setText("Player Green: Human");
         });
+        greenHuman.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        DropShadow shadow = new DropShadow();
+
+        greenHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHuman.setEffect(shadow));
+        greenHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHuman.setEffect(null));
 
         Button greenEasy = new Button("AI: Easy");
         greenEasy.setOnAction(event-> {
             gameState.greenPlayer = EASY;
             greenText.setText("Player Green: Easy");
         });
+        greenEasy.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        greenEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenEasy.setEffect(shadow));
+        greenEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenEasy.setEffect(null));
 
         Button greenMedium = new Button("AI: Medium");
         greenMedium.setOnAction(event-> {
             gameState.greenPlayer = MEDIUM;
             greenText.setText("Player Green: Medium");
         });
+        greenMedium.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        greenMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenMedium.setEffect(shadow));
+        greenMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenMedium.setEffect(null));
 
         Button greenHard = new Button("AI: Hard");
         greenHard.setOnAction(event-> {
             gameState.greenPlayer = HARD;
             greenText.setText("Player Green: Hard");
         });
+        greenHard.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        greenHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHard.setEffect(shadow));
+        greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null));
 
         Button redHuman = new Button("Human");
         redHuman.setOnAction(event-> {
             gameState.redPlayer = HUMAN;
             redText.setText("Player Red: Human");
         });
+        redHuman.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        redHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redHuman.setEffect(shadow));
+        redHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redHuman.setEffect(null));
 
         Button redEasy = new Button("AI: Easy");
         redEasy.setOnAction(event-> {
             gameState.redPlayer = EASY;
             redText.setText("Player Red: Easy");
         });
+        redEasy.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        redEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redEasy.setEffect(shadow));
+        redEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redEasy.setEffect(null));
 
         Button redMedium = new Button("AI: Medium");
         redMedium.setOnAction(event-> {
             gameState.redPlayer = MEDIUM;
             redText.setText("Player Red: Medium");
         });
+        redMedium.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        redMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redMedium.setEffect(shadow));
+        redMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redMedium.setEffect(null));
 
         Button redHard = new Button("AI: Hard");
         redHard.setOnAction(event-> {
             gameState.redPlayer = HARD;
             redText.setText("Player Red: Hard");
         });
+        redHard.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        redHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redHard.setEffect(shadow));
+        redHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redHard.setEffect(null));
 
         Button startGame = new Button("Start");
         startGame.setOnAction(event-> {
             placementGrp.getChildren().clear();
             makePlayer();
         });
-        startGame.setLayoutX(450);
+        startGame.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        startGame.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> startGame.setEffect(shadow));
+        startGame.addEventHandler(MouseEvent.MOUSE_EXITED, event -> startGame.setEffect(null));
+        startGame.setLayoutX(446);
         startGame.setLayoutY(660);
 
         /*A button that created a scrolling text node that displays the instructions*/
         Button instructions = new Button("How to Play");
         instructions.setOnAction(event->  getInstructions() );
+        instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
+        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
+        instructions.setLayoutX(424);
+        instructions.setLayoutY(620);
 
         /*Layout*/
         HBox greenButtons = new HBox();
@@ -201,10 +295,10 @@ public class Board extends Application {
 
         VBox red = new VBox();
         red.getChildren().addAll(redText,redButtons);
-        red.setLayoutX(620);
+        red.setLayoutX(560);
         red.setLayoutY(600);
 
-        placementGrp.getChildren().addAll(green, red, startGame);
+        placementGrp.getChildren().addAll(green, red, startGame, instructions);
     }
 
     /*Function by Zhixian Wu. This function displays the instructions when called.*/
@@ -212,8 +306,16 @@ public class Board extends Application {
         GridPane mainInstruc = new GridPane();
         mainInstruc.setLayoutY(50);
         mainInstruc.setLayoutX(105);
+        mainInstruc.setHgap(5);
+        mainInstruc.setVgap(5);
 
         ScrollPane scroll = new ScrollPane();
+
+        Rectangle thickBorder = new Rectangle(750,520,Color.ANTIQUEWHITE);
+        thickBorder.setArcHeight(7);
+        thickBorder.setArcWidth(7);
+        thickBorder.setLayoutX(87);
+        thickBorder.setLayoutY(40);
 
         Text instructions = new Text("Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
@@ -253,24 +355,33 @@ public class Board extends Application {
                 " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum");
 
         instructions.setFont(Font.font("Arial", 16));
-
         instructions.setWrappingWidth(680);
 
         scroll.setContent(instructions);
-
-        scroll.setPrefViewportHeight(500.0);
+        scroll.setPrefViewportHeight(450.0);
         scroll.setPrefViewportWidth(700.0);
 
-        Button exitBtn = new Button("X");
-        exitBtn.setOnAction(event->  root.getChildren().remove(mainInstruc) );
+        Button exitBtn = new Button("x");
+        exitBtn.setOnAction(event->  root.getChildren().removeAll(mainInstruc,thickBorder) );
+        exitBtn.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        DropShadow shadow = new DropShadow();
+        exitBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, event ->  exitBtn.setEffect(shadow));
+        exitBtn.addEventHandler(MouseEvent.MOUSE_EXITED, event -> exitBtn.setEffect(null));
 
         mainInstruc.getChildren().addAll(scroll,exitBtn);
         GridPane.setRowIndex(scroll,1);
         GridPane.setColumnIndex(scroll,0);
         GridPane.setRowIndex(exitBtn,0);
-        GridPane.setColumnIndex(exitBtn,1);
+        GridPane.setColumnIndex(exitBtn,0);
+        GridPane.setHalignment(exitBtn, HPos.RIGHT);
 
-        root.getChildren().add(mainInstruc);
+        root.getChildren().addAll(thickBorder,mainInstruc);
     }
 
     /*Function by Zhixian Wu*/
@@ -316,6 +427,16 @@ public class Board extends Application {
                     }
                 }
             });
+            nextMove.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                    "        #090a0c,\n" +
+                    "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                    "        linear-gradient(#20262b, #191d22),\n" +
+                    "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                    "-fx-text-fill: white;");
+
+            DropShadow shadow = new DropShadow();
+            nextMove.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> nextMove.setEffect(shadow));
+            nextMove.addEventHandler(MouseEvent.MOUSE_EXITED, event -> nextMove.setEffect(null));
             nextMove.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
             nextMove.setLayoutY(650);
             controls.getChildren().add(nextMove);
@@ -426,25 +547,18 @@ public class Board extends Application {
 
         DropShadow shadow = new DropShadow();
 
-        menu.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-            menu.setEffect(shadow);
-        });
-        menu.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-            menu.setEffect(null);
-        });
+        menu.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> menu.setEffect(shadow));
+        menu.addEventHandler(MouseEvent.MOUSE_EXITED, event -> menu.setEffect(null));
 
 
 
 
         /*Scores by Manal Mohania*/
-        Rectangle r = new Rectangle();
+        Rectangle r = new Rectangle(170,80,Color.SANDYBROWN);
         r.setLayoutY(50);
         r.setLayoutX(735);
-        r.setWidth(170);
-        r.setHeight(80);
         r.setArcHeight(20);
         r.setArcWidth(20);
-        r.setFill(Color.SANDYBROWN);
         controls.getChildren().add(r);
 
         Text score = new Text("SCORES");
@@ -504,15 +618,11 @@ public class Board extends Application {
             }
         }
         /*Give the board thicker outer edges*/
-        Rectangle thickBorder = new Rectangle();
-        thickBorder.setWidth(size+8);
-        thickBorder.setHeight(size+8);
+        Rectangle thickBorder = new Rectangle(size+8,size+8,Color.BLACK);
         thickBorder.setArcHeight(7);
         thickBorder.setArcWidth(7);
-        thickBorder.setFill(Color.BLACK);
         thickBorder.setLayoutX(offset-4);
         thickBorder.setLayoutY(offset-4);
-        placementGrp.getChildren().add(thickBorder);
 
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
         playingBoard.setGridLinesVisible(false);
@@ -621,9 +731,7 @@ public class Board extends Application {
 
         /*The must be added in this order so the heights show on top of the tiles
         * and the interactive panes are on top of all of them.*/
-        placementGrp.getChildren().add(playingBoard);
-        placementGrp.getChildren().add(heightLabels);
-        placementGrp.getChildren().add(clickablePanes);
+        placementGrp.getChildren().addAll(thickBorder,playingBoard,heightLabels,clickablePanes);
     }
 
 
