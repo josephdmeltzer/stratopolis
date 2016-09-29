@@ -77,9 +77,9 @@ public class StratoGame {
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
-        if (!isPlacementAdjacent(placement)) {return false;}
+        if (!isPlacementAdjacent2(placement)) {return false;}
         if (!tileStraddle(placement)) return false;
-        if (!checkBounds(placement)) return false;
+       // if (!checkBounds(placement)) return false; // most likely this is not needed anymore, as its stuff has been incorporated in placementAdjacent. Do not remove this line though.
         return areColoursAlright(placement);
     }
 
@@ -164,6 +164,161 @@ public class StratoGame {
             }
         }
         return coverage;
+    }
+
+    /*Exploit the fact that a tile on top, must completely lie within the boundaries formed by other placements*/
+    private static boolean isPlacementAdjacent2(String placement){
+
+        int coverage[][] = new int[26][26];
+        coverage[12][12] = 1;
+        coverage[12][13] = 1;
+
+        for (int i = 4; i < placement.length(); i += 4){
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i + 1) - 'A';
+
+            if (coverage[col][row] != 0){
+                if (placement.charAt(i + 3) == 'A'){
+                    if (col == 25 || row == 25){
+                        return false;
+                    }
+                    if (!(coverage[1 + col][row] == coverage[col][1 + row] && coverage[1 + col][row] == coverage[col][row])) {
+                        return false;
+                    }
+                    coverage[col + 1][row]++;
+                    coverage[col][row + 1]++;
+                    continue;
+                }
+
+                else if (placement.charAt(i + 3) == 'B'){
+                    if (col == 0 || row == 25){return false;}
+                    if (!(coverage[col][row] == coverage[-1 + col][row] && coverage[-1 + col][row] == coverage[col][1 + row])) {
+                        return false;
+                    }
+                    coverage[-1 + col][row]++;
+                    coverage[col][row + 1]++;
+                    continue;
+                }
+
+                else if (placement.charAt(i + 3) == 'C'){
+                    if (col == 0 || row == 0){return false;}
+                    if (!(coverage[-1 + col][row] == coverage[col][row] && coverage[col][row] == coverage[col][-1 + row])) {
+                        return false;
+                    }
+                    coverage[-1 + col][row]++;
+                    coverage[col][-1 + row]++;
+                    continue;
+                }
+                else if (placement.charAt(i + 3) == 'D'){
+                    if (col == 25 || row == 0){return false;}
+                    if (!(coverage[1 + col][row] == coverage[col][row] && coverage[col][row] == coverage[col][-1 + row])) {
+                        return false;
+                    }
+                    coverage[col + 1][row]++;
+                    coverage[col][-1 + row]++;
+                    continue;
+                }
+                else{
+                    System.out.println("isOnTop, adjacent2: should not reach here");
+                }
+            }
+
+            if (placement.charAt(i+3) == 'A'){
+                if ((col < 25 && coverage[1 + col][row] != 0) ||
+                        (row < 25 && coverage[col][1 + row] != 0)){
+                    return false;}
+                if ((!(2 + col < 26) || coverage[2 + col][row] == 0) &&
+                        (!(1 + col < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
+                        (!(col + 1 < 26 && row + 1 < 26) || coverage[1 + col][1 + row] == 0) &&
+                        (!(row - 1 >= 0) || coverage[col][-1 + row] == 0) &&
+                        (!(row + 2 < 26) || coverage[col][2 + row] == 0) &&
+                        (!(col - 1 >= 0) || coverage[-1 + col][row] == 0) &&
+                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0)){
+                    return false;
+                }
+
+                if (col == 25 || row == 25) {
+                    return false;
+                }
+                coverage[col][row] = 1;
+                coverage[1 + col][row] = 1;
+                coverage[col][1 + row] = 1;
+            }
+
+            else if (placement.charAt(i+3) == 'B'){
+                if ((col - 1 >= 0 && coverage[-1 + col][row] != 0) ||
+                        (row + 1 < 26 && coverage[col][1 + row] != 0)) {
+                    return false;
+                }
+                if (((!(1 + col < 26) || coverage[1 + col][row] == 0) &&
+                        (!(1 + col < 26 && 1 + row < 26) || coverage[1 + col][1 + row] == 0) &&
+                        (!(row - 1 >= 0) || coverage[col][-1 + row] == 0) &&
+                        (!(row + 2 < 26) || coverage[col][2 + row] == 0) &&
+                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0) &&
+                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0) &&
+                        (!(col - 2 >= 0) || coverage[-2 + col][row] == 0))) {
+                    return false;
+                }
+
+                if (col == 0 || row == 25) {
+                    return false;
+                }
+                coverage[col][row] = 1;
+                coverage[-1 + col][row] = 1;
+                coverage[col][1 + row] = 1;
+            }
+
+            else if (placement.charAt(i+3) == 'C'){
+                if ((col - 1 >= 0 && coverage[-1 + col][row] != 0) ||
+                        (row - 1 >= 0 && coverage[col][-1 + row] != 0)) {
+                    return false;
+                }
+                if ((!(col + 1 < 26) || coverage[1 + col][row] == 0 ) &&
+                        (!(col + 1 < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
+                        (!(row - 2 >= 0) || coverage[col][-2 + row] == 0) &&
+                        (!(row + 1 < 26) || coverage[col][1 + row] == 0) &&
+                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0) &&
+                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0) &&
+                        (!(col - 2 >= 0) || coverage[-2 + col][row] == 0)){
+                    return false;
+                }
+
+                if (col == 0  || row == 0 ) {
+                    return false;
+                }
+                coverage[col][row] = 1;
+                coverage[-1 + col][row] = 1;
+                coverage[col][-1 + row] = 1;
+            }
+
+            else if (placement.charAt(i+3) == 'D'){
+                if ((col + 1 < 26 && coverage[1 + col][row] != 0) ||
+                        (row - 1 >= 0 && coverage[col][-1 + row] != 0)){
+                    return false;
+                }
+                if ((!(col + 2 < 26) || coverage[2 + col][row] == 0) &&
+                        (!(col + 1 < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
+                        (!(col + 1 < 26 && row + 1 < 26) || coverage[1 + col][1 + row] == 0) &&
+                        (!(row - 2 >= 0) || coverage[col][-2 + row] == 0) &&
+                        (!(row + 1 < 26) || coverage[col][1 + row] == 0) &&
+                        (!(col - 1 >= 0) || coverage[-1 + col][row] == 0) &&
+                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0)){
+                    return false;
+                }
+
+                if (col == 25 || row == 0) {
+                    return false;
+                }
+                coverage[col][row] = 1;
+                coverage[1 + col][row] = 1;
+                coverage[col][-1 + row] = 1;
+            }
+            else {
+                System.out.println("isPlacementAdjacent: should not reach here");
+            }
+
+        }
+        return true;
     }
 
     /**

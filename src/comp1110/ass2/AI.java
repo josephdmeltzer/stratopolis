@@ -120,6 +120,7 @@ public class AI {
                     }
                 }
             }
+            System.out.println(bestMove);
             return new moveScore(bestMove, bestScore);
         }
         else {
@@ -141,6 +142,7 @@ public class AI {
                     }
                 }
             }
+            System.out.println(bestMove);
             return new moveScore(bestMove, bestScore);
         }
     }
@@ -157,7 +159,13 @@ public class AI {
      * @return              The expected value of the score given the board state and available moves.
      */
     public static float average(String placement, ArrayList<Character> pieceArray, int depth, float a, float b, boolean maximising, boolean initialGreen) {
-        if (depth==0 || pieceArray.size()==0) return getScore(placement, initialGreen)-getScore(placement, !initialGreen);
+        if (depth==0 || pieceArray.size()==0) {
+            long init = System.currentTimeMillis();
+            float x = getScore(placement, initialGreen)-getScore(placement, !initialGreen);
+            long fin = System.currentTimeMillis();
+            System.out.println("scoring: " + (fin - init));
+            return x;
+        }
         float counter = 0.0f;
         ArrayList<Character> noDupsPieces = new ArrayList<>(new HashSet<>(pieceArray));
         for (Character piece : pieceArray) {
