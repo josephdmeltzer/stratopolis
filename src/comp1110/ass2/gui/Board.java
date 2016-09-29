@@ -138,7 +138,7 @@ public class Board extends Application {
             char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
             String opponent;
             /* Condition for using the probabilistic AI. pAI is only really playable for the last 1 move. */
-            if (AI.piecesLeft(boardState.moveHistory, true).size() <= 1) {
+            if (AI.piecesLeft(boardState.moveHistory, true).size() >= 0) {
                 opponent = generateMove(boardState.moveHistory, greenTile, redTile);
             }
             else {
@@ -636,7 +636,7 @@ public class Board extends Application {
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent;
                 /* Joseph Meltzer: Condition for using the probabilistic AI. AI is only really playable for the last 1 move. */
-                if (AI.piecesLeft(boardState.moveHistory, false).size() <= 1) {
+                if (AI.piecesLeft(boardState.moveHistory, false).size() >= 0) {
                     opponent = generateMove(boardState.moveHistory, redTile, greenTile);
                 }
                 else {
@@ -714,7 +714,7 @@ public class Board extends Application {
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 String opponent;
                 /* Condition for using the probabilistic AI. pAI is only really playable for the last 1 move. */
-                if (AI.piecesLeft(boardState.moveHistory, true).size() <= 1) {
+                if (AI.piecesLeft(boardState.moveHistory, true).size() >= 0) {
                     opponent = generateMove(boardState.moveHistory, greenTile, redTile);
                 }
                 else {
