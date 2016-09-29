@@ -3,13 +3,10 @@ package comp1110.ass2;
 import org.junit.Test;
 
 import static comp1110.ass2.AI.alphabeta;
-import static comp1110.ass2.AI.checkOrder;
 import static comp1110.ass2.Scoring.getScore;
 import static comp1110.ass2.StratoGame.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static comp1110.ass2.TestUtility.*;
-import java.util.Random;
 
 /**
  * Created by Joseph Meltzer on 13/09/2016.

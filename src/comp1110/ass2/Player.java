@@ -10,6 +10,7 @@ public class Player {
     public static final int MAX_TILES = 20; /*The number of tiles each player is supposed to have*/
     public char rotation = 'A';
 
+    /*Rotates the tile of the player*/
     public void rotateTile() {
         switch (this.rotation) {
             case 'A':
@@ -25,6 +26,7 @@ public class Player {
                 this.rotation = 'A';
         }
     }
+    /*Moves the used_tiles counter so you know which tile is next for the player*/
     public void getNextTile(){
         if (this.used_tiles < MAX_TILES-1){
             used_tiles++;

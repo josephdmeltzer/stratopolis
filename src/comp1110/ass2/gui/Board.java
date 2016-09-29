@@ -3,6 +3,7 @@ package comp1110.ass2.gui;
 import comp1110.ass2.*;
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -26,13 +27,12 @@ import comp1110.ass2.StratoGame;
 import static comp1110.ass2.Colour.BLACK;
 import static comp1110.ass2.Colour.GREEN;
 import static comp1110.ass2.Colour.RED;
+import static comp1110.ass2.Difficulty.*;
 import static comp1110.ass2.Player.MAX_TILES;
-import static comp1110.ass2.StratoGame.genMoveMedium;
-import static comp1110.ass2.StratoGame.generateMove;
 import static comp1110.ass2.PlayingMode.PlayerIsGreen;
 import static comp1110.ass2.PlayingMode.PlayerIsRed;
 import static comp1110.ass2.PlayingMode.TwoPlayers;
-import static comp1110.ass2.StratoGame.heightArray;
+import static comp1110.ass2.StratoGame.*;
 
 public class Board extends Application {
 
@@ -77,11 +77,11 @@ public class Board extends Application {
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
     private static final String URI_BASE = "assets/";
-    private static final int TILE_SIZE = 24;
+    private static final int TILE_SIZE = 25;
     private static final int BOARD_SIZE = 26;
 
     /*Some fields for initial conditions.*/
-    private BoardState boardState;
+    private GameState gameState;
     private PlayerG playerG;
     private PlayerR playerR;
 
@@ -110,62 +110,101 @@ public class Board extends Application {
 
     /*Function by Zhixian Wu*/
     private void initialSettings() {
-        boardState  = new BoardState(BLACK, TwoPlayers);
+        playingBoard.setOpacity(1);
+        heightLabels.setOpacity(1);
 
-        Text introtext = new Text("Choose playing mode");
+        gameState  = new GameState(BLACK, HUMAN, HUMAN);
 
-        placementGrp.getChildren().add(introtext);
+        Text greenText = new Text("Player Green: Human");
+        greenText.setFill(Color.GREEN);
+        greenText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+        Text redText = new Text("Player Red: Human");
+        redText.setFill(Color.RED);
+        redText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+
 
         /*Each of these buttons tell the game if you want a two player game, or
         * to play as green or red against an AI*/
-        Button playAsGreen = new Button("Play as Green");
-        playAsGreen.setOnAction(event-> {
-            placementGrp.getChildren().clear();
-            boardState.playingMode = PlayerIsGreen;
-
-            makePlayer();
+        Button greenHuman = new Button("Human");
+        greenHuman.setOnAction(event-> {
+            gameState.greenPlayer = HUMAN;
+            greenText.setText("Player Green: Human");
         });
 
-        Button playAsRed = new Button("Play as Red");
-        playAsRed.setOnAction(event-> {
-            placementGrp.getChildren().clear();
-            boardState.playingMode = PlayerIsRed;
-
-            makePlayer();
-
-                /*Makes the opponent's move first*/
-            char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-            char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-            String opponent;
-            /* Condition for using the probabilistic AI. pAI is only really playable for the last 1 move. */
-            if (AI.piecesLeft(boardState.moveHistory, true).size() >= 0) {
-                opponent = generateMove(boardState.moveHistory, greenTile, redTile);
-            }
-            else {
-                opponent = genMoveMedium(boardState.moveHistory, greenTile, redTile);
-            }
-            makeGUIPlacement(opponent);
+        Button greenEasy = new Button("AI: Easy");
+        greenEasy.setOnAction(event-> {
+            gameState.greenPlayer = EASY;
+            greenText.setText("Player Green: Easy");
         });
 
-        Button twoPlayer = new Button("Two players");
-        twoPlayer.setOnAction(event-> {
+        Button greenMedium = new Button("AI: Medium");
+        greenMedium.setOnAction(event-> {
+            gameState.greenPlayer = MEDIUM;
+            greenText.setText("Player Green: Medium");
+        });
+
+        Button greenHard = new Button("AI: Hard");
+        greenHard.setOnAction(event-> {
+            gameState.greenPlayer = HARD;
+            greenText.setText("Player Green: Hard");
+        });
+
+        Button redHuman = new Button("Human");
+        redHuman.setOnAction(event-> {
+            gameState.redPlayer = HUMAN;
+            redText.setText("Player Red: Human");
+        });
+
+        Button redEasy = new Button("AI: Easy");
+        redEasy.setOnAction(event-> {
+            gameState.redPlayer = EASY;
+            redText.setText("Player Red: Easy");
+        });
+
+        Button redMedium = new Button("AI: Medium");
+        redMedium.setOnAction(event-> {
+            gameState.redPlayer = MEDIUM;
+            redText.setText("Player Red: Medium");
+        });
+
+        Button redHard = new Button("AI: Hard");
+        redHard.setOnAction(event-> {
+            gameState.redPlayer = HARD;
+            redText.setText("Player Red: Hard");
+        });
+
+        Button startGame = new Button("Start");
+        startGame.setOnAction(event-> {
             placementGrp.getChildren().clear();
-            boardState.playingMode = TwoPlayers;
             makePlayer();
         });
+        startGame.setLayoutX(450);
+        startGame.setLayoutY(660);
 
         /*A button that created a scrolling text node that displays the instructions*/
         Button instructions = new Button("How to Play");
         instructions.setOnAction(event->  getInstructions() );
 
         /*Layout*/
-        VBox vb = new VBox();
-        vb.getChildren().addAll(introtext,twoPlayer,playAsRed,playAsGreen,instructions);
-        vb.setSpacing(10);
-        vb.setLayoutX(300);
-        vb.setLayoutY(150);
+        HBox greenButtons = new HBox();
+        greenButtons.getChildren().addAll(greenHuman,greenEasy,greenMedium,greenHard);
+        greenButtons.setSpacing(10);
 
-        placementGrp.getChildren().addAll(vb);
+        VBox green = new VBox();
+        green.getChildren().addAll(greenText,greenButtons);
+        green.setLayoutX(50);
+        green.setLayoutY(600);
+
+        HBox redButtons = new HBox();
+        redButtons.getChildren().addAll(redHuman,redEasy,redMedium,redHard);
+        redButtons.setSpacing(10);
+
+        VBox red = new VBox();
+        red.getChildren().addAll(redText,redButtons);
+        red.setLayoutX(620);
+        red.setLayoutY(600);
+
+        placementGrp.getChildren().addAll(green, red, startGame);
     }
 
     /*Function by Zhixian Wu. This function displays the instructions when called.*/
@@ -245,7 +284,44 @@ public class Board extends Application {
         /*Makes the controls for the game, separately from the board*/
         makeControls();
 
-        makeGUIPlacement("MMUA");
+        /*Plays the game for two AI*/
+        if (gameState.greenPlayer!=HUMAN && gameState.redPlayer!=HUMAN) {
+            makeGUIPlacement("MMUA");
+
+
+            Button nextMove = new Button("Next Move");
+            nextMove.setOnAction(event->  {
+                if (gameState.moveHistory.length()<=MAX_TILES*8){
+                    if (gameState.playerTurn==GREEN){
+                        char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                        char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                        String opponent;
+
+
+                        opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
+                        if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
+                        if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
+
+                        makeGUIPlacement(opponent);
+                    } else{
+                        char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                        char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                        String opponent2;
+
+                        opponent2 = genMoveEasy(gameState.moveHistory, redTile, greenTile);
+                        if (gameState.greenPlayer == MEDIUM) opponent2 = genMoveMedium(gameState.moveHistory, redTile, greenTile);
+                        if (gameState.greenPlayer == HARD) opponent2 = generateMove(gameState.moveHistory, redTile, greenTile);
+
+                        makeGUIPlacement(opponent2);
+                    }
+                }
+            });
+            nextMove.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
+            nextMove.setLayoutY(650);
+            controls.getChildren().add(nextMove);
+        }
+
+
     }
 
     /*Function mostly by Zhixian Wu, with the running score by Manal Mohania*/
@@ -256,19 +332,12 @@ public class Board extends Application {
         playerControls.setMaxSize(120, 200);
 
         /*The text labeling Green and Red's tiles, which you see on the right*/
-        if (boardState.playingMode==PlayerIsRed){
-            greentxt.setFill(Color.GREEN);
-            greentxt.setFont(Font.font("Verdana", 14));
+        greentxt.setFill(Color.GREEN);
+        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
 
-            redtxt.setFill(Color.RED);
-            redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-        } else{
-            greentxt.setFill(Color.GREEN);
-            greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+        redtxt.setFill(Color.RED);
+        redtxt.setFont(Font.font("Verdana", 14));
 
-            redtxt.setFill(Color.RED);
-            redtxt.setFont(Font.font("Verdana", 14));
-        }
 
 
         /*The tiles at the "top" of each player's "stack", displayed on the right*/
@@ -300,9 +369,9 @@ public class Board extends Application {
         });
 
         /*Adding the nodes. We may omit the a rotate button depending on the playingMode*/
-        if (boardState.playingMode==TwoPlayers) playerControls.getChildren().addAll(greentxt,redtxt,rotateG,rotateR,ivg,ivr);
-        if (boardState.playingMode==PlayerIsGreen) playerControls.getChildren().addAll(greentxt,redtxt,rotateG,ivg,ivr);
-        if (boardState.playingMode==PlayerIsRed) playerControls.getChildren().addAll(greentxt,redtxt,rotateR,ivg,ivr);
+        playerControls.getChildren().addAll(greentxt,redtxt,ivg,ivr);
+        if (gameState.greenPlayer==HUMAN) playerControls.getChildren().add(rotateG);
+        if (gameState.redPlayer==HUMAN) playerControls.getChildren().add(rotateR);
 
         /*Layout*/
         GridPane.setColumnIndex(ivg,0);
@@ -318,7 +387,7 @@ public class Board extends Application {
         GridPane.setColumnIndex(redtxt,1);
         GridPane.setRowIndex(redtxt,2);
 
-        playerControls.setLayoutX((TILE_SIZE+1)*BOARD_SIZE+85);
+        playerControls.setLayoutX(TILE_SIZE*BOARD_SIZE+85);
         playerControls.setLayoutY(200);
 
         playerControls.setHgap(10);
@@ -347,7 +416,6 @@ public class Board extends Application {
         menu.setLayoutX(835);
         menu.setLayoutY(650);
 
-
         /*Changes have been made from this line onwards*/
         menu.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
@@ -358,8 +426,14 @@ public class Board extends Application {
 
         DropShadow shadow = new DropShadow();
 
-        menu.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> menu.setEffect(shadow));
-        menu.addEventHandler(MouseEvent.MOUSE_EXITED, event -> menu.setEffect(null));
+        menu.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            menu.setEffect(shadow);
+        });
+        menu.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            menu.setEffect(null);
+        });
+
+
 
 
         /*Scores by Manal Mohania*/
@@ -382,19 +456,19 @@ public class Board extends Application {
         greenScore.setLayoutY(103);
         greenScore.setFill(Color.GREEN);
         greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
-        controls.getChildren().add(greenScore);
+        updateGreenScore();
 
         redScore.setLayoutX(830);
         redScore.setLayoutY(103);
         redScore.setFill(Color.RED);
         redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
-        controls.getChildren().add(redScore);
+        updateRedScore();
 
     }
 
     /*Function mostly by Zhixian Wu, with minor changes by Manal Mohania (indicated below)*/
     private void makeBoard(){
-        int size = (TILE_SIZE + 1) * BOARD_SIZE;
+        int size = TILE_SIZE * BOARD_SIZE;
         int offset = (BOARD_HEIGHT - size) / 2;
         playingBoard.setPrefSize(size, size);
         playingBoard.setMaxSize(size, size);
@@ -402,11 +476,11 @@ public class Board extends Application {
         if (firstGame){
             /*determines the size of the rows and columns of the playing board*/
             for (int i = 0; i < BOARD_SIZE; i++) {
-                RowConstraints row = new RowConstraints(TILE_SIZE+1);
+                RowConstraints row = new RowConstraints(TILE_SIZE);
                 playingBoard.getRowConstraints().add(row);
             }
             for (int i = 0; i < BOARD_SIZE; i++) {
-                ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
+                ColumnConstraints column = new ColumnConstraints(TILE_SIZE);
                 playingBoard.getColumnConstraints().add(column);
             }
         }
@@ -419,7 +493,7 @@ public class Board extends Application {
         /*Creates white squares on a black background for the board*/
         for (int i=0; i<BOARD_SIZE;i++){
             for (int j=0; j<BOARD_SIZE; j++){
-                int rectSize = TILE_SIZE-1;
+                int rectSize = TILE_SIZE-2;
                 Rectangle r = new Rectangle(rectSize, rectSize);
                 r.setFill(Color.web("rgb(230,228,221)")); /*Colour done by Manal Mohania*/
                 playingBoard.getChildren().add(r);
@@ -454,11 +528,11 @@ public class Board extends Application {
         if (firstGame){
             /*Determines the size of the grid rows and columns*/
             for (int i = 0; i < BOARD_SIZE; i++) {
-                RowConstraints row = new RowConstraints(TILE_SIZE+1);
+                RowConstraints row = new RowConstraints(TILE_SIZE);
                 heightLabels.getRowConstraints().add(row);
             }
             for (int i = 0; i < BOARD_SIZE; i++) {
-                ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
+                ColumnConstraints column = new ColumnConstraints(TILE_SIZE);
                 heightLabels.getColumnConstraints().add(column);
             }
         }
@@ -474,36 +548,21 @@ public class Board extends Application {
         if (firstGame){
             /*Determines the size of the grid rows and columns*/
             for (int i = 0; i < BOARD_SIZE; i++) {
-                RowConstraints row = new RowConstraints(TILE_SIZE+1);
+                RowConstraints row = new RowConstraints(TILE_SIZE);
                 clickablePanes.getRowConstraints().add(row);
             }
             for (int i = 0; i < BOARD_SIZE; i++) {
-                ColumnConstraints column = new ColumnConstraints(TILE_SIZE+1);
+                ColumnConstraints column = new ColumnConstraints(TILE_SIZE);
                 clickablePanes.getColumnConstraints().add(column);
             }
         }
 
+        Button instructions = new Button("How to Play");
+        instructions.setOnAction(event->  getInstructions() );
         /*What kind of function the pane calls when clicked depends on the playingMode.
         * Instead of checking what the playingMode is everytime a pane is clicked,
         * we check it now and create different panes depending on the playingMode*/
-        if (boardState.playingMode==PlayerIsGreen) {
-            for (int i=0; i<BOARD_SIZE;i++){
-                for (int j=0; j<BOARD_SIZE; j++){
-                    addPanePlayerGreen(i,j);
-                    addPanePlayerGreen(j,i);
-                }
-            }
-        }
-        if (boardState.playingMode==PlayerIsRed) {
-            for (int i=0; i<BOARD_SIZE;i++){
-                for (int j=0; j<BOARD_SIZE; j++){
-                /*Creates the clickable panes of the board*/
-                    addPanePlayerRed(i,j);
-                    addPanePlayerRed(j,i);
-                }
-            }
-        }
-        if (boardState.playingMode==TwoPlayers) {
+        if (gameState.greenPlayer==HUMAN && gameState.redPlayer==HUMAN) {
             for (int i=0; i<BOARD_SIZE;i++){
                 for (int j=0; j<BOARD_SIZE; j++){
                 /*Creates the clickable panes of the board*/
@@ -511,7 +570,51 @@ public class Board extends Application {
                     addPaneTwoPlayer(j,i);
                 }
             }
+            controls.getChildren().add(instructions);
+            instructions.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
+            instructions.setLayoutY(650);
+
+            makeGUIPlacement("MMUA");
         }
+        if (gameState.greenPlayer==HUMAN && gameState.redPlayer!=HUMAN) {
+            for (int i=0; i<BOARD_SIZE;i++){
+                for (int j=0; j<BOARD_SIZE; j++){
+                    addPanePlayerGreen(i,j);
+                    addPanePlayerGreen(j,i);
+                }
+            }
+            controls.getChildren().add(instructions);
+            instructions.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
+            instructions.setLayoutY(650);
+
+            makeGUIPlacement("MMUA");
+        }
+        if (gameState.greenPlayer!=HUMAN && gameState.redPlayer==HUMAN) {
+            for (int i=0; i<BOARD_SIZE;i++){
+                for (int j=0; j<BOARD_SIZE; j++){
+                /*Creates the clickable panes of the board*/
+                    addPanePlayerRed(i,j);
+                    addPanePlayerRed(j,i);
+                }
+            }
+            controls.getChildren().add(instructions);
+            instructions.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
+            instructions.setLayoutY(650);
+
+            makeGUIPlacement("MMUA");
+
+            /*Makes the opponent's move first*/
+            char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+            char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+
+            String opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
+            if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
+            if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
+
+            makeGUIPlacement(opponent);
+        }
+
+
         /*Layout*/
         clickablePanes.setLayoutX(offset);
         clickablePanes.setLayoutY(offset);
@@ -538,7 +641,7 @@ public class Board extends Application {
         pane.setOnMouseClicked(event -> {
                 char col = (char) (colIndex+'A');
                 char row = (char) (rowIndex+'A');
-                switch (boardState.playerTurn){
+                switch (gameState.playerTurn){
                     case RED:
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
                         makeGUIPlacement(placement);
@@ -549,7 +652,7 @@ public class Board extends Application {
                         break;
                     case BLACK:
                         makeGUIPlacement("MMUA");
-                        boardState.playerTurn = GREEN;
+                        gameState.playerTurn = GREEN;
                         break;
                 }
 
@@ -559,7 +662,7 @@ public class Board extends Application {
             char col = (char) (colIndex + 'A');
             char row = (char) (rowIndex + 'A');
 
-            switch (boardState.playerTurn){
+            switch (gameState.playerTurn){
                 case RED:
                     String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
                     makeTempPlacement(iv, placement);
@@ -609,10 +712,10 @@ public class Board extends Application {
             String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
             makeGUIPlacement(placement);
 
-            int length = boardState.moveHistory.length()-2;
+            int length = gameState.moveHistory.length()-2;
             /*We only suggest the AI is thinking if it actually is, i.e. your move was valid,
              i.e. if the last move in moveHistory was yours*/
-            if ('K'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='T'){
+            if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(740);
@@ -622,29 +725,26 @@ public class Board extends Application {
 
         /*Event by Zhixian Wu and Joseph Meltzer. This event causes the AI to make its move when the mouse is released.*/
         pane.setOnMouseReleased(event -> {
-            int length = boardState.moveHistory.length()-2;
+            int length = gameState.moveHistory.length()-2;
+            System.out.println("addPanePlayerGreen, the moveHistory the AI uses: " + gameState.moveHistory);
 
             /*Zhixian Wu: The AI only makes its move if your move was valid, i.e. if the
             last move in moveHistory was yours*/
-            if ('K'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='T'){
+            if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                String opponent;
-                /* Joseph Meltzer: Condition for using the probabilistic AI. AI is only really playable for the last 1 move. */
-                if (AI.piecesLeft(boardState.moveHistory, false).size() >= 0) {
-                    opponent = generateMove(boardState.moveHistory, redTile, greenTile);
-                }
-                else {
-                    opponent = genMoveMedium(boardState.moveHistory, redTile, greenTile);
-                }
+                System.out.println("AI input tiles: Green: " + greenTile + ", Red: " + redTile);
+
+                String opponent = genMoveEasy(gameState.moveHistory, redTile, greenTile);
+                if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, redTile, greenTile);
+                if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, redTile, greenTile);
+
+                System.out.println("AI generates: "+opponent);
+                if (opponent=="") System.out.println("Empty string generated by AI");
                 makeGUIPlacement(opponent);
-                /*System.out.println("AI generates: "+opponent);
-                if (opponent=="") {
-                    System.out.println("Empty string generated by AI");
-                }*/
-            } /*else{
+            } else{
                 System.out.println("AI did not move");
-            }*/
+            }
         });
 
         clickablePanes.getChildren().add(pane);
@@ -683,10 +783,10 @@ public class Board extends Application {
             System.out.println("Red tried: " + placement);
             makeGUIPlacement(placement);
 
-            int length = boardState.moveHistory.length()-2;
+            int length = gameState.moveHistory.length()-2;
             /*We only suggest the AI is thinking if it actually is, i.e. if your
             move was valid, i.e. if the last move in moveHistory was yours*/
-            if ('A'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='J'){
+            if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J'){
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(740);
@@ -697,29 +797,26 @@ public class Board extends Application {
 
         /*Event by Zhixian Wu. This event causes the AI to make its move when the mouse is released.*/
         pane.setOnMouseReleased(event -> {
-            int length = boardState.moveHistory.length()-2;
+            int length = gameState.moveHistory.length()-2;
 
             /*The first two conditions check if your move was valid,
             by checking if the last move in moveHistory was yours.
             The AI only makes its move if your move was valid.
               The last condition checks if the game is not over yet,
             so te AI doesn't try to make a move after the game is over*/
-            if ('A'<=boardState.moveHistory.charAt(length) && boardState.moveHistory.charAt(length)<='J' && boardState.moveHistory.length()<MAX_TILES*8){
+            if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J' && gameState.moveHistory.length()<MAX_TILES*8){
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                String opponent;
-                /* Condition for using the probabilistic AI. pAI is only really playable for the last 1 move. */
-                if (AI.piecesLeft(boardState.moveHistory, true).size() >= 0) {
-                    opponent = generateMove(boardState.moveHistory, greenTile, redTile);
-                }
-                else {
-                    opponent = genMoveMedium(boardState.moveHistory, greenTile, redTile);
-                }
-                /*System.out.println("AI generates: "+opponent);
-                if (opponent=="") System.out.println("Empty string generated by AI");*/
+
+                String opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
+                if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
+                if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
+
+                System.out.println("AI generates: "+opponent);
+                if (opponent=="") System.out.println("Empty string generated by AI");
                 makeGUIPlacement(opponent);
             } else{
-                /*System.out.println("AI did not move");*/
+                System.out.println("AI did not move");
                 controls.getChildren().remove(aiThink);
             }
 
@@ -776,7 +873,7 @@ public class Board extends Application {
 
         /*remove error messages, if any. And set image according to the validity of the placement*/
         controls.getChildren().remove(errormessage);
-        if (StratoGame.isPlacementValid(boardState.moveHistory.concat(placement))) {
+        if (StratoGame.isPlacementValid(gameState.moveHistory.concat(placement))) {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
             iv.setOpacity(0.8);
         }
@@ -828,7 +925,7 @@ public class Board extends Application {
      * */
 
     private void updateGreenScore(){
-        String placement = boardState.moveHistory;
+        String placement = gameState.moveHistory;
         controls.getChildren().remove(greenScore);
         int score = StratoGame.getScoreForPlacement(placement, true);
         greenScore.setText("" + score);
@@ -841,7 +938,7 @@ public class Board extends Application {
     }
 
     private void updateRedScore(){
-        String placement = boardState.moveHistory;
+        String placement = gameState.moveHistory;
         controls.getChildren().remove(redScore);
         int score = StratoGame.getScoreForPlacement(placement, false);
         redScore.setText("" + score);
@@ -861,7 +958,7 @@ public class Board extends Application {
         controls.getChildren().remove(aiThink);
         System.out.println("Someone tried: " + placement); /*For debugging purposes*/
 
-        String tempMove = boardState.moveHistory.concat(placement);
+        String tempMove = gameState.moveHistory.concat(placement);
         if (!StratoGame.isPlacementValid(tempMove)) { /*If the attempted move is invalid*/
             errormessage.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
             controls.getChildren().add(errormessage);
@@ -902,7 +999,8 @@ public class Board extends Application {
                     GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 'A' - 1));
                     break;
             }
-            boardState.updateMoves(placement);
+            gameState.updateMoves(placement);
+            System.out.println("makeGUIPlacement updated moveHistory: " + gameState.moveHistory);
 
             /*Update the heights we're supposed to display*/
             displayHeights();
@@ -912,7 +1010,7 @@ public class Board extends Application {
             updateGreenScore();
 
             /*Update the top tiles shown on the control panel, whose turn it is, and whose turn is bolded.*/
-            switch (boardState.playerTurn) {
+            switch (gameState.playerTurn) {
                 case RED:
                     if (playerR.used_tiles<19){ /*If red still has tiles left*/
                         /*Update the red player's tile index*/
@@ -930,7 +1028,7 @@ public class Board extends Application {
                         playerR.getNextTile();
                     }
                     /*Update whose turn it is, and whose turn is bolded.*/
-                    boardState.playerTurn = GREEN;
+                    gameState.playerTurn = GREEN;
                     greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
                     redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
                     break;
@@ -951,30 +1049,34 @@ public class Board extends Application {
                         playerG.getNextTile();
                     }
                     /*Update whose turn it is, and whose turn is bolded.*/
-                    boardState.playerTurn = RED;
+                    gameState.playerTurn = RED;
                     greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
                     redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
                     break;
                 case BLACK:
-                    boardState.playerTurn = GREEN;
+                    gameState.playerTurn = GREEN;
                     break;
             }
 
             /*Checks if the game is over. If it is, we clear the board and display the winner.*/
-            if (boardState.moveHistory.length() > MAX_TILES*8) {
-                placementGrp.getChildren().clear();
+            if (gameState.moveHistory.length() > MAX_TILES*8) {
+                clickablePanes.getChildren().clear();
+                playingBoard.setOpacity(0.2);
+                heightLabels.setOpacity(0.2);
                 /*If green wins*/
-                if (Scoring.getWinner(boardState.moveHistory)){
+                if (Scoring.getWinner(gameState.moveHistory)){
                     Text score = new Text("Green Wins!");
+                    score.setFill(Color.GREEN);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
                     placementGrp.getChildren().add(score);
-                    score.setLayoutX(300);
+                    score.setLayoutX(280);
                     score.setLayoutY(300);
                 } else{ /*if red wins*/
                     Text score = new Text("Red Wins!");
+                    score.setFill(Color.RED);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
                     placementGrp.getChildren().add(score);
-                    score.setLayoutX(300);
+                    score.setLayoutX(290);
                     score.setLayoutY(300);
                 }
             }
@@ -987,7 +1089,7 @@ public class Board extends Application {
         /*Clear existing heights*/
         heightLabels.getChildren().clear();
         /*Make 2D array of the height at each position*/
-        int[][] heights = heightArray(boardState.moveHistory);
+        int[][] heights = heightArray(gameState.moveHistory);
         /*Recursively go through each tile and label its height*/
         for (int i=0; i<BOARD_SIZE;i++){
             for (int j=0; j<BOARD_SIZE; j++){

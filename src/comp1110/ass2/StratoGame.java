@@ -104,23 +104,23 @@ public class StratoGame {
             char orientation = placement.charAt(i + 3);
             /*based on the orientation change the appropriate colours*/
 
-            coverage[col][row] = getColours(piece)[0];
+            coverage[col][row] = Pieces.valueOf(""+piece).colours[0];
 
             if (orientation == 'A'){
-                coverage[col + 1][row] = getColours(piece)[1];
-                coverage[col][row + 1] = getColours(piece)[2];
+                coverage[col + 1][row] = Pieces.valueOf(""+piece).colours[1];
+                coverage[col][row + 1] = Pieces.valueOf(""+piece).colours[2];
             }
             else if (orientation == 'B'){
-                coverage[col][row + 1] = getColours(piece)[1];
-                coverage[col - 1][row] = getColours(piece)[2];
+                coverage[col][row + 1] = Pieces.valueOf(""+piece).colours[1];
+                coverage[col - 1][row] = Pieces.valueOf(""+piece).colours[2];
             }
             else if (orientation == 'C'){
-                coverage[col - 1][row] = getColours(piece)[1];
-                coverage[col][row - 1] = getColours(piece)[2];
+                coverage[col - 1][row] = Pieces.valueOf(""+piece).colours[1];
+                coverage[col][row - 1] = Pieces.valueOf(""+piece).colours[2];
             }
             else if (orientation == 'D'){
-                coverage[col][row - 1] = getColours(piece)[1];
-                coverage[col + 1][row] = getColours(piece)[2];
+                coverage[col][row - 1] = Pieces.valueOf(""+piece).colours[1];
+                coverage[col + 1][row] = Pieces.valueOf(""+piece).colours[2];
             }
             else
                 System.out.println("colourArray: should not reach here");
