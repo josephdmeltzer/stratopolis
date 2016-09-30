@@ -30,6 +30,7 @@ import static comp1110.ass2.Colour.RED;
 import static comp1110.ass2.Difficulty.*;
 import static comp1110.ass2.Player.MAX_TILES;
 import static comp1110.ass2.StratoGame.*;
+import static javafx.scene.paint.Color.*;
 
 public class Board extends Application {
 
@@ -95,6 +96,7 @@ public class Board extends Application {
     /*Various Groups that organise the screen.*/
     private final Group root = new Group();
     private final Group controls = new Group();
+    GridPane playerControls = new GridPane();
     private final Group placementGrp = new Group();
     private GridPane playingBoard = new GridPane();
     private GridPane heightLabels = new GridPane();
@@ -358,11 +360,12 @@ public class Board extends Application {
 
         ScrollPane scroll = new ScrollPane();
 
-        Rectangle thickBorder = new Rectangle(750,520,Color.ANTIQUEWHITE);
+        Rectangle thickBorder = new Rectangle(750,520,Color.BEIGE);
         thickBorder.setArcHeight(7);
         thickBorder.setArcWidth(7);
         thickBorder.setLayoutX(87);
         thickBorder.setLayoutY(40);
+        thickBorder.setOpacity(0.5);
 
         Text instructions = new Text("Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
@@ -448,34 +451,13 @@ public class Board extends Application {
 
 
             Button nextMove = new Button("Next Move");
-            nextMove.setOnAction(event->  {
-                if (gameState.moveHistory.length()<=MAX_TILES*8){
-                    if (gameState.playerTurn==GREEN){
-                        char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                        char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                        String opponent;
-
-
-                        opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
-                        if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
-                        if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
-                        if (gameState.greenPlayer == CHEATING) opponent = genMoveCheating(gameState.moveHistory, playerG, playerR);
-
-                        makeGUIPlacement(opponent);
-                    } else{
-                        char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                        char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                        String opponent2;
-
-                        opponent2 = genMoveEasy(gameState.moveHistory, redTile, greenTile);
-                        if (gameState.redPlayer == MEDIUM) opponent2 = genMoveMedium(gameState.moveHistory, redTile, greenTile);
-                        if (gameState.redPlayer == HARD) opponent2 = generateMove(gameState.moveHistory, redTile, greenTile);
-                        if (gameState.redPlayer == CHEATING) opponent2 = genMoveCheating(gameState.moveHistory, playerR, playerG);
-
-                        makeGUIPlacement(opponent2);
-                    }
-                }
+            nextMove.setOnMousePressed(event->  {
+                aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+                controls.getChildren().add(aiThink);
+                aiThink.setLayoutX(740);
+                aiThink.setLayoutY(400);
             });
+            nextMove.setOnAction(event->  makeAIMove());
             nextMove.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                     "        #090a0c,\n" +
                     "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
@@ -497,7 +479,6 @@ public class Board extends Application {
     /*Function mostly by Zhixian Wu, with the running score by Manal Mohania*/
     private void makeControls(){
         /*Make the control pane as a GridPane. This is the stuff on the right*/
-        GridPane playerControls = new GridPane();
         playerControls.setPrefSize(120, 200);
         playerControls.setMaxSize(120, 200);
 
@@ -577,6 +558,7 @@ public class Board extends Application {
             playingBoard.getChildren().clear();
             heightLabels.getChildren().clear();
             clickablePanes.getChildren().clear();
+            playerControls.getChildren().clear();
 
             firstGame = false;
 
@@ -718,6 +700,18 @@ public class Board extends Application {
 
         Button instructions = new Button("How to Play");
         instructions.setOnAction(event->  getInstructions() );
+
+        instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        DropShadow shadow = new DropShadow();
+        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
+        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
+
         /*What kind of function the pane calls when clicked depends on the playingMode.
         * Instead of checking what the playingMode is everytime a pane is clicked,
         * we check it now and create different panes depending on the playingMode*/
@@ -880,7 +874,7 @@ public class Board extends Application {
             }
         });
 
-        /*Event by Zhixian Wu and Joseph Meltzer. This event causes the AI to make its move when the mouse is released.*/
+        /*Event by Zhixian Wu. This event causes the AI to make its move when the mouse is released.*/
         pane.setOnMouseReleased(event -> {
             int length = gameState.moveHistory.length()-2;
             System.out.println("addPanePlayerGreen, the moveHistory the AI uses: " + gameState.moveHistory);
@@ -888,18 +882,7 @@ public class Board extends Application {
             /*Zhixian Wu: The AI only makes its move if your move was valid, i.e. if the
             last move in moveHistory was yours*/
             if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                System.out.println("AI input tiles: Green: " + greenTile + ", Red: " + redTile);
-
-                String opponent = genMoveEasy(gameState.moveHistory, redTile, greenTile);
-                if (gameState.redPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, redTile, greenTile);
-                if (gameState.redPlayer == HARD) opponent = generateMove(gameState.moveHistory, redTile, greenTile);
-                if (gameState.redPlayer == CHEATING) opponent = genMoveCheating(gameState.moveHistory, playerR, playerG);
-
-                System.out.println("AI generates: "+opponent);
-                if (opponent=="") System.out.println("Empty string generated by AI");
-                makeGUIPlacement(opponent);
+                makeAIMove();
             } else{
                 System.out.println("AI did not move");
             }
@@ -963,17 +946,7 @@ public class Board extends Application {
               The last condition checks if the game is not over yet,
             so te AI doesn't try to make a move after the game is over*/
             if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J' && gameState.moveHistory.length()<MAX_TILES*8){
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-
-                String opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
-                if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
-                if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
-                if (gameState.greenPlayer == CHEATING) opponent = genMoveCheating(gameState.moveHistory, playerG, playerR);
-
-                System.out.println("AI generates: "+opponent);
-                if (opponent=="") System.out.println("Empty string generated by AI");
-                makeGUIPlacement(opponent);
+                makeAIMove();
             } else{
                 System.out.println("AI did not move");
                 controls.getChildren().remove(aiThink);
@@ -1181,9 +1154,12 @@ public class Board extends Application {
                         ivr.setSmooth(true);
                         ivr.setCache(true);
                     } else{ /*If red does not still have tiles left, say they're our of tiles*/
-                        ivr.setRotate(0);
-                        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
-                        ivr.setRotate(0);
+                        Text outoftiles = new Text("Out of\n tiles");
+                        outoftiles.setFont(Font.font("", FontWeight.BOLD, 20));
+                        GridPane.setColumnIndex(outoftiles,1);
+                        GridPane.setRowIndex(outoftiles,0);
+                        playerControls.getChildren().remove(ivr);
+                        playerControls.getChildren().add(outoftiles);
                         playerR.getNextTile();
                     }
                     /*Update whose turn it is, and whose turn is bolded.*/
@@ -1202,9 +1178,12 @@ public class Board extends Application {
                         ivg.setSmooth(true);
                         ivg.setCache(true);
                     } else{ /*If green does not still have tiles left, say they're out of tiles*/
-                        ivg.setRotate(0);
-                        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + "outoftiles.png").toString()));
-                        ivg.setRotate(0);
+                        Text outoftiles = new Text("Out of\n tiles");
+                        outoftiles.setFont(Font.font("", FontWeight.BOLD, 20));
+                        GridPane.setColumnIndex(outoftiles,0);
+                        GridPane.setRowIndex(outoftiles,0);
+                        playerControls.getChildren().remove(ivg);
+                        playerControls.getChildren().add(outoftiles);
                         playerG.getNextTile();
                     }
                     /*Update whose turn it is, and whose turn is bolded.*/
@@ -1242,6 +1221,35 @@ public class Board extends Application {
         }
     }
 
+    private void makeAIMove(){
+        if (gameState.moveHistory.length()<=MAX_TILES*8){
+            if (gameState.playerTurn==GREEN){
+                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                String opponent;
+
+
+                opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
+                if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
+                if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
+                if (gameState.greenPlayer == CHEATING) opponent = genMoveCheating(gameState.moveHistory, playerG, playerR);
+
+                makeGUIPlacement(opponent);
+            } else{
+                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+                String opponent2;
+
+                opponent2 = genMoveEasy(gameState.moveHistory, redTile, greenTile);
+                if (gameState.redPlayer == MEDIUM) opponent2 = genMoveMedium(gameState.moveHistory, redTile, greenTile);
+                if (gameState.redPlayer == HARD) opponent2 = generateMove(gameState.moveHistory, redTile, greenTile);
+                if (gameState.redPlayer == CHEATING) opponent2 = genMoveCheating(gameState.moveHistory, playerR, playerG);
+
+                makeGUIPlacement(opponent2);
+            }
+        }
+    }
+
     /*Display the height at each position*/
     /*Function by Zhixian Wu*/
     private void displayHeights(){
@@ -1272,7 +1280,7 @@ public class Board extends Application {
         primaryStage.setTitle("Stratopolis");
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "icon.png").toString())));
-        Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT);
+        Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT, WHITESMOKE);
 
         root.getChildren().add(controls);
         root.getChildren().add(placementGrp);
