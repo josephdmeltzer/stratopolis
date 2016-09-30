@@ -190,6 +190,7 @@ public class StratoGame {
                     }
                     coverage[col + 1][row]++;
                     coverage[col][row + 1]++;
+                    coverage[col][row]++;
                     continue;
                 }
 
@@ -200,6 +201,7 @@ public class StratoGame {
                     }
                     coverage[-1 + col][row]++;
                     coverage[col][row + 1]++;
+                    coverage[col][row]++;
                     continue;
                 }
 
@@ -210,6 +212,7 @@ public class StratoGame {
                     }
                     coverage[-1 + col][row]++;
                     coverage[col][-1 + row]++;
+                    coverage[col][row]++;
                     continue;
                 }
                 else if (placement.charAt(i + 3) == 'D'){
@@ -219,6 +222,7 @@ public class StratoGame {
                     }
                     coverage[col + 1][row]++;
                     coverage[col][-1 + row]++;
+                    coverage[col][row]++;
                     continue;
                 }
                 else{

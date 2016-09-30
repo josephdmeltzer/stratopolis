@@ -157,10 +157,7 @@ public class AI {
      */
     public static float average(String placement, ArrayList<Character> pieceArray, int depth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0 || pieceArray.size()==0) {
-            long init = System.currentTimeMillis();
             float x = getScore(placement, initialGreen)-getScore(placement, !initialGreen);
-            long fin = System.currentTimeMillis();
-            System.out.println("scoring: " + (fin - init));
             return x;
         }
         float counter = 0.0f;
