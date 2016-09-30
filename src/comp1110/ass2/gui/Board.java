@@ -9,6 +9,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
@@ -123,69 +125,108 @@ public class Board extends Application {
         redText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
 
 
+
         /*Each of these buttons tell the game if you want a two player game, or
         * to play as green or red against an AI*/
-        Button greenHuman = new Button("Human");
+
+
+        ToggleButton greenHuman = new ToggleButton("Human");
         greenHuman.setOnAction(event-> {
             gameState.greenPlayer = HUMAN;
             greenText.setText("Player Green: Human");
         });
-        greenHuman.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
+        greenHuman.setStyle("-fx-background-color: \n" +
+                "        linear-gradient(#ffd65b, #e68400),\n" +
+                "        linear-gradient(#ffef84, #f2ba44),\n" +
+                "        linear-gradient(#ffea6a, #efaa22),\n" +
+                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
+                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
+                "    -fx-background-radius: 30;\n" +
+               // "    -fx-background-insets: 0,1,2,3,0;\n" +
+                "    -fx-text-fill: #654b00;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-font-size: 12px;\n" +
+                "    -fx-padding: 10 20 10 20;");
 
         DropShadow shadow = new DropShadow();
 
+        /*
         greenHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHuman.setEffect(shadow));
         greenHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHuman.setEffect(null));
+        */
 
-        Button greenEasy = new Button("AI: Easy");
+        ToggleButton greenEasy = new ToggleButton("AI: Easy");
         greenEasy.setOnAction(event-> {
             gameState.greenPlayer = EASY;
             greenText.setText("Player Green: Easy");
         });
-        greenEasy.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
+        greenEasy.setStyle("-fx-background-color: \n" +
+                "        linear-gradient(#ffd65b, #e68400),\n" +
+                "        linear-gradient(#ffef84, #f2ba44),\n" +
+                "        linear-gradient(#ffea6a, #efaa22),\n" +
+                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
+                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
+                "    -fx-background-radius: 30;\n" +
+           //     "    -fx-background-insets: 0,1,2,3,0;\n" +
+                "    -fx-text-fill: #654b00;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-font-size: 12px;\n" +
+                "    -fx-padding: 10 20 10 20;");
 
+        /*
         greenEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenEasy.setEffect(shadow));
         greenEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenEasy.setEffect(null));
+        */
 
-        Button greenMedium = new Button("AI: Medium");
+        ToggleButton greenMedium = new ToggleButton("AI: Medium");
         greenMedium.setOnAction(event-> {
             gameState.greenPlayer = MEDIUM;
             greenText.setText("Player Green: Medium");
         });
-        greenMedium.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
+        greenMedium.setStyle("-fx-background-color: \n" +
+                "        linear-gradient(#ffd65b, #e68400),\n" +
+                "        linear-gradient(#ffef84, #f2ba44),\n" +
+                "        linear-gradient(#ffea6a, #efaa22),\n" +
+                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
+                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
+                "    -fx-background-radius: 30;\n" +
+             //   "    -fx-background-insets: 0,1,2,3,0;\n" +
+                "    -fx-text-fill: #654b00;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-font-size: 12px;\n" +
+                "    -fx-padding: 10 20 10 20;");
+        /*
         greenMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenMedium.setEffect(shadow));
         greenMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenMedium.setEffect(null));
+        */
 
-        Button greenHard = new Button("AI: Hard");
+        ToggleButton greenHard = new ToggleButton("AI: Hard");
         greenHard.setOnAction(event-> {
             gameState.greenPlayer = HARD;
             greenText.setText("Player Green: Hard");
         });
-        greenHard.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
+        greenHard.setStyle("-fx-background-color: \n" +
+                "        linear-gradient(#ffd65b, #e68400),\n" +
+                "        linear-gradient(#ffef84, #f2ba44),\n" +
+                "        linear-gradient(#ffea6a, #efaa22),\n" +
+                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
+                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
+                "    -fx-background-radius: 30;\n" +
+             //   "    -fx-background-insets: 0,1,2,3,0;\n" +
+                "    -fx-text-fill: #654b00;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-font-size: 12px;\n" +
+                "    -fx-padding: 10 20 10 20;");
 
+        /*
         greenHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHard.setEffect(shadow));
-        greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null));
+        greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null)); */
+
+        ToggleGroup greenGroup = new ToggleGroup();
+        greenHuman.setToggleGroup(greenGroup);
+        greenEasy.setToggleGroup(greenGroup);
+        greenHuman.setToggleGroup(greenGroup);
+        greenHard.setToggleGroup(greenGroup);
 
         Button redHuman = new Button("Human");
         redHuman.setOnAction(event-> {
@@ -280,6 +321,7 @@ public class Board extends Application {
         instructions.setLayoutY(620);
 
         /*Layout*/
+
         HBox greenButtons = new HBox();
         greenButtons.getChildren().addAll(greenHuman,greenEasy,greenMedium,greenHard);
         greenButtons.setSpacing(10);
@@ -288,6 +330,7 @@ public class Board extends Application {
         green.getChildren().addAll(greenText,greenButtons);
         green.setLayoutX(50);
         green.setLayoutY(600);
+
 
         HBox redButtons = new HBox();
         redButtons.getChildren().addAll(redHuman,redEasy,redMedium,redHard);
