@@ -311,9 +311,15 @@ public class Board extends Application {
         startGame.setLayoutX(440);
         startGame.setLayoutY(650);
 
+        final int[] numClicks = {0};
         /*A button that created a scrolling text node that displays the instructions*/
         Button instructions = new Button("How to Play");
-        instructions.setOnAction(event->  getInstructions() );
+        instructions.setOnAction(event->  {
+            if (numClicks[0] == 0) {
+                getInstructions();
+                numClicks[0] = 1;
+            }
+        });
         instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
