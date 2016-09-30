@@ -219,11 +219,11 @@ public final class Scoring {
             }
         }
 
-        int maxArea = 1;
+        int maxArea = 0;
         int maxHeight = 1;
 
         for (int i = 0; i < REGIONS; i++) {
-            // System.out.println(i + "\t" + candidates[i][0] + "\t" + candidates[i][1]);
+          //  System.out.println(i + "\t" + candidates[i][0] + "\t" + candidates[i][1]);
             if (candidates[i][0] == 0)
                 break;
             maxArea = (candidates[i][0] > maxArea ? candidates[i][0] : maxArea);
@@ -315,7 +315,7 @@ public final class Scoring {
     }
 
     public static void main(String[] args) {
-        System.out.println(isPlacementValid("MMUANMTALLBAMLNBKNEDNNNCMMAAOOQCLMJBLLSA"));
+        System.out.println(getScore("MMUAKNNDLLGALMMCMNBCMMOB", false));
     }
 
 }
