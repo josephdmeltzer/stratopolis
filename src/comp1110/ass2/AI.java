@@ -207,6 +207,7 @@ public class AI {
         }
     }
 
+    /*Updates the valid places for the next placement given a certain placement*/
     public static HashSet<String> validTiles(String placement) {
         HashSet<String> tiles = new HashSet<>();
         char tilex;
@@ -252,5 +253,54 @@ public class AI {
             }
         }
         return tiles;
+    }
+
+
+    /*Zhixian trying a random thing for a cheating AI*/
+    public static moveScore alphabetaCheat(String placement, Player us, Player opponent, int depth, int maxDepth, float a, float b, boolean maximising, boolean initialGreen) {
+        if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
+        if (maximising) {
+            float bestScore = -1000;
+            String bestMove = "x";
+            char piece = (char) (us.available_tiles).get(us.used_tiles+maxDepth-depth);
+
+            for (String move : validTiles(placement)) {
+                char x = move.charAt(0);
+                char y = move.charAt(1);
+                for (char o='A'; o<='D'; o++) {
+                    if (isPlacementValid(placement+x+y+piece+o)) {
+                        moveScore ab = new moveScore("" + x + y + piece + o, alphabetaCheat(placement + x + y + piece + o, opponent, us, depth - 1, maxDepth, a, b, false, initialGreen).score);
+                        if (ab.score > bestScore) {
+                            bestScore = ab.score;
+                            bestMove = ab.move;
+                        }
+                        a = Math.max(a, bestScore);
+                        if (b <= a) break;
+                    }
+                }
+            }
+            return new moveScore(bestMove, bestScore);
+        }
+        else {
+            float bestScore = 1000;
+            String bestMove = "";
+            char piece = (char) (us.available_tiles).get(us.used_tiles+maxDepth-depth);
+            for (String move : validTiles(placement)) {
+                char x = move.charAt(0);
+                char y = move.charAt(1);
+                for (char o='A'; o<='D'; o++) {
+                    if (isPlacementValid(placement+x+y+piece+o)) {
+                        moveScore ab = new moveScore("" + x + y + piece + o, alphabetaCheat(placement + x + y + piece + o, opponent, us, depth - 1, maxDepth, a, b, true, initialGreen).score);
+                        if (ab.score < bestScore) {
+                            bestScore = ab.score;
+                            bestMove = ab.move;
+                        }
+                        b = Math.min(b, bestScore);
+                        if (b <= a) break;
+                    }
+                }
+            }
+            return new moveScore(bestMove, bestScore);
+        }
     }
 }

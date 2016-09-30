@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import java.util.List;
+
 /**
  * Created by manalmohania on 11/08/2016.
  */
@@ -9,6 +11,7 @@ public class Player {
     public int used_tiles = 0;
     public static final int MAX_TILES = 20; /*The number of tiles each player is supposed to have*/
     public char rotation = 'A';
+    public List available_tiles;
 
     /*Rotates the tile of the player*/
     public void rotateTile() {
