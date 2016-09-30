@@ -314,4 +314,8 @@ public final class Scoring {
         return winnerByChance;
     }
 
+    public static void main(String[] args) {
+        System.out.println(isPlacementValid("MMUANMTALLBAMLNBKNEDNNNCMMAAOOQCLMJBLLSA"));
+    }
+
 }
