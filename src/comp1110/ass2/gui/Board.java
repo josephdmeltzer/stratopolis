@@ -9,8 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
@@ -31,9 +29,6 @@ import static comp1110.ass2.Colour.GREEN;
 import static comp1110.ass2.Colour.RED;
 import static comp1110.ass2.Difficulty.*;
 import static comp1110.ass2.Player.MAX_TILES;
-import static comp1110.ass2.PlayingMode.PlayerIsGreen;
-import static comp1110.ass2.PlayingMode.PlayerIsRed;
-import static comp1110.ass2.PlayingMode.TwoPlayers;
 import static comp1110.ass2.StratoGame.*;
 
 public class Board extends Application {
@@ -84,8 +79,8 @@ public class Board extends Application {
 
     /*Some fields for initial conditions.*/
     private GameState gameState;
-    private PlayerG playerG;
-    private PlayerR playerR;
+    private Player playerG;
+    private Player playerR;
 
     /*Nodes that need to be accessible by many functions.*/
     private ImageView ivg = new ImageView();
@@ -120,113 +115,107 @@ public class Board extends Application {
         Text greenText = new Text("Player Green: Human");
         greenText.setFill(Color.GREEN);
         greenText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+
+        Text green1 = new Text("Human: ");
+        green1.setFill(Color.GREEN);
+        green1.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Text green2 = new Text("AI:   ");
+        green2.setFill(Color.GREEN);
+        green2.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
         Text redText = new Text("Player Red: Human");
         redText.setFill(Color.RED);
         redText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
 
+        Text red1 = new Text("Human: ");
+        red1.setFill(Color.RED);
+        red1.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Text red2 = new Text("AI:   ");
+        red2.setFill(Color.RED);
+        red2.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
 
         /*Each of these buttons tell the game if you want a two player game, or
         * to play as green or red against an AI*/
-
-
-        ToggleButton greenHuman = new ToggleButton("Human");
+        Button greenHuman = new Button("Human");
         greenHuman.setOnAction(event-> {
             gameState.greenPlayer = HUMAN;
             greenText.setText("Player Green: Human");
         });
-        greenHuman.setStyle("-fx-background-color: \n" +
-                "        linear-gradient(#ffd65b, #e68400),\n" +
-                "        linear-gradient(#ffef84, #f2ba44),\n" +
-                "        linear-gradient(#ffea6a, #efaa22),\n" +
-                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
-                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
-                "    -fx-background-radius: 30;\n" +
-               // "    -fx-background-insets: 0,1,2,3,0;\n" +
-                "    -fx-text-fill: #654b00;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-font-size: 12px;\n" +
-                "    -fx-padding: 10 20 10 20;");
+        greenHuman.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
 
         DropShadow shadow = new DropShadow();
 
-        /*
         greenHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHuman.setEffect(shadow));
         greenHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHuman.setEffect(null));
-        */
 
-        ToggleButton greenEasy = new ToggleButton("AI: Easy");
+        Button greenEasy = new Button("Easy");
         greenEasy.setOnAction(event-> {
             gameState.greenPlayer = EASY;
             greenText.setText("Player Green: Easy");
         });
-        greenEasy.setStyle("-fx-background-color: \n" +
-                "        linear-gradient(#ffd65b, #e68400),\n" +
-                "        linear-gradient(#ffef84, #f2ba44),\n" +
-                "        linear-gradient(#ffea6a, #efaa22),\n" +
-                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
-                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
-                "    -fx-background-radius: 30;\n" +
-           //     "    -fx-background-insets: 0,1,2,3,0;\n" +
-                "    -fx-text-fill: #654b00;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-font-size: 12px;\n" +
-                "    -fx-padding: 10 20 10 20;");
+        greenEasy.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
 
-        /*
         greenEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenEasy.setEffect(shadow));
         greenEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenEasy.setEffect(null));
-        */
 
-        ToggleButton greenMedium = new ToggleButton("AI: Medium");
+        Button greenMedium = new Button("Medium");
         greenMedium.setOnAction(event-> {
             gameState.greenPlayer = MEDIUM;
             greenText.setText("Player Green: Medium");
         });
-        greenMedium.setStyle("-fx-background-color: \n" +
-                "        linear-gradient(#ffd65b, #e68400),\n" +
-                "        linear-gradient(#ffef84, #f2ba44),\n" +
-                "        linear-gradient(#ffea6a, #efaa22),\n" +
-                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
-                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
-                "    -fx-background-radius: 30;\n" +
-             //   "    -fx-background-insets: 0,1,2,3,0;\n" +
-                "    -fx-text-fill: #654b00;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-font-size: 12px;\n" +
-                "    -fx-padding: 10 20 10 20;");
-        /*
+        greenMedium.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
         greenMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenMedium.setEffect(shadow));
         greenMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenMedium.setEffect(null));
-        */
 
-        ToggleButton greenHard = new ToggleButton("AI: Hard");
+        Button greenHard = new Button("Hard");
         greenHard.setOnAction(event-> {
             gameState.greenPlayer = HARD;
             greenText.setText("Player Green: Hard");
         });
-        greenHard.setStyle("-fx-background-color: \n" +
-                "        linear-gradient(#ffd65b, #e68400),\n" +
-                "        linear-gradient(#ffef84, #f2ba44),\n" +
-                "        linear-gradient(#ffea6a, #efaa22),\n" +
-                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
-                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
-                "    -fx-background-radius: 30;\n" +
-             //   "    -fx-background-insets: 0,1,2,3,0;\n" +
-                "    -fx-text-fill: #654b00;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-font-size: 12px;\n" +
-                "    -fx-padding: 10 20 10 20;");
+        greenHard.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
 
-        /*
         greenHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHard.setEffect(shadow));
-        greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null)); */
+        greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null));
 
-        ToggleGroup greenGroup = new ToggleGroup();
-        greenHuman.setToggleGroup(greenGroup);
-        greenEasy.setToggleGroup(greenGroup);
-        greenHuman.setToggleGroup(greenGroup);
-        greenHard.setToggleGroup(greenGroup);
+
+        Button greenCheating = new Button("Cheating");
+        greenCheating.setOnAction(event-> {
+            gameState.greenPlayer = CHEATING;
+            greenText.setText("Player Green: Cheating");
+        });
+        greenCheating.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        greenCheating.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenCheating.setEffect(shadow));
+        greenCheating.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenCheating.setEffect(null));
 
         Button redHuman = new Button("Human");
         redHuman.setOnAction(event-> {
@@ -243,7 +232,7 @@ public class Board extends Application {
         redHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redHuman.setEffect(shadow));
         redHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redHuman.setEffect(null));
 
-        Button redEasy = new Button("AI: Easy");
+        Button redEasy = new Button("Easy");
         redEasy.setOnAction(event-> {
             gameState.redPlayer = EASY;
             redText.setText("Player Red: Easy");
@@ -258,7 +247,7 @@ public class Board extends Application {
         redEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redEasy.setEffect(shadow));
         redEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redEasy.setEffect(null));
 
-        Button redMedium = new Button("AI: Medium");
+        Button redMedium = new Button("Medium");
         redMedium.setOnAction(event-> {
             gameState.redPlayer = MEDIUM;
             redText.setText("Player Red: Medium");
@@ -273,7 +262,7 @@ public class Board extends Application {
         redMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redMedium.setEffect(shadow));
         redMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redMedium.setEffect(null));
 
-        Button redHard = new Button("AI: Hard");
+        Button redHard = new Button("Hard");
         redHard.setOnAction(event-> {
             gameState.redPlayer = HARD;
             redText.setText("Player Red: Hard");
@@ -287,6 +276,21 @@ public class Board extends Application {
 
         redHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redHard.setEffect(shadow));
         redHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redHard.setEffect(null));
+
+        Button redCheating = new Button("Cheating");
+        redCheating.setOnAction(event-> {
+            gameState.redPlayer = CHEATING;
+            redText.setText("Player Red: Cheating");
+        });
+        redCheating.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                "        #090a0c,\n" +
+                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                "        linear-gradient(#20262b, #191d22),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "-fx-text-fill: white;");
+
+        redCheating.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redCheating.setEffect(shadow));
+        redCheating.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redCheating.setEffect(null));
 
         Button startGame = new Button("Start");
         startGame.setOnAction(event-> {
@@ -302,8 +306,8 @@ public class Board extends Application {
 
         startGame.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> startGame.setEffect(shadow));
         startGame.addEventHandler(MouseEvent.MOUSE_EXITED, event -> startGame.setEffect(null));
-        startGame.setLayoutX(446);
-        startGame.setLayoutY(660);
+        startGame.setLayoutX(440);
+        startGame.setLayoutY(650);
 
         /*A button that created a scrolling text node that displays the instructions*/
         Button instructions = new Button("How to Play");
@@ -317,29 +321,29 @@ public class Board extends Application {
 
         instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
         instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
-        instructions.setLayoutX(424);
-        instructions.setLayoutY(620);
+        instructions.setLayoutX(420);
+        instructions.setLayoutY(610);
 
         /*Layout*/
+        HBox ghb1 = new HBox(5);
+        ghb1.getChildren().addAll(green1,greenHuman);
+        HBox ghb2 = new HBox(5);
+        ghb2.getChildren().addAll(green2,greenEasy,greenMedium,greenHard,greenCheating);
+        ghb2.setMargin(green2, new Insets(0,27,0,0));
+        VBox green = new VBox(5);
+        green.getChildren().addAll(greenText,ghb1,ghb2);
+        green.setLayoutX(30);
+        green.setLayoutY(580);
 
-        HBox greenButtons = new HBox();
-        greenButtons.getChildren().addAll(greenHuman,greenEasy,greenMedium,greenHard);
-        greenButtons.setSpacing(10);
-
-        VBox green = new VBox();
-        green.getChildren().addAll(greenText,greenButtons);
-        green.setLayoutX(50);
-        green.setLayoutY(600);
-
-
-        HBox redButtons = new HBox();
-        redButtons.getChildren().addAll(redHuman,redEasy,redMedium,redHard);
-        redButtons.setSpacing(10);
-
-        VBox red = new VBox();
-        red.getChildren().addAll(redText,redButtons);
-        red.setLayoutX(560);
-        red.setLayoutY(600);
+        HBox rhb1 = new HBox(5);
+        rhb1.getChildren().addAll(red1,redHuman);
+        HBox rhb2 = new HBox(5);
+        rhb2.getChildren().addAll(red2,redEasy,redMedium,redHard,redCheating);
+        rhb2.setMargin(red2, new Insets(0,27,0,0));
+        VBox red = new VBox(5);
+        red.getChildren().addAll(redText,rhb1,rhb2);
+        red.setLayoutX(580);
+        red.setLayoutY(580);
 
         placementGrp.getChildren().addAll(green, red, startGame, instructions);
     }
@@ -455,6 +459,7 @@ public class Board extends Application {
                         opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
                         if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
                         if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
+                        if (gameState.greenPlayer == CHEATING) opponent = genMoveCheating(gameState.moveHistory, playerG, playerR);
 
                         makeGUIPlacement(opponent);
                     } else{
@@ -465,6 +470,7 @@ public class Board extends Application {
                         opponent2 = genMoveEasy(gameState.moveHistory, redTile, greenTile);
                         if (gameState.redPlayer == MEDIUM) opponent2 = genMoveMedium(gameState.moveHistory, redTile, greenTile);
                         if (gameState.redPlayer == HARD) opponent2 = generateMove(gameState.moveHistory, redTile, greenTile);
+                        if (gameState.redPlayer == CHEATING) opponent2 = genMoveCheating(gameState.moveHistory, playerR, playerG);
 
                         makeGUIPlacement(opponent2);
                     }
@@ -889,6 +895,7 @@ public class Board extends Application {
                 String opponent = genMoveEasy(gameState.moveHistory, redTile, greenTile);
                 if (gameState.redPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, redTile, greenTile);
                 if (gameState.redPlayer == HARD) opponent = generateMove(gameState.moveHistory, redTile, greenTile);
+                if (gameState.redPlayer == CHEATING) opponent = genMoveCheating(gameState.moveHistory, playerR, playerG);
 
                 System.out.println("AI generates: "+opponent);
                 if (opponent=="") System.out.println("Empty string generated by AI");
@@ -962,6 +969,7 @@ public class Board extends Application {
                 String opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
                 if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
                 if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
+                if (gameState.greenPlayer == CHEATING) opponent = genMoveCheating(gameState.moveHistory, playerG, playerR);
 
                 System.out.println("AI generates: "+opponent);
                 if (opponent=="") System.out.println("Empty string generated by AI");

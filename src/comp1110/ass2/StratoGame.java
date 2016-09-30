@@ -1,10 +1,13 @@
 package comp1110.ass2;
 
 import static comp1110.ass2.AI.alphabeta;
+import static comp1110.ass2.AI.alphabetaCheat;
 import static comp1110.ass2.Colour.*;
 import static comp1110.ass2.Pieces.getColours;
+import static comp1110.ass2.Player.MAX_TILES;
 import static comp1110.ass2.Scoring.getScore;
 import static comp1110.ass2.Scoring.getWinner;
+import static java.lang.StrictMath.min;
 
 
 /**
@@ -743,5 +746,15 @@ public class StratoGame {
             }
         }
         return bestMove;
+    }
+    public static String genMoveCheating(String placement, Player us, Player opponent){
+        int depth = min(MAX_TILES-us.used_tiles-1, 2);
+        System.out.println("Depth: "+depth);
+        char piece = (char) (us.available_tiles).get(us.used_tiles);
+        char opiece = (char) (opponent.available_tiles).get(opponent.used_tiles);
+        boolean green = (piece>='K' && piece<='T');
+        System.out.println("We are: "+green);
+        if (depth>0) return alphabetaCheat(placement, us, opponent, depth, depth, -1000, 1000, true, green).move;
+        else return genMoveEasy(placement,piece,opiece);
     }
 }

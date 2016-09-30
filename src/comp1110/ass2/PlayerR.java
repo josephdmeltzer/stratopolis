@@ -14,7 +14,6 @@ import static comp1110.ass2.Colour.RED;
 
 public class PlayerR extends Player {
     public static Colour playerColour = RED;
-    public List available_tiles;
 
     //this generates a valid list of tiles
     private List movesG(){
