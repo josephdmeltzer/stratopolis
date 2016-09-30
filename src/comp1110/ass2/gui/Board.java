@@ -705,7 +705,14 @@ public class Board extends Application {
         }
 
         Button instructions = new Button("How to Play");
-        instructions.setOnAction(event->  getInstructions() );
+        final int[] numClicks = {0};
+
+        instructions.setOnAction(event->  {
+            if (numClicks[0] == 0) {
+                getInstructions();
+                numClicks[0] = 1;
+            }
+        } );
 
         instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
