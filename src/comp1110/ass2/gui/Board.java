@@ -104,6 +104,7 @@ public class Board extends Application {
 
     /*A counter that tells you if this is the first game played.*/
     private Boolean firstGame = true;
+    private boolean instructionsOpen = false;
 
 
 
@@ -311,13 +312,12 @@ public class Board extends Application {
         startGame.setLayoutX(440);
         startGame.setLayoutY(650);
 
-        final int[] numClicks = {0};
         /*A button that created a scrolling text node that displays the instructions*/
         Button instructions = new Button("How to Play");
-        instructions.setOnAction(event->  {
-            if (numClicks[0] == 0) {
+        instructions.setOnAction(event-> {
+            if (!instructionsOpen) {
                 getInstructions();
-                numClicks[0] = 1;
+                instructionsOpen = true;
             }
         });
         instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
@@ -418,7 +418,7 @@ public class Board extends Application {
         scroll.setPrefViewportWidth(700.0);
 
         Button exitBtn = new Button("x");
-        exitBtn.setOnAction(event->  root.getChildren().removeAll(mainInstruc,thickBorder) );
+        exitBtn.setOnAction(event->  {root.getChildren().removeAll(mainInstruc,thickBorder); instructionsOpen = false;} );
         exitBtn.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
@@ -705,12 +705,12 @@ public class Board extends Application {
         }
 
         Button instructions = new Button("How to Play");
-        final int[] numClicks = {0};
+
 
         instructions.setOnAction(event->  {
-            if (numClicks[0] == 0) {
+            if (!instructionsOpen) {
                 getInstructions();
-                numClicks[0] = 1;
+                instructionsOpen = true;
             }
         } );
 
