@@ -473,8 +473,8 @@ public class Board extends Application {
             nextMove.setOnMousePressed(event->  {
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
-                aiThink.setLayoutX(740);
-                aiThink.setLayoutY(400);
+                aiThink.setLayoutX(750);
+                aiThink.setLayoutY(420);
             });
             nextMove.setOnAction(event->  makeAIMove());
             nextMove.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
@@ -974,8 +974,8 @@ public class Board extends Application {
             if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
-                aiThink.setLayoutX(740);
-                aiThink.setLayoutY(400);
+                aiThink.setLayoutX(750);
+                aiThink.setLayoutY(420);
             }
         });
 
@@ -1036,7 +1036,7 @@ public class Board extends Application {
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(740);
-                aiThink.setLayoutY(400);
+                aiThink.setLayoutY(420);
             }
 
         });
