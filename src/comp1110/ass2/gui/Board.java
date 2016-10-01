@@ -95,6 +95,8 @@ public class Board extends Application {
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
+    private Text redTilesLeft = new Text("");
+    private Text greenTilesLeft = new Text("");
     ImageView sound_icon = new ImageView();
 
     /*Various Groups that organise the screen.*/
@@ -566,8 +568,23 @@ public class Board extends Application {
             ivr.setRotate((((int) (playerR.rotation)-'A')*90));
         });
 
+        /*Tiles left by Zhixian Wu*/
+        Rectangle r2 = new Rectangle(170,50,Color.SANDYBROWN);
+        r2.setArcHeight(20);
+        r2.setArcWidth(20);
+
+        Text tiles_left = new Text("TILES LEFT");
+
+        greenTilesLeft.setFill(Color.GREEN);
+        greenTilesLeft.setFont(Font.font("", FontWeight.EXTRA_BOLD, 24));
+
+        redTilesLeft.setFill(Color.RED);
+        redTilesLeft.setFont(Font.font("", FontWeight.EXTRA_BOLD, 24));
+
+        updateTilesLeft();
+
         /*Adding the nodes. We may omit the a rotate button depending on the playingMode*/
-        playerControls.getChildren().addAll(greentxt,redtxt,ivg,ivr);
+        playerControls.getChildren().addAll(greentxt,redtxt,ivg,ivr,r2,tiles_left,greenTilesLeft,redTilesLeft);
         if (gameState.greenPlayer==HUMAN) playerControls.getChildren().add(rotateG);
         if (gameState.redPlayer==HUMAN) playerControls.getChildren().add(rotateR);
 
@@ -584,6 +601,23 @@ public class Board extends Application {
         GridPane.setRowIndex(greentxt,2);
         GridPane.setColumnIndex(redtxt,1);
         GridPane.setRowIndex(redtxt,2);
+
+        GridPane.setColumnIndex(r2,0);
+        GridPane.setRowIndex(r2,3);
+        GridPane.setColumnSpan(r2,2);
+        GridPane.setColumnIndex(tiles_left,0);
+        GridPane.setRowIndex(tiles_left,3);
+        GridPane.setColumnSpan(tiles_left,2);
+        GridPane.setHalignment(tiles_left, HPos.CENTER);
+        GridPane.setValignment(tiles_left, VPos.TOP);
+        GridPane.setColumnIndex(greenTilesLeft,0);
+        GridPane.setRowIndex(greenTilesLeft,3);
+        GridPane.setHalignment(greenTilesLeft, HPos.CENTER);
+        GridPane.setValignment(greenTilesLeft, VPos.CENTER);
+        GridPane.setColumnIndex(redTilesLeft,1);
+        GridPane.setRowIndex(redTilesLeft,3);
+        GridPane.setHalignment(redTilesLeft, HPos.CENTER);
+        GridPane.setValignment(redTilesLeft, VPos.CENTER);
 
         playerControls.setLayoutX(TILE_SIZE*BOARD_SIZE+85);
         playerControls.setLayoutY(200);
@@ -655,6 +689,28 @@ public class Board extends Application {
         redScore.setFill(Color.RED);
         redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
         updateRedScore();
+
+
+
+    }
+    private void updateTilesLeft(){
+        if (gameState.moveHistory.length()<=MAX_TILES*8-4){
+            String green = Integer.toString(MAX_TILES-playerG.used_tiles);
+            System.out.println("G "+playerG.used_tiles);
+            String red = Integer.toString(MAX_TILES-playerR.used_tiles);
+            System.out.println("R "+playerR.used_tiles);
+            greenTilesLeft.setText(green);
+            redTilesLeft.setText(red);
+        } else{
+            if (MAX_TILES*8-4<=gameState.moveHistory.length() && gameState.moveHistory.length()<=MAX_TILES*8){
+                greenTilesLeft.setText("0");
+                String red = Integer.toString(MAX_TILES-playerR.used_tiles);
+                redTilesLeft.setText(red);
+            } else{
+                greenTilesLeft.setText("0");
+                redTilesLeft.setText("0");
+            }
+        }
 
     }
 
@@ -1248,6 +1304,8 @@ public class Board extends Application {
                     gameState.playerTurn = GREEN;
                     break;
             }
+            /*Update the number of tiles left*/
+            updateTilesLeft();
 
             /*Checks if the game is over. If it is, we clear the board and display the winner.*/
             if (gameState.moveHistory.length() > MAX_TILES*8) {
