@@ -125,6 +125,12 @@ public class Board extends Application {
 
         gameState  = new GameState(BLACK, HUMAN, HUMAN);
 
+        ImageView logo = new ImageView();
+        logo.setImage(new Image(Viewer.class.getResource(URI_BASE + "stratopolis" + ".png").toString()));
+        placementGrp.getChildren().add(logo);
+        logo.setLayoutX(220);
+        logo.setLayoutY(230);
+
         Text greenText = new Text("Player Green: Human");
         greenText.setFill(Color.GREEN);
         greenText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
