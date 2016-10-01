@@ -5,13 +5,14 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import static comp1110.ass2.Scoring.getScore;
+import static comp1110.ass2.StratoGame.generateMove;
 import static comp1110.ass2.StratoGame.isPlacementValid;
 
 /**
  * Created by josephmeltzer on 11/08/16.
  */
 
-/*Implementated by Joseph Meltzer*/
+/*Implemented by Joseph Meltzer*/
 public class AI {
     /* The moveScore (nested) class is an object which combines a move and its score. */
     public static class moveScore {
@@ -42,7 +43,7 @@ public class AI {
      *                     and the four letter move that corresponds to it
      */
     public static moveScore alphabeta(String placement, char piece, char opiece, int depth, int prob, float a, float b, boolean maximising, boolean initialGreen) {
-        if (depth==0) return new moveScore("", average(placement,piecesLeft(placement,maximising==initialGreen),prob,a,b,maximising,initialGreen));
+        if (depth==0 || placement.length()==164) return new moveScore("", average(placement,piecesLeft(placement,maximising==initialGreen),prob,a,b,maximising,initialGreen));
         if (maximising) {
             float bestScore = -100;
             String bestMove = "x";
@@ -98,7 +99,7 @@ public class AI {
      *                      and the four letter move that corresponds to it.
      */
     public static moveScore probAB(String placement, char piece, int depth, float a, float b, boolean maximising, boolean initialGreen) {
-        if (depth==0) return new moveScore ("", average(placement,piecesLeft(placement, maximising==initialGreen), 0, a, b, maximising, initialGreen));
+        if (depth==0 || placement.length()==164) return new moveScore ("", average(placement,piecesLeft(placement, maximising==initialGreen), 0, a, b, maximising, initialGreen));
         if (maximising) {
             float bestScore = -100.0f;
             String bestMove = "";
@@ -300,4 +301,10 @@ public class AI {
             return new moveScore(bestMove, bestScore);
         }
     }
+
+//    public static void main(String[] args) {
+//        for (char i = 'K'; i<='T'; i++) {
+//            System.out.println(generateMove("MMUALMMBNLEBLNTDLLACKLKANMJCLMNCNKGCJMRCMMIALMMDLJBDJKRDOJHAIKPBOMEDMKKAJLCBKITBPLIDIISBOIGDLJNAMJABNHSCPKFBJKLCNKBALHPCMKHDILODQIDALHQBOHCBHHLDQHDCKGQCHIFDOGOD", 'J', i));
+//        }
+//    }
 }
