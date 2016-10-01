@@ -121,11 +121,11 @@ public class Board extends Application {
 
         Text green1 = new Text("Human: ");
         green1.setFill(Color.GREEN);
-        green1.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        green1.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 
         Text green2 = new Text("AI:   ");
         green2.setFill(Color.GREEN);
-        green2.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        green2.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 
         Text redText = new Text("Player Red: Human");
         redText.setFill(Color.RED);
@@ -133,11 +133,11 @@ public class Board extends Application {
 
         Text red1 = new Text("Human: ");
         red1.setFill(Color.RED);
-        red1.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        red1.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 
         Text red2 = new Text("AI:   ");
         red2.setFill(Color.RED);
-        red2.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        red2.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 
 
         /*Each of these buttons tell the game if you want a two player game, or
@@ -337,7 +337,7 @@ public class Board extends Application {
         ghb1.getChildren().addAll(green1,greenHuman);
         HBox ghb2 = new HBox(5);
         ghb2.getChildren().addAll(green2,greenEasy,greenMedium,greenHard,greenCheating);
-        ghb2.setMargin(green2, new Insets(0,27,0,0));
+        ghb2.setMargin(green2, new Insets(0,28,0,0));
         VBox green = new VBox(5);
         green.getChildren().addAll(greenText,ghb1,ghb2);
         green.setLayoutX(30);
@@ -347,7 +347,7 @@ public class Board extends Application {
         rhb1.getChildren().addAll(red1,redHuman);
         HBox rhb2 = new HBox(5);
         rhb2.getChildren().addAll(red2,redEasy,redMedium,redHard,redCheating);
-        rhb2.setMargin(red2, new Insets(0,27,0,0));
+        rhb2.setMargin(red2, new Insets(0,28,0,0));
         VBox red = new VBox(5);
         red.getChildren().addAll(redText,rhb1,rhb2);
         red.setLayoutX(580);
@@ -1239,26 +1239,47 @@ public class Board extends Application {
             if (gameState.playerTurn==GREEN){
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                String opponent;
 
+                String opponent = "";
 
-                opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
-                if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
-                if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
-                if (gameState.greenPlayer == CHEATING) opponent = genMoveCheating(gameState.moveHistory, playerG, playerR);
+                switch (gameState.greenPlayer){
+                    case EASY:
+                        opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
+                        break;
+                    case MEDIUM:
+                        opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
+                        break;
+                    case HARD:
+                        opponent = generateMove(gameState.moveHistory, greenTile, redTile);
+                        break;
+                    case CHEATING:
+                        opponent = genMoveCheating(gameState.moveHistory, playerG, playerR);
+                        break;
+                }
 
                 makeGUIPlacement(opponent);
             } else{
                 char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
                 char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-                String opponent2;
 
-                opponent2 = genMoveEasy(gameState.moveHistory, redTile, greenTile);
-                if (gameState.redPlayer == MEDIUM) opponent2 = genMoveMedium(gameState.moveHistory, redTile, greenTile);
-                if (gameState.redPlayer == HARD) opponent2 = generateMove(gameState.moveHistory, redTile, greenTile);
-                if (gameState.redPlayer == CHEATING) opponent2 = genMoveCheating(gameState.moveHistory, playerR, playerG);
+                String opponent = "";
 
-                makeGUIPlacement(opponent2);
+                switch (gameState.redPlayer){
+                    case EASY:
+                        opponent = genMoveEasy(gameState.moveHistory, redTile, greenTile);
+                        break;
+                    case MEDIUM:
+                        opponent = genMoveMedium(gameState.moveHistory, redTile, greenTile);
+                        break;
+                    case HARD:
+                        opponent = generateMove(gameState.moveHistory, redTile, greenTile);
+                        break;
+                    case CHEATING:
+                        opponent = genMoveCheating(gameState.moveHistory, playerR, playerG);
+                        break;
+                }
+
+                makeGUIPlacement(opponent);
             }
         }
     }
