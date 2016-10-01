@@ -654,7 +654,7 @@ public class Board extends Application {
         controls.getChildren().add(r);
 
         Text score = new Text("SCORES");
-        score.setLayoutX(790);
+        score.setLayoutX(801);
         score.setLayoutY(65);
         controls.getChildren().add(score);
 
