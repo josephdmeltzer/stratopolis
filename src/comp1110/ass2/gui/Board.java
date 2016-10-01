@@ -696,7 +696,9 @@ public class Board extends Application {
     private void updateTilesLeft(){
         if (gameState.moveHistory.length()<=MAX_TILES*8-4){
             String green = Integer.toString(MAX_TILES-playerG.used_tiles);
+            System.out.println("G "+playerG.used_tiles);
             String red = Integer.toString(MAX_TILES-playerR.used_tiles);
+            System.out.println("R "+playerR.used_tiles);
             greenTilesLeft.setText(green);
             redTilesLeft.setText(red);
         } else{
@@ -1168,6 +1170,8 @@ public class Board extends Application {
         int offset = (Integer.toString(score)).length() * 15;
         greenScore.setLayoutX(790-offset);
         greenScore.setLayoutY(107);
+        greenScore.setFill(Color.GREEN);
+        greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
     }
 
     private void updateRedScore(){
@@ -1179,6 +1183,8 @@ public class Board extends Application {
         int offset = (Integer.toString(score)).length() * 15;
         redScore.setLayoutX(870 - offset);
         redScore.setLayoutY(107);
+        redScore.setFill(Color.RED);
+        redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
     }
 
     /*The method that makes a placement*/
