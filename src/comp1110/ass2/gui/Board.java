@@ -509,10 +509,10 @@ public class Board extends Application {
 
         /*The text labeling Green and Red's tiles, which you see on the right*/
         greentxt.setFill(Color.GREEN);
-        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 
         redtxt.setFill(Color.RED);
-        redtxt.setFont(Font.font("Verdana", 14));
+        redtxt.setFont(Font.font("Verdana", 16));
 
         sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
         sound_icon.setFitWidth(25);
@@ -574,27 +574,15 @@ public class Board extends Application {
             ivr.setRotate((((int) (playerR.rotation)-'A')*90));
         });
 
-        /*Tiles left by Zhixian Wu*/
-        Rectangle r2 = new Rectangle(170,50,Color.SANDYBROWN);
-        r2.setArcHeight(20);
-        r2.setArcWidth(20);
 
-        Text tiles_left = new Text("TILES LEFT");
-
-        greenTilesLeft.setFill(Color.GREEN);
-        greenTilesLeft.setFont(Font.font("", FontWeight.EXTRA_BOLD, 24));
-
-        redTilesLeft.setFill(Color.RED);
-        redTilesLeft.setFont(Font.font("", FontWeight.EXTRA_BOLD, 24));
-
-        updateTilesLeft();
 
         /*Adding the nodes. We may omit the a rotate button depending on the playingMode*/
-        playerControls.getChildren().addAll(greentxt,redtxt,ivg,ivr,r2,tiles_left,greenTilesLeft,redTilesLeft);
+        playerControls.getChildren().addAll(greentxt,redtxt,ivg,ivr);
         if (gameState.greenPlayer==HUMAN) playerControls.getChildren().add(rotateG);
         if (gameState.redPlayer==HUMAN) playerControls.getChildren().add(rotateR);
 
         /*Layout*/
+
         GridPane.setColumnIndex(ivg,0);
         GridPane.setRowIndex(ivg,0);
         GridPane.setColumnIndex(ivr,1);
@@ -608,22 +596,7 @@ public class Board extends Application {
         GridPane.setColumnIndex(redtxt,1);
         GridPane.setRowIndex(redtxt,2);
 
-        GridPane.setColumnIndex(r2,0);
-        GridPane.setRowIndex(r2,3);
-        GridPane.setColumnSpan(r2,2);
-        GridPane.setColumnIndex(tiles_left,0);
-        GridPane.setRowIndex(tiles_left,3);
-        GridPane.setColumnSpan(tiles_left,2);
-        GridPane.setHalignment(tiles_left, HPos.CENTER);
-        GridPane.setValignment(tiles_left, VPos.TOP);
-        GridPane.setColumnIndex(greenTilesLeft,0);
-        GridPane.setRowIndex(greenTilesLeft,3);
-        GridPane.setHalignment(greenTilesLeft, HPos.CENTER);
-        GridPane.setValignment(greenTilesLeft, VPos.CENTER);
-        GridPane.setColumnIndex(redTilesLeft,1);
-        GridPane.setRowIndex(redTilesLeft,3);
-        GridPane.setHalignment(redTilesLeft, HPos.CENTER);
-        GridPane.setValignment(redTilesLeft, VPos.CENTER);
+        GridPane.setValignment(redTilesLeft, VPos.TOP);
 
         playerControls.setLayoutX(TILE_SIZE*BOARD_SIZE+85);
         playerControls.setLayoutY(200);
@@ -696,7 +669,49 @@ public class Board extends Application {
         redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
         updateRedScore();
 
+        /*Tiles left by Zhixian Wu*/
+        Rectangle r2 = new Rectangle(170,45,Color.SANDYBROWN);
+        r2.setArcHeight(20);
+        r2.setArcWidth(20);
 
+        Text tiles_left = new Text("TILES LEFT");
+
+        greenTilesLeft.setFill(Color.GREEN);
+        greenTilesLeft.setFont(Font.font("", FontWeight.EXTRA_BOLD, 16));
+
+        redTilesLeft.setFill(Color.RED);
+        redTilesLeft.setFont(Font.font("", FontWeight.EXTRA_BOLD, 16));
+
+        updateTilesLeft();
+
+        GridPane tileCounter = new GridPane();
+        tileCounter.getChildren().addAll(r2,tiles_left,greenTilesLeft,redTilesLeft);
+        for (int i = 0; i < 2; i++) {
+            ColumnConstraints column = new ColumnConstraints(85);
+            tileCounter.getColumnConstraints().add(column);
+        }
+        GridPane.setColumnIndex(r2,0);
+        GridPane.setRowIndex(r2,0);
+        GridPane.setColumnSpan(r2,2);
+        GridPane.setRowSpan(r2,2);
+        GridPane.setValignment(r2, VPos.TOP);
+        GridPane.setColumnIndex(tiles_left,0);
+        GridPane.setRowIndex(tiles_left,0);
+        GridPane.setColumnSpan(tiles_left,2);
+        GridPane.setHalignment(tiles_left, HPos.CENTER);
+        GridPane.setValignment(tiles_left, VPos.BOTTOM);
+        GridPane.setColumnIndex(greenTilesLeft,0);
+        GridPane.setRowIndex(greenTilesLeft,1);
+        GridPane.setHalignment(greenTilesLeft, HPos.CENTER);
+        GridPane.setValignment(greenTilesLeft, VPos.TOP);
+        GridPane.setColumnIndex(redTilesLeft,1);
+        GridPane.setRowIndex(redTilesLeft,1);
+        GridPane.setHalignment(redTilesLeft, HPos.CENTER);
+        GridPane.setValignment(redTilesLeft, VPos.TOP);
+
+        tileCounter.setLayoutX(TILE_SIZE*BOARD_SIZE+80);
+        tileCounter.setLayoutY(360);
+        controls.getChildren().add(tileCounter);
 
     }
     private void updateTilesLeft(){
@@ -1270,7 +1285,7 @@ public class Board extends Application {
                         ivr.setCache(true);
                     } else{ /*If red does not still have tiles left, say they're our of tiles*/
                         Text outoftiles = new Text("Out of\n tiles");
-                        outoftiles.setFont(Font.font("", FontWeight.BOLD, 20));
+                        outoftiles.setFont(Font.font("", FontWeight.BOLD, 24));
                         GridPane.setColumnIndex(outoftiles,1);
                         GridPane.setRowIndex(outoftiles,0);
                         playerControls.getChildren().remove(ivr);
@@ -1279,8 +1294,8 @@ public class Board extends Application {
                     }
                     /*Update whose turn it is, and whose turn is bolded.*/
                     gameState.playerTurn = GREEN;
-                    greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-                    redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
+                    greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+                    redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
                     break;
                 case GREEN:
                     if (playerG.used_tiles<19){ /*If green still has tiles left*/
@@ -1294,7 +1309,7 @@ public class Board extends Application {
                         ivg.setCache(true);
                     } else{ /*If green does not still have tiles left, say they're out of tiles*/
                         Text outoftiles = new Text("Out of\n tiles");
-                        outoftiles.setFont(Font.font("", FontWeight.BOLD, 20));
+                        outoftiles.setFont(Font.font("", FontWeight.BOLD, 24));
                         GridPane.setColumnIndex(outoftiles,0);
                         GridPane.setRowIndex(outoftiles,0);
                         playerControls.getChildren().remove(ivg);
@@ -1303,8 +1318,8 @@ public class Board extends Application {
                     }
                     /*Update whose turn it is, and whose turn is bolded.*/
                     gameState.playerTurn = RED;
-                    greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
-                    redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+                    greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
+                    redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
                     break;
                 case BLACK:
                     gameState.playerTurn = GREEN;
