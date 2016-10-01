@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -77,6 +78,7 @@ public class Board extends Application {
     private static final String URI_BASE = "assets/";
     private static final int TILE_SIZE = 25;
     private static final int BOARD_SIZE = 26;
+    private static final String SOUND_URI = Viewer.class.getResource(URI_BASE + "sound.mp3").toString();
 
     /*Some fields for initial conditions.*/
     private GameState gameState;
@@ -96,7 +98,7 @@ public class Board extends Application {
     /*Various Groups that organise the screen.*/
     private final Group root = new Group();
     private final Group controls = new Group();
-    GridPane playerControls = new GridPane();
+    private GridPane playerControls = new GridPane();
     private final Group placementGrp = new Group();
     private GridPane playingBoard = new GridPane();
     private GridPane heightLabels = new GridPane();
@@ -104,7 +106,12 @@ public class Board extends Application {
 
     /*A counter that tells you if this is the first game played.*/
     private Boolean firstGame = true;
+
+    /*true if the instruction panel is open*/
     private boolean instructionsOpen = false;
+
+    /*the audio clip*/
+    private AudioClip audio = new AudioClip(SOUND_URI);
 
 
 
@@ -1153,6 +1160,10 @@ public class Board extends Application {
             /*Update the scores displayed*/
             updateRedScore();
             updateGreenScore();
+
+            audio.play();
+
+
 
             /*Update the top tiles shown on the control panel, whose turn it is, and whose turn is bolded.*/
             switch (gameState.playerTurn) {
