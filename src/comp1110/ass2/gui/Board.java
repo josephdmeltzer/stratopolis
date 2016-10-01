@@ -327,7 +327,7 @@ public class Board extends Application {
         startGame.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> startGame.setEffect(shadow));
         startGame.addEventHandler(MouseEvent.MOUSE_EXITED, event -> startGame.setEffect(null));
         startGame.setLayoutX(440);
-        startGame.setLayoutY(650);
+        startGame.setLayoutY(620);
 
         /*A button that created a scrolling text node that displays the instructions*/
         Button instructions = new Button("How to Play");
@@ -342,7 +342,7 @@ public class Board extends Application {
         instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
         instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
         instructions.setLayoutX(420);
-        instructions.setLayoutY(610);
+        instructions.setLayoutY(580);
 
         /*Layout*/
         HBox ghb1 = new HBox(5);
@@ -353,7 +353,7 @@ public class Board extends Application {
         VBox green = new VBox(5);
         green.getChildren().addAll(greenText,ghb1,ghb2);
         green.setLayoutX(30);
-        green.setLayoutY(580);
+        green.setLayoutY(550);
 
         HBox rhb1 = new HBox(5);
         rhb1.getChildren().addAll(red1,redHuman);
@@ -363,7 +363,7 @@ public class Board extends Application {
         VBox red = new VBox(5);
         red.getChildren().addAll(redText,rhb1,rhb2);
         red.setLayoutX(580);
-        red.setLayoutY(580);
+        red.setLayoutY(550);
 
         placementGrp.getChildren().addAll(green, red, startGame, instructions);
     }
@@ -388,7 +388,7 @@ public class Board extends Application {
         thickBorder.setLayoutY(40);
         thickBorder.setOpacity(0.5);
 
-        Text instructions = new Text("Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
+        Text instructions = new Text("Stratopolis a two player strategy based game." +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
                 " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
                 " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
@@ -1420,6 +1420,7 @@ public class Board extends Application {
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "icon.png").toString())));
         Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT, WHITESMOKE);
+        scene.setFill(Color.LIGHTGRAY);
 
         root.getChildren().add(controls);
         root.getChildren().add(placementGrp);
