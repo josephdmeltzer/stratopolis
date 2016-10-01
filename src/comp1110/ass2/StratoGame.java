@@ -711,7 +711,7 @@ public class StratoGame {
     public static String generateMove(String placement, char piece, char opponentsPiece) {
         // FIXME Task 10: generate a valid move
         boolean green = (piece>='K' && piece<='T');
-        return alphabeta(placement, piece, opponentsPiece, 2, 1, -100, 1000, true, green).move;
+        return alphabeta(placement, piece, opponentsPiece, 3, 1, -100, 1000, true, green).move;
     }
 
     /* Previous version of the generateMove function: used as a faster, but less powerful generator.
@@ -749,12 +749,11 @@ public class StratoGame {
     }
     public static String genMoveCheating(String placement, Player us, Player opponent){
         int depth = min(MAX_TILES-us.used_tiles-1, 2);
-        System.out.println("Depth: "+depth);
         char piece = (char) (us.available_tiles).get(us.used_tiles);
         char opiece = (char) (opponent.available_tiles).get(opponent.used_tiles);
         boolean green = (piece>='K' && piece<='T');
         System.out.println("We are: "+green);
         if (depth>0) return alphabetaCheat(placement, us, opponent, depth, depth, -1000, 1000, true, green).move;
-        else return genMoveEasy(placement,piece,opiece);
+            else return genMoveEasy(placement,piece,opiece);
     }
 }
