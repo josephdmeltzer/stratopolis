@@ -690,6 +690,7 @@ public class Board extends Application {
             ColumnConstraints column = new ColumnConstraints(85);
             tileCounter.getColumnConstraints().add(column);
         }
+        /*Layout*/
         /*GridPane.setColumnIndex(r2,0);
         GridPane.setRowIndex(r2,0);
         GridPane.setColumnSpan(r2,2);
