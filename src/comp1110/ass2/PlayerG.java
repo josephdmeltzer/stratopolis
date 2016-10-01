@@ -21,6 +21,7 @@ public class PlayerG extends Player {
         ArrayList<Character> moves = new ArrayList<>();
         moves.add('K');
         moves.add('L');
+        moves.add('M');
         moves.add('N');
         moves.add('O');
         moves.add('P');
@@ -28,9 +29,9 @@ public class PlayerG extends Player {
         moves.add('R');
         moves.add('S');
         moves.add('T');
-        moves.add('M');
         moves.add('K');
         moves.add('L');
+        moves.add('M');
         moves.add('N');
         moves.add('O');
         moves.add('P');
@@ -38,8 +39,7 @@ public class PlayerG extends Player {
         moves.add('R');
         moves.add('S');
         moves.add('T');
-        moves.add('M');
-        Collections.shuffle(moves);
+        /*Collections.shuffle(moves);*/
         return moves;
     }
     /*Constructor for the class*/

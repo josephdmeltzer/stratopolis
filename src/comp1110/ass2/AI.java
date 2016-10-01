@@ -140,7 +140,7 @@ public class AI {
                     }
                 }
             }
-            System.out.println(bestMove);
+            /*System.out.println(bestMove);*/
             return new moveScore(bestMove, bestScore);
         }
     }

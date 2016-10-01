@@ -2,6 +2,7 @@ package comp1110.ass2.gui;
 
 import comp1110.ass2.*;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -94,21 +95,21 @@ public class Board extends Application {
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
+    ImageView sound_icon = new ImageView();
 
     /*Various Groups that organise the screen.*/
     private final Group root = new Group();
+    private final Group popUp1 = new Group();
     private final Group controls = new Group();
-    private GridPane playerControls = new GridPane();
+    private final GridPane playerControls = new GridPane();
     private final Group placementGrp = new Group();
-    private GridPane playingBoard = new GridPane();
-    private GridPane heightLabels = new GridPane();
-    private GridPane clickablePanes = new GridPane();
+    private final GridPane playingBoard = new GridPane();
+    private final GridPane heightLabels = new GridPane();
+    private final GridPane clickablePanes = new GridPane();
 
     /*A counter that tells you if this is the first game played.*/
-    private Boolean firstGame = true;
-
-    /*true if the instruction panel is open*/
-    private boolean instructionsOpen = false;
+    private boolean firstGame = true;
+    private boolean soundOn = true;
 
     /*the audio clip*/
     private AudioClip audio = new AudioClip(SOUND_URI);
@@ -321,12 +322,7 @@ public class Board extends Application {
 
         /*A button that created a scrolling text node that displays the instructions*/
         Button instructions = new Button("How to Play");
-        instructions.setOnAction(event-> {
-            if (!instructionsOpen) {
-                getInstructions();
-                instructionsOpen = true;
-            }
-        });
+        instructions.setOnAction(event-> getInstructions());
         instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
@@ -365,6 +361,9 @@ public class Board extends Application {
 
     /*Function by Zhixian Wu. This function displays the instructions when called.*/
     private void getInstructions(){
+        placementGrp.setDisable(true);
+        controls.setDisable(true);
+
         GridPane mainInstruc = new GridPane();
         mainInstruc.setLayoutY(50);
         mainInstruc.setLayoutX(105);
@@ -425,7 +424,11 @@ public class Board extends Application {
         scroll.setPrefViewportWidth(700.0);
 
         Button exitBtn = new Button("x");
-        exitBtn.setOnAction(event->  {root.getChildren().removeAll(mainInstruc,thickBorder); instructionsOpen = false;} );
+        exitBtn.setOnAction(event->  {
+            root.getChildren().remove(popUp1);
+            placementGrp.setDisable(false);
+            controls.setDisable(false);
+        } );
         exitBtn.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
@@ -444,7 +447,8 @@ public class Board extends Application {
         GridPane.setColumnIndex(exitBtn,0);
         GridPane.setHalignment(exitBtn, HPos.RIGHT);
 
-        root.getChildren().addAll(thickBorder,mainInstruc);
+        popUp1.getChildren().addAll(thickBorder,mainInstruc);
+        root.getChildren().add(popUp1);
     }
 
     /*Function by Zhixian Wu*/
@@ -501,6 +505,36 @@ public class Board extends Application {
 
         redtxt.setFill(Color.RED);
         redtxt.setFont(Font.font("Verdana", 14));
+
+        sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+        sound_icon.setFitWidth(25);
+        sound_icon.setPreserveRatio(true);
+        sound_icon.setSmooth(true);
+        sound_icon.setCache(true);
+        sound_icon.setLayoutX(900);
+        sound_icon.setLayoutY(15);
+        sound_icon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (soundOn){
+                    sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
+                    sound_icon.setFitWidth(25);
+                    sound_icon.setPreserveRatio(true);
+                    sound_icon.setSmooth(true);
+                    sound_icon.setCache(true);
+                    soundOn = false;
+                } else{
+                    sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+                    sound_icon.setFitWidth(25);
+                    sound_icon.setPreserveRatio(true);
+                    sound_icon.setSmooth(true);
+                    sound_icon.setCache(true);
+                    soundOn = true;
+                }
+                event.consume();
+            }
+        });
+        controls.getChildren().add(sound_icon);
 
 
 
@@ -714,12 +748,7 @@ public class Board extends Application {
         Button instructions = new Button("How to Play");
 
 
-        instructions.setOnAction(event->  {
-            if (!instructionsOpen) {
-                getInstructions();
-                instructionsOpen = true;
-            }
-        } );
+        instructions.setOnAction(event->getInstructions());
 
         instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
@@ -1161,7 +1190,7 @@ public class Board extends Application {
             updateRedScore();
             updateGreenScore();
 
-            audio.play();
+            if (soundOn) audio.play();
 
 
 
