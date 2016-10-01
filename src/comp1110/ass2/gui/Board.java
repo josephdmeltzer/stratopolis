@@ -17,6 +17,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -112,8 +114,7 @@ public class Board extends Application {
     private boolean soundOn = true;
 
     /*the audio clip*/
-    private AudioClip audio = new AudioClip(SOUND_URI);
-
+    private final AudioClip audio = new AudioClip(SOUND_URI);
 
 
     /*Function by Zhixian Wu*/
