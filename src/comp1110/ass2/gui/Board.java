@@ -1,6 +1,8 @@
 package comp1110.ass2.gui;
 
 import comp1110.ass2.*;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -28,6 +30,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import comp1110.ass2.StratoGame;
+import javafx.util.Duration;
 
 
 import static comp1110.ass2.Colour.BLACK;
@@ -83,7 +86,7 @@ public class Board extends Application {
     private static final String URI_BASE = "assets/";
     private static final int TILE_SIZE = 25;
     private static final int BOARD_SIZE = 26;
-    private static final String SOUND_URI = Viewer.class.getResource(URI_BASE + "sound.mp3").toString();
+    private static final String PLACEMENT_URI = Viewer.class.getResource(URI_BASE + "sound.mp3").toString();
 
     /*Some fields for initial conditions.*/
     private GameState gameState;
@@ -101,7 +104,7 @@ public class Board extends Application {
     private Text greenScore = new Text("1");
     private Text redTilesLeft = new Text("");
     private Text greenTilesLeft = new Text("");
-    ImageView sound_icon = new ImageView();
+    private ImageView sound_icon = new ImageView();
 
     /*Various Groups that organise the screen.*/
     private final Group root = new Group();
@@ -110,6 +113,7 @@ public class Board extends Application {
     private final GridPane playerControls = new GridPane();
     private final Group placementGrp = new Group();
     private final GridPane playingBoard = new GridPane();
+
     private final GridPane heightLabels = new GridPane();
     private final GridPane clickablePanes = new GridPane();
 
@@ -119,15 +123,16 @@ public class Board extends Application {
     private boolean firstGame = true;
     private boolean soundOn = true;
 
-    /*the audio clip*/
-    private final AudioClip audio = new AudioClip(SOUND_URI);
+    /*the audio clip played when a placement is made*/
+    /*The sound was retrieved from http://www.sounds.beachware.com/2illionzayp3may/jspjrz/SWITCH.mp3*/
+    private final AudioClip audio = new AudioClip(PLACEMENT_URI);
 
 
     /*Function by Zhixian Wu*/
     private void initialSettings() {
         playingBoard.setOpacity(1);
         heightLabels.setOpacity(1);
-        scene.setFill(LIGHTGRAY);
+        scene.setFill(LIGHTGREY);
 
         gameState  = new GameState(BLACK, HUMAN, HUMAN);
 
@@ -181,7 +186,7 @@ public class Board extends Application {
         greenHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHuman.setEffect(shadow));
         greenHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHuman.setEffect(null));
 
-        Button greenEasy = new Button("Easy");
+        Button greenEasy = new Button("Amateur");
         greenEasy.setOnAction(event-> {
             gameState.greenPlayer = EASY;
             greenText.setText("Player Green: Easy");
@@ -196,7 +201,7 @@ public class Board extends Application {
         greenEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenEasy.setEffect(shadow));
         greenEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenEasy.setEffect(null));
 
-        Button greenMedium = new Button("Medium");
+        Button greenMedium = new Button("Skilful");
         greenMedium.setOnAction(event-> {
             gameState.greenPlayer = MEDIUM;
             greenText.setText("Player Green: Medium");
@@ -211,7 +216,7 @@ public class Board extends Application {
         greenMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenMedium.setEffect(shadow));
         greenMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenMedium.setEffect(null));
 
-        Button greenHard = new Button("Hard");
+        Button greenHard = new Button("Pro");
         greenHard.setOnAction(event-> {
             gameState.greenPlayer = HARD;
             greenText.setText("Player Green: Hard");
@@ -227,7 +232,7 @@ public class Board extends Application {
         greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null));
 
 
-        Button greenCheating = new Button("Cheating");
+        Button greenCheating = new Button("Nightmare");
         greenCheating.setOnAction(event-> {
             gameState.greenPlayer = CHEATING;
             greenText.setText("Player Green: Cheating");
@@ -498,7 +503,7 @@ public class Board extends Application {
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(750);
-                aiThink.setLayoutY(420);
+                aiThink.setLayoutY(450);
             });
             nextMove.setOnAction(event->  makeAIMove());
             nextMove.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
@@ -1259,6 +1264,8 @@ public class Board extends Application {
                /*make sure it's centered*/
             GridPane.setHalignment(iv1, HPos.CENTER);
             GridPane.setValignment(iv1, VPos.CENTER);
+
+
             /*Place the image, in the correct rotation, in the correct place on the board*/
             switch (placement.charAt(3)) {
                 case 'A':
@@ -1454,7 +1461,7 @@ public class Board extends Application {
         primaryStage.setTitle("Stratopolis");
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "icon.png").toString())));
-        scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT, LIGHTGRAY);
+        scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT, LIGHTGREY);
         scene.setFill(Color.LIGHTGRAY);
 
         root.getChildren().add(controls);
