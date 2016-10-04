@@ -25,8 +25,8 @@ public final class Scoring {
     private static Colour[][] colours;
     private static Colour[][] colours2 = new Colour[26][26];
     private static int[][] heights = new int[BOARD_SIZE][BOARD_SIZE];
-    private static final int REGIONS = 36;
-    private static int[][] candidates = new int[REGIONS][2]; // An upper bound for the number of contiguous regions of a certain colour
+    private static final int REGIONS = 36; // Maximum number of contiguous regions of a certain colour
+    private static int[][] candidates = new int[REGIONS][2];
     private static boolean winnerByChance; // If this bool is true, you'll know that the winner has been determined by chance.
 
     /**
@@ -251,18 +251,23 @@ public final class Scoring {
 
         int val;
 
-        if (!(col >= 0 && row >= 0 && col <= 25 && row <= 25)) {
+        if (!(col >= 0 && row >= 0 && col <= 25 && row <= 25) || colours2[col][row] != colour) {
             return max;
         }
 
+        /*
         if (colours2[col][row] != colour) {
             return max;
         }
+        */
 
         colours2[col][row] = BLACK;
         val = heights[col][row] > max ? heights[col][row] : max;
 
-        return myMax(floodHeight(col + 1, row, colour, val), floodHeight(col - 1, row, colour, val), floodHeight(col, row + 1, colour, val), floodHeight(col, row - 1, colour, val));
+        return myMax(floodHeight(col + 1, row, colour, val),
+                floodHeight(col - 1, row, colour, val),
+                floodHeight(col, row + 1, colour, val),
+                floodHeight(col, row - 1, colour, val));
     }
 
     /**
@@ -275,25 +280,23 @@ public final class Scoring {
      * @return the area of the region*/
     private static int floodFill(int col, int row, Colour colour) {
 
-        int val;
-
-        if (!(col >= 0 && row >= 0 && col <= 25 && row <= 25)) {
+        if (!(col >= 0 && row >= 0 && col <= 25 && row <= 25) || colours[col][row] != colour) {
             return 0;
         }
 
         /*flags[col][row] = 1;*/
 
+        /*
         if (colours[col][row] != colour) {
             return 0;
         }
+        */
 
         colours[col][row] = BLACK;
-        val = 1 + floodFill(col + 1, row, colour) +
+        return 1 + floodFill(col + 1, row, colour) +
                 floodFill(col - 1, row, colour) +
                 floodFill(col, row + 1, colour) +
                 floodFill(col, row - 1, colour);
-
-        return val;
     }
 
     /**Calculates the maximum of four intgers

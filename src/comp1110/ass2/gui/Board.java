@@ -6,10 +6,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
@@ -111,6 +113,8 @@ public class Board extends Application {
     private final GridPane heightLabels = new GridPane();
     private final GridPane clickablePanes = new GridPane();
 
+    private Scene scene;
+
     /*A counter that tells you if this is the first game played.*/
     private boolean firstGame = true;
     private boolean soundOn = true;
@@ -123,6 +127,7 @@ public class Board extends Application {
     private void initialSettings() {
         playingBoard.setOpacity(1);
         heightLabels.setOpacity(1);
+        scene.setFill(LIGHTGRAY);
 
         gameState  = new GameState(BLACK, HUMAN, HUMAN);
 
@@ -130,7 +135,7 @@ public class Board extends Application {
         logo.setImage(new Image(Viewer.class.getResource(URI_BASE + "stratopolis" + ".png").toString()));
         placementGrp.getChildren().add(logo);
         logo.setLayoutX(220);
-        logo.setLayoutY(230);
+        logo.setLayoutY(180);
 
         Text greenText = new Text("Player Green: Human");
         greenText.setFill(Color.GREEN);
@@ -317,32 +322,40 @@ public class Board extends Application {
             placementGrp.getChildren().clear();
             makePlayer();
         });
-        startGame.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
+        startGame.setStyle("-fx-background-color: \n" +
+                "        linear-gradient(#ffd65b, #e68400),\n" +
+                "        linear-gradient(#ffef84, #f2ba44),\n" +
+                "        linear-gradient(#ffea6a, #efaa22),\n" +
+                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
+                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
+                "    -fx-background-radius: 30;\n" +
+                "    -fx-background-insets: 0,1,2,3,0;\n" +
+                "    -fx-text-fill: #654b00;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-font-size: 26px;\n" +
+                "    -fx-padding: 10 25 10 25;");
 
         startGame.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> startGame.setEffect(shadow));
         startGame.addEventHandler(MouseEvent.MOUSE_EXITED, event -> startGame.setEffect(null));
-        startGame.setLayoutX(440);
+        startGame.setLayoutX(420);
         startGame.setLayoutY(620);
 
         /*A button that created a scrolling text node that displays the instructions*/
-        Button instructions = new Button("How to Play");
+        Button instructions = new Button("?");
         instructions.setOnAction(event-> getInstructions());
-        instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
+        instructions.setStyle("-fx-background-color: #9932cc;" +
+                "-fx-background-radius: 55em; " +
+                "-fx-min-width: 30px; " +
+                "-fx-min-height: 30px; " +
+                "-fx-max-width: 30px; " +
+                "-fx-max-height: 30px;" +
+                "-fx-text-fill: #ffd65b"
+        );
 
         instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
         instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
-        instructions.setLayoutX(420);
-        instructions.setLayoutY(580);
+        instructions.setLayoutX(870);
+        instructions.setLayoutY(20);
 
         /*Layout*/
         HBox ghb1 = new HBox(5);
@@ -350,20 +363,24 @@ public class Board extends Application {
         HBox ghb2 = new HBox(5);
         ghb2.getChildren().addAll(green2,greenEasy,greenMedium,greenHard,greenCheating);
         ghb2.setMargin(green2, new Insets(0,28,0,0));
+        ghb2.setSpacing(7);
         VBox green = new VBox(5);
         green.getChildren().addAll(greenText,ghb1,ghb2);
+        green.setSpacing(15);
         green.setLayoutX(30);
-        green.setLayoutY(550);
+        green.setLayoutY(480);
 
         HBox rhb1 = new HBox(5);
         rhb1.getChildren().addAll(red1,redHuman);
         HBox rhb2 = new HBox(5);
         rhb2.getChildren().addAll(red2,redEasy,redMedium,redHard,redCheating);
         rhb2.setMargin(red2, new Insets(0,28,0,0));
+        rhb2.setSpacing(7);
         VBox red = new VBox(5);
         red.getChildren().addAll(redText,rhb1,rhb2);
-        red.setLayoutX(580);
-        red.setLayoutY(550);
+        red.setSpacing(15);
+        red.setLayoutX(570);
+        red.setLayoutY(480);
 
         placementGrp.getChildren().addAll(green, red, startGame, instructions);
     }
@@ -400,12 +417,12 @@ public class Board extends Application {
                 " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
                 " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
                 " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
-                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
-                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
-                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
-                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
+                "The score for a certain colour is determined by multiplying the area of" +
+                " its largest contiguous region with the maximum height in that region." +
+                " The winner of the game is the one who has the highest score when all tiles are finished." +
+                " If the two scores are equal at the end of the game, the next largest region for each colour is selected to break the tie." +
+                " This process is continued indefinitely to ascertain the winner if there is still a tie." +
+                " Even at the end of it, if a winner hasn't been decided, the winner is selected using a simple coin toss." + "\n" + "\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
                 " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
@@ -504,6 +521,7 @@ public class Board extends Application {
 
     /*Function mostly by Zhixian Wu, with the running score by Manal Mohania*/
     private void makeControls(){
+        scene.setFill(WHITESMOKE);
         /*Make the control pane as a GridPane. This is the stuff on the right*/
         playerControls.setPrefSize(120, 200);
         playerControls.setMaxSize(120, 200);
@@ -583,7 +601,6 @@ public class Board extends Application {
         if (gameState.redPlayer==HUMAN) playerControls.getChildren().add(rotateR);
 
         /*Layout*/
-
         GridPane.setColumnIndex(ivg,0);
         GridPane.setRowIndex(ivg,0);
         GridPane.setColumnIndex(ivr,1);
@@ -1113,6 +1130,8 @@ public class Board extends Application {
     * @param placement   The placement string*/
     private void makeTempPlacement(ImageView iv, String placement){
 
+        /*remove error messages, if any*/
+        controls.getChildren().remove(errormessage);
 
         /*The following ensure that the piece does not fall out of the board*/
         if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'D'))){
@@ -1131,8 +1150,8 @@ public class Board extends Application {
             return;
         }
 
-        /*remove error messages, if any. And set image according to the validity of the placement*/
-        controls.getChildren().remove(errormessage);
+        /*set image according to the validity of the placement*/
+
         if (StratoGame.isPlacementValid(gameState.moveHistory.concat(placement))) {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
             iv.setOpacity(0.8);
@@ -1415,8 +1434,8 @@ public class Board extends Application {
         /*Recursively go through each tile and label its height*/
         for (int i=0; i<BOARD_SIZE;i++){
             for (int j=0; j<BOARD_SIZE; j++){
-                String tall = Integer.toString(heights[i][j]);
                 if (heights[i][j]>1){
+                    String tall = Integer.toString(heights[i][j]);
                     Text label1 = new Text(tall);
                     label1.setFill(Color.WHITE);
                     label1.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
@@ -1435,7 +1454,7 @@ public class Board extends Application {
         primaryStage.setTitle("Stratopolis");
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "icon.png").toString())));
-        Scene scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT, WHITESMOKE);
+        scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT, LIGHTGRAY);
         scene.setFill(Color.LIGHTGRAY);
 
         root.getChildren().add(controls);

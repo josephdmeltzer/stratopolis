@@ -225,19 +225,14 @@ public class ScoringAndWinning {
             boolean redWin = false;
             boolean greenWin = false;
             for (int i = 0; i < 10000; i++){
-                if (StratoGame.greenHasWon(placement)){
+                if (StratoGame.greenHasWon(placement))
                     greenWin = true;
-                }
-                else{
+                else
                     redWin = true;
-                }
-                if (greenWin && redWin){
+                if (greenWin && redWin)
                     break;
-                }
             }
             assertTrue("The placement string "+ placement + " is symmetric and needs to have a random winner. However, " + (StratoGame.greenHasWon(placement) ? "green"  : "red") + "  has won each time in 10000 iterations", redWin && greenWin);
         }
-
-
     }
 }
