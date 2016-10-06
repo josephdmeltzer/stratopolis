@@ -757,6 +757,32 @@ public class StratoGame {
         boolean green = (piece>='K' && piece<='T');
         System.out.println("We are: "+green);
         if (depth>0) return alphabetaCheat(placement, us, opponent, depth, depth, -1000, 1000, true, green).move;
-            else return genMoveEasy(placement,piece,opiece);
+        else {
+            System.out.println("genMoveNotEasy");
+            return genMoveNotEasy(placement,piece,opiece);
+        }
+    }
+    public static String genMoveNotEasy(String placement, char piece, char opponentsPiece) {
+        String bestMove = "";
+        int bestScore = -100;
+        for (char x='A'; x<='Z'; x++) {
+            for (char y='A'; y<='Z'; y++) {
+                for (char o='A'; o<='D'; o++) {
+                    if (piece>='A' && piece <='J') {
+                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)>bestScore ) {
+                            bestMove = ""+x+y+piece+o;
+                            bestScore = getScoreForPlacement(placement + x + y + piece + o, false)-getScoreForPlacement(placement + x + y + piece + o, true);
+                        }
+                    }
+                    if (piece>='K' && piece <='T') {
+                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true)>bestScore ) {
+                            bestMove = ""+x+y+piece+o;
+                            bestScore = getScoreForPlacement(placement + x + y + piece + o, true)-getScoreForPlacement(placement + x + y + piece + o, false);
+                        }
+                    }
+                }
+            }
+        }
+        return bestMove;
     }
 }
