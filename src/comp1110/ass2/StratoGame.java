@@ -751,7 +751,7 @@ public class StratoGame {
         return bestMove;
     }
     public static String genMoveCheating(String placement, Player us, Player opponent){
-        int depth = min(MAX_TILES-us.used_tiles-1, 4);
+        int depth = min(MAX_TILES-us.used_tiles-1, 3);
         char piece = (char) (us.available_tiles).get(us.used_tiles);
         char opiece = (char) (opponent.available_tiles).get(opponent.used_tiles);
         boolean green = (piece>='K' && piece<='T');
