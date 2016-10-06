@@ -387,7 +387,8 @@ public class Board extends Application {
         red.setLayoutX(570);
         red.setLayoutY(480);
 
-        placementGrp.getChildren().addAll(green, red, startGame, instructions);
+        placementGrp.getChildren().addAll(red, startGame, instructions);
+        placementGrp.getChildren().add(green);
     }
 
     /*Function by Zhixian Wu. This function displays the instructions when called.*/
