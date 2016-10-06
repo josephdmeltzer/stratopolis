@@ -232,7 +232,7 @@ public class Board extends Application {
         greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null));
 
 
-        Button greenCheating = new Button("Cheating");
+        Button greenCheating = new Button("Nightmare");
         greenCheating.setOnAction(event-> {
             gameState.greenPlayer = CHEATING;
             greenText.setText("Player Green: Cheating");
@@ -307,7 +307,7 @@ public class Board extends Application {
         redHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redHard.setEffect(shadow));
         redHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redHard.setEffect(null));
 
-        Button redCheating = new Button("Cheating");
+        Button redCheating = new Button("Nightmare");
         redCheating.setOnAction(event-> {
             gameState.redPlayer = CHEATING;
             redText.setText("Player Red: Cheating");
