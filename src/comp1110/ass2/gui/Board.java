@@ -1,8 +1,6 @@
 package comp1110.ass2.gui;
 
 import comp1110.ass2.*;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -30,7 +28,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import comp1110.ass2.StratoGame;
-import javafx.util.Duration;
 
 
 import static comp1110.ass2.Colour.BLACK;
@@ -98,6 +95,8 @@ public class Board extends Application {
     private ImageView ivr = new ImageView();
     private Text greentxt = new Text("Green");
     private Text redtxt = new Text("Red");
+    Button rotateG = new Button("Rotate");
+    Button rotateR = new Button("Rotate");
     private Text errormessage = new Text("Invalid move!");
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
@@ -109,11 +108,11 @@ public class Board extends Application {
     /*Various Groups that organise the screen.*/
     private final Group root = new Group();
     private final Group popUp1 = new Group();
+    private final Group popUp2 = new Group();
     private final Group controls = new Group();
     private final GridPane playerControls = new GridPane();
     private final Group placementGrp = new Group();
     private final GridPane playingBoard = new GridPane();
-
     private final GridPane heightLabels = new GridPane();
     private final GridPane clickablePanes = new GridPane();
 
@@ -130,6 +129,7 @@ public class Board extends Application {
 
     /*Function by Zhixian Wu*/
     private void initialSettings() {
+        placementGrp.setOpacity(1);
         playingBoard.setOpacity(1);
         heightLabels.setOpacity(1);
         scene.setFill(LIGHTGREY);
@@ -387,8 +387,7 @@ public class Board extends Application {
         red.setLayoutX(570);
         red.setLayoutY(480);
 
-        placementGrp.getChildren().addAll(red, startGame, instructions);
-        placementGrp.getChildren().add(green);
+        placementGrp.getChildren().addAll(green, red, startGame, instructions);
     }
 
     /*Function by Zhixian Wu. This function displays the instructions when called.*/
@@ -501,12 +500,15 @@ public class Board extends Application {
 
             Button nextMove = new Button("Next Move");
             nextMove.setOnMousePressed(event->  {
-                aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
-                controls.getChildren().add(aiThink);
-                aiThink.setLayoutX(750);
-                aiThink.setLayoutY(450);
+                if (gameState.moveHistory.length()<=MAX_TILES*8){
+                    aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+                    controls.getChildren().add(aiThink);
+                    aiThink.setLayoutX(750);
+                    aiThink.setLayoutY(420);
+                }
             });
             nextMove.setOnAction(event->  makeAIMove());
+
             nextMove.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                     "        #090a0c,\n" +
                     "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
@@ -587,13 +589,12 @@ public class Board extends Application {
         ivr.setCache(true);
 
         /*The buttons that rotate the tiles*/
-        Button rotateG = new Button("Rotate");
         rotateG.setOnAction(event-> {
             playerG.rotateTile();
             ivg.setRotate((((int) (playerG.rotation)-'A')*90));
         });
 
-        Button rotateR = new Button("Rotate");
+
         rotateR.setOnAction(event-> {
             playerR.rotateTile();
             ivr.setRotate((((int) (playerR.rotation)-'A')*90));
@@ -637,12 +638,14 @@ public class Board extends Application {
         /*A main menu button. It clears the current game and calls initialSettings()*/
         Button menu = new Button("Main Menu");
         menu.setOnAction(event->{
+            placementGrp.setOpacity(1);
             controls.getChildren().clear();
             placementGrp.getChildren().clear();
             playingBoard.getChildren().clear();
             heightLabels.getChildren().clear();
             clickablePanes.getChildren().clear();
             playerControls.getChildren().clear();
+            root.getChildren().remove(popUp2);
 
             firstGame = false;
 
@@ -1321,10 +1324,12 @@ public class Board extends Application {
                         playerControls.getChildren().add(outoftiles);
                         playerR.getNextTile();
                     }
-                    /*Update whose turn it is, and whose turn is bolded.*/
+                    /*Update whose turn it is, whose turn is bolded, and which rotate button is greyed out.*/
                     gameState.playerTurn = GREEN;
                     greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
                     redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
+                    rotateG.setDisable(false);
+                    rotateR.setDisable(true);
                     break;
                 case GREEN:
                     if (playerG.used_tiles<19){ /*If green still has tiles left*/
@@ -1349,9 +1354,13 @@ public class Board extends Application {
                     gameState.playerTurn = RED;
                     greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
                     redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+                    rotateG.setDisable(true);
+                    rotateR.setDisable(false);
                     break;
                 case BLACK:
                     gameState.playerTurn = GREEN;
+                    rotateG.setDisable(false);
+                    rotateR.setDisable(true);
                     break;
             }
             /*Update the number of tiles left*/
@@ -1360,23 +1369,26 @@ public class Board extends Application {
             /*Checks if the game is over. If it is, we clear the board and display the winner.*/
             if (gameState.moveHistory.length() > MAX_TILES*8) {
                 clickablePanes.getChildren().clear();
-                playingBoard.setOpacity(0.2);
-                heightLabels.setOpacity(0.2);
+                placementGrp.setOpacity(0.5);
+                playingBoard.setOpacity(0.3);
+                heightLabels.setOpacity(0.3);
                 /*If green wins*/
                 if (Scoring.getWinner(gameState.moveHistory)){
                     Text score = new Text("Green Wins!");
                     score.setFill(Color.GREEN);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-                    placementGrp.getChildren().add(score);
+                    popUp2.getChildren().add(score);
                     score.setLayoutX(280);
                     score.setLayoutY(300);
+                    root.getChildren().add(popUp2);
                 } else{ /*if red wins*/
                     Text score = new Text("Red Wins!");
                     score.setFill(Color.RED);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-                    placementGrp.getChildren().add(score);
+                    popUp2.getChildren().add(score);
                     score.setLayoutX(290);
                     score.setLayoutY(300);
+                    root.getChildren().add(popUp2);
                 }
             }
         }
@@ -1426,7 +1438,6 @@ public class Board extends Application {
                         opponent = genMoveCheating(gameState.moveHistory, playerR, playerG);
                         break;
                 }
-
                 makeGUIPlacement(opponent);
             }
         }
