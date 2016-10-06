@@ -6,21 +6,16 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -497,7 +492,6 @@ public class Board extends Application {
         if (gameState.greenPlayer!=HUMAN && gameState.redPlayer!=HUMAN) {
             makeGUIPlacement("MMUA");
 
-
             Button nextMove = new Button("Next Move");
             nextMove.setOnMousePressed(event->  {
                 if (gameState.moveHistory.length()<=MAX_TILES*8){
@@ -548,7 +542,30 @@ public class Board extends Application {
         sound_icon.setCache(true);
         sound_icon.setLayoutX(900);
         sound_icon.setLayoutY(15);
-        sound_icon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+        Pane sound_pane = new Pane();
+        sound_pane.setPrefSize(50,50);
+        sound_pane.setOnMouseClicked(event -> {
+            if (soundOn){
+                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
+                sound_icon.setFitWidth(25);
+                sound_icon.setPreserveRatio(true);
+                sound_icon.setSmooth(true);
+                sound_icon.setCache(true);
+                soundOn = false;
+            } else{
+                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+                sound_icon.setFitWidth(25);
+                sound_icon.setPreserveRatio(true);
+                sound_icon.setSmooth(true);
+                sound_icon.setCache(true);
+                soundOn = true;
+            }
+        });
+        sound_pane.setLayoutX(900);
+        sound_pane.setLayoutY(15);
+
+        /*sound_icon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (soundOn){
@@ -568,8 +585,8 @@ public class Board extends Application {
                 }
                 event.consume();
             }
-        });
-        controls.getChildren().add(sound_icon);
+        });*/
+        controls.getChildren().addAll(sound_icon,sound_pane);
 
 
 
@@ -697,10 +714,6 @@ public class Board extends Application {
         updateRedScore();
 
         /*Tiles left by Zhixian Wu*/
-        /*Rectangle r2 = new Rectangle(170,45,Color.SANDYBROWN);
-        r2.setArcHeight(20);
-        r2.setArcWidth(20);*/
-
         Text tiles_left = new Text("TILES LEFT");
 
         greenTilesLeft.setFill(Color.GREEN);
@@ -718,11 +731,6 @@ public class Board extends Application {
             tileCounter.getColumnConstraints().add(column);
         }
         /*Layout*/
-        /*GridPane.setColumnIndex(r2,0);
-        GridPane.setRowIndex(r2,0);
-        GridPane.setColumnSpan(r2,2);
-        GridPane.setRowSpan(r2,2);
-        GridPane.setValignment(r2, VPos.TOP);*/
         GridPane.setColumnIndex(tiles_left,0);
         GridPane.setRowIndex(tiles_left,0);
         GridPane.setColumnSpan(tiles_left,2);
