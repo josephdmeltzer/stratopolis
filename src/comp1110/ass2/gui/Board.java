@@ -1374,6 +1374,7 @@ public class Board extends Application {
                     Text score = new Text("Green Wins!");
                     score.setFill(Color.GREEN);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+                    popUp2.getChildren().clear();
                     popUp2.getChildren().add(score);
                     score.setLayoutX(280);
                     score.setLayoutY(300);
@@ -1382,6 +1383,7 @@ public class Board extends Application {
                     Text score = new Text("Red Wins!");
                     score.setFill(Color.RED);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+                    popUp2.getChildren().clear();
                     popUp2.getChildren().add(score);
                     score.setLayoutX(290);
                     score.setLayoutY(300);
