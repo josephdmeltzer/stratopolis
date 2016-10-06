@@ -39,7 +39,7 @@ public class PlayerG extends Player {
         moves.add('R');
         moves.add('S');
         moves.add('T');
-        /*Collections.shuffle(moves);*/
+        Collections.shuffle(moves);
         return moves;
     }
     /*Constructor for the class*/

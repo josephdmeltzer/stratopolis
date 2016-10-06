@@ -186,7 +186,7 @@ public class Board extends Application {
         greenHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHuman.setEffect(shadow));
         greenHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHuman.setEffect(null));
 
-        Button greenEasy = new Button("Amateur");
+        Button greenEasy = new Button("Easy");
         greenEasy.setOnAction(event-> {
             gameState.greenPlayer = EASY;
             greenText.setText("Player Green: Easy");
@@ -201,7 +201,7 @@ public class Board extends Application {
         greenEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenEasy.setEffect(shadow));
         greenEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenEasy.setEffect(null));
 
-        Button greenMedium = new Button("Skilful");
+        Button greenMedium = new Button("Medium");
         greenMedium.setOnAction(event-> {
             gameState.greenPlayer = MEDIUM;
             greenText.setText("Player Green: Medium");
@@ -216,7 +216,7 @@ public class Board extends Application {
         greenMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenMedium.setEffect(shadow));
         greenMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenMedium.setEffect(null));
 
-        Button greenHard = new Button("Pro");
+        Button greenHard = new Button("Hard");
         greenHard.setOnAction(event-> {
             gameState.greenPlayer = HARD;
             greenText.setText("Player Green: Hard");
@@ -232,7 +232,7 @@ public class Board extends Application {
         greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null));
 
 
-        Button greenCheating = new Button("Nightmare");
+        Button greenCheating = new Button("Cheating");
         greenCheating.setOnAction(event-> {
             gameState.greenPlayer = CHEATING;
             greenText.setText("Player Green: Cheating");
