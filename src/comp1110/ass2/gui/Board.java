@@ -65,11 +65,14 @@ layout by Manal Mohania and Joseph Meltzer*/
 * on the GridPane clickablePanes.
 * When a pane is clicked, the two player version of the function makes a
 * move (by calling makeGUIPlacement) based on whose turn it is.
-* The one player version makes the player's move and calls the AI with the
-* appropriate input on which player it is supposed to be.
+* The one player version makes the player's move and calls makeAIMove().
 * These panes also hold the events for the previews of tile placements*/
 
-/*Apart from putting an image in the right place, the makeGUIPlacement function modifies a shitton of stuff*/
+/*Apart from putting an image in the right place, the makeGUIPlacement function
+* modifies whose turn it is, how far through their stack of tiles each player
+* is at, the heights of the tiles (by calling displayHeights()), what the current
+ * score is (by calling updateScores()), check if the game is over and display
+ * the Game Over Screen is true, etc.*/
 
 
 
@@ -686,7 +689,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         controls.getChildren().add(r);
 
         Text score = new Text("SCORES");
-        score.setLayoutX(801);
+        score.setLayoutX(800);
         score.setLayoutY(65);
         controls.getChildren().add(score);
 
@@ -694,13 +697,13 @@ layout by Manal Mohania and Joseph Meltzer*/
         greenScore.setLayoutY(103);
         greenScore.setFill(Color.GREEN);
         greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
-        updateGreenScore();
 
         redScore.setLayoutX(830);
         redScore.setLayoutY(103);
         redScore.setFill(Color.RED);
         redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
-        updateRedScore();
+        controls.getChildren().addAll(greenScore,redScore);
+        updateScores();
 
         /*Counter of tiles left by Zhixian Wu*/
         Text tiles_left = new Text("TILES LEFT");
@@ -714,7 +717,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         updateTilesLeft();
 
         GridPane tileCounter = new GridPane();
-        tileCounter.getChildren().addAll(/*r2,*/tiles_left,greenTilesLeft,redTilesLeft);
+        tileCounter.getChildren().addAll(tiles_left,greenTilesLeft,redTilesLeft);
         for (int i = 0; i < 2; i++) {
             ColumnConstraints column = new ColumnConstraints(85);
             tileCounter.getColumnConstraints().add(column);
@@ -773,9 +776,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private void updateTilesLeft(){
         if (gameState.moveHistory.length()<=MAX_TILES*8-4){
             String green = Integer.toString(MAX_TILES-playerG.used_tiles);
-            System.out.println("G "+playerG.used_tiles);
             String red = Integer.toString(MAX_TILES-playerR.used_tiles);
-            System.out.println("R "+playerR.used_tiles);
             greenTilesLeft.setText(green);
             redTilesLeft.setText(red);
         } else{
@@ -1032,14 +1033,11 @@ layout by Manal Mohania and Joseph Meltzer*/
         /*Event by Zhixian Wu. This event causes the AI to make its move when the mouse is released.*/
         pane.setOnMouseReleased(event -> {
             int length = gameState.moveHistory.length()-2;
-            System.out.println("addPanePlayerGreen, the moveHistory the AI uses: " + gameState.moveHistory);
 
             /*The AI only makes its move if your move was valid, i.e. if the
             last move in moveHistory was yours*/
             if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
                 makeAIMove();
-            } else{
-                System.out.println("AI did not move");
             }
         });
 
@@ -1076,7 +1074,6 @@ layout by Manal Mohania and Joseph Meltzer*/
             char row = (char) (rowIndex+'A');
 
             String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
-            System.out.println("Red tried: " + placement);
             makeGUIPlacement(placement);
 
             int length = gameState.moveHistory.length()-2;
@@ -1104,7 +1101,6 @@ layout by Manal Mohania and Joseph Meltzer*/
             if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J' && gameState.moveHistory.length()<MAX_TILES*8){
                 makeAIMove();
             } else{
-                System.out.println("AI did not move");
                 controls.getChildren().remove(aiThink);
             }
 
@@ -1145,24 +1141,15 @@ layout by Manal Mohania and Joseph Meltzer*/
         controls.getChildren().remove(errormessage);
 
         /*The following ensure that the piece does not fall out of the board*/
-        if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'D'))){
-            return;
-        }
+        if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'D'))) return;
 
-        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'C'))){
-            return;
-        }
+        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'C'))) return;
 
-        if ((placement.charAt(1) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'B'))){
-            return;
-        }
+        if ((placement.charAt(1) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'B'))) return;
 
-        if ((placement.charAt(1) == 'A') && ((placement.charAt(3) == 'C') || (placement.charAt(3) == 'D'))){
-            return;
-        }
+        if ((placement.charAt(1) == 'A') && ((placement.charAt(3) == 'C') || (placement.charAt(3) == 'D'))) return;
 
         /*set image according to the validity of the placement*/
-
         if (StratoGame.isPlacementValid(gameState.moveHistory.concat(placement))) {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
             iv.setOpacity(0.8);
@@ -1207,32 +1194,25 @@ layout by Manal Mohania and Joseph Meltzer*/
 
 
     }
+
     /**
-     * The next two functions update the score of the green and the red players respectively.
+     * The next function updates the score of the green and the red players.
      *
      * These functions were written by Manal Mohania
      * Some minor edits by Joseph Meltzer and Zhixian Wu
      * */
-
-    private void updateGreenScore(){
+    private void updateScores(){
         String placement = gameState.moveHistory;
-        controls.getChildren().remove(greenScore);
         int score = StratoGame.getScoreForPlacement(placement, true);
         greenScore.setText("" + score);
-        controls.getChildren().add(greenScore);
         int offset = (Integer.toString(score)).length() * 15;
         greenScore.setLayoutX(790-offset);
         greenScore.setLayoutY(107);
-    }
 
-    private void updateRedScore(){
-        String placement = gameState.moveHistory;
-        controls.getChildren().remove(redScore);
-        int score = StratoGame.getScoreForPlacement(placement, false);
-        redScore.setText("" + score);
-        controls.getChildren().add(redScore);
-        int offset = (Integer.toString(score)).length() * 15;
-        redScore.setLayoutX(870 - offset);
+        int score2 = StratoGame.getScoreForPlacement(placement, false);
+        redScore.setText("" + score2);
+        int offset2 = (Integer.toString(score2)).length() * 15;
+        redScore.setLayoutX(870 - offset2);
         redScore.setLayoutY(107);
     }
 
@@ -1240,9 +1220,9 @@ layout by Manal Mohania and Joseph Meltzer*/
     /*Function by Zhixian Wu*/
     /* @param placement   The placement string*/
     private void makeGUIPlacement(String placement) {
+        /*Remove some messages if they are on screen*/
         controls.getChildren().remove(errormessage);
         controls.getChildren().remove(aiThink);
-        System.out.println("Someone tried: " + placement); /*For debugging purposes*/
 
         String tempMove = gameState.moveHistory.concat(placement);
         if (!StratoGame.isPlacementValid(tempMove)) { /*If the attempted move is invalid*/
@@ -1266,7 +1246,6 @@ layout by Manal Mohania and Joseph Meltzer*/
                /*make sure it's centered*/
             GridPane.setHalignment(iv1, HPos.CENTER);
             GridPane.setValignment(iv1, VPos.CENTER);
-
 
             /*Place the image, in the correct rotation, in the correct place on the board*/
             switch (placement.charAt(3)) {
@@ -1294,8 +1273,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             displayHeights();
 
             /*Update the scores displayed*/
-            updateRedScore();
-            updateGreenScore();
+            updateScores();
 
             if (soundOn) audio.play();
 
@@ -1346,7 +1324,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                         playerControls.getChildren().add(outoftiles);
                         playerG.getNextTile();
                     }
-                    /*Update whose turn it is, and whose turn is bolded.*/
+                    /*Update whose turn it is, whose turn is bolded, and which rotate button is greyed out.*/
                     gameState.playerTurn = RED;
                     greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
                     redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
@@ -1362,9 +1340,11 @@ layout by Manal Mohania and Joseph Meltzer*/
             /*Update the number of tiles left*/
             updateTilesLeft();
 
-            /*Checks if the game is over. If it is, we clear the board and display the winner.*/
+            /*Checks if the game is over. If it is, we lower the board opacity and display the winner.*/
             if (gameState.moveHistory.length() > MAX_TILES*8) {
+                /*Get rid of the panes*/
                 clickablePanes.getChildren().clear();
+                /*Lower opacity of the board*/
                 placementGrp.setOpacity(0.5);
                 playingBoard.setOpacity(0.3);
                 heightLabels.setOpacity(0.3);
@@ -1373,7 +1353,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                     Text score = new Text("Green Wins!");
                     score.setFill(Color.GREEN);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-                    popUp2.getChildren().clear();
+                    popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
                     score.setLayoutX(280);
                     score.setLayoutY(300);
@@ -1382,7 +1362,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                     Text score = new Text("Red Wins!");
                     score.setFill(Color.RED);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-                    popUp2.getChildren().clear();
+                    popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
                     score.setLayoutX(290);
                     score.setLayoutY(300);
@@ -1392,14 +1372,17 @@ layout by Manal Mohania and Joseph Meltzer*/
         }
     }
 
+    /*Function by Zhixian Wu
+    * It makes a move for the AI, which plays as whichever player whose turn it is*/
     private void makeAIMove(){
-        if (gameState.moveHistory.length()<=MAX_TILES*8){
-            if (gameState.playerTurn==GREEN){
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+        if (gameState.moveHistory.length()<=MAX_TILES*8){ /*Checks the game is not over*/
 
-                String opponent = "";
+            char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+            char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
 
+            String opponent = "";
+
+            if (gameState.playerTurn==GREEN){ /*if the current turn is green*/
                 switch (gameState.greenPlayer){
                     case EASY:
                         opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
@@ -1416,12 +1399,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                 }
 
                 makeGUIPlacement(opponent);
-            } else{
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-
-                String opponent = "";
-
+            } else{ /*if the current turn is red*/
                 switch (gameState.redPlayer){
                     case EASY:
                         opponent = genMoveEasy(gameState.moveHistory, redTile, greenTile);
