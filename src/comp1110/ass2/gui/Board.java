@@ -30,6 +30,7 @@ import static comp1110.ass2.Colour.RED;
 import static comp1110.ass2.Difficulty.*;
 import static comp1110.ass2.Player.MAX_TILES;
 import static comp1110.ass2.StratoGame.*;
+import static comp1110.ass2.GameState.*;
 import static javafx.scene.paint.Color.*;
 
 public class Board extends Application {
@@ -134,6 +135,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         heightLabels.setOpacity(1);
 
         gameState = new GameState(BLACK, HUMAN, HUMAN);
+        System.out.println("initial settings: " + gameState.playerTurn);
 
         /*The logo*/
         ImageView logo = new ImageView();
@@ -956,7 +958,6 @@ layout by Manal Mohania and Joseph Meltzer*/
                         break;
                     case BLACK:
                         makeGUIPlacement("MMUA");
-                        gameState.playerTurn = GREEN;
                         break;
                 }
 
@@ -1298,8 +1299,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                         playerControls.getChildren().add(outoftiles);
                         playerR.getNextTile();
                     }
-                    /*Update whose turn it is, whose turn is bolded, and which rotate button is greyed out.*/
-                    gameState.playerTurn = GREEN;
+                    /*Update whose turn is bolded, and which rotate button is greyed out.*/
                     greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
                     redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
                     rotateG.setDisable(false);
@@ -1324,19 +1324,21 @@ layout by Manal Mohania and Joseph Meltzer*/
                         playerControls.getChildren().add(outoftiles);
                         playerG.getNextTile();
                     }
-                    /*Update whose turn it is, whose turn is bolded, and which rotate button is greyed out.*/
-                    gameState.playerTurn = RED;
+                    /*Update whose turn is bolded, and which rotate button is greyed out.*/
                     greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
                     redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
                     rotateG.setDisable(true);
                     rotateR.setDisable(false);
                     break;
                 case BLACK:
-                    gameState.playerTurn = GREEN;
                     rotateG.setDisable(false);
                     rotateR.setDisable(true);
                     break;
             }
+            /*Update whose turn it is*/
+            gameState.nextTurn();
+            System.out.println(gameState.playerTurn);
+
             /*Update the number of tiles left*/
             updateTilesLeft();
 

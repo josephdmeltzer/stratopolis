@@ -5,12 +5,7 @@ import org.junit.Test;
 import static comp1110.ass2.Player.MAX_TILES;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Aftran261 on 14/09/2016.
- */
 /*By Zhixian Wu*/
 public class PlayerTestByZhixian {
 

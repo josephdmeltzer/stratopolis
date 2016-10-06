@@ -2,6 +2,8 @@ package comp1110.ass2;
 
 import java.util.List;
 
+import static comp1110.ass2.Colour.GREEN;
+
 /**
  * Created by manalmohania on 11/08/2016.
  */
@@ -34,6 +36,12 @@ public class Player {
         if (this.used_tiles < MAX_TILES-1){
             used_tiles++;
         }
+    }
+
+    /*Constructor for the class*/
+    public Player(){
+        this.used_tiles = 0;
+        this.rotation = 'A';
     }
 }
 /*a function that rotates the tile should be here instead*/

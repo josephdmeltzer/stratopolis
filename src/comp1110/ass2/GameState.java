@@ -1,5 +1,9 @@
 package comp1110.ass2;
 
+import static comp1110.ass2.Colour.BLACK;
+import static comp1110.ass2.Colour.GREEN;
+import static comp1110.ass2.Colour.RED;
+
 /**
  * Created by u5807060 on 11/08/2016.
  */
@@ -21,8 +25,24 @@ public class GameState {
         this.moveHistory = "";
     }
 
-    public void updateMoves(String placement){
-        this.moveHistory = this.moveHistory + placement;
+    public void updateMoves(String placement){ this.moveHistory = this.moveHistory + placement;}
+
+
+    public void nextTurn(){
+        switch (this.playerTurn){
+            case GREEN: {
+                this.playerTurn=RED;
+                break;
+            }
+            case RED: {
+                this.playerTurn=GREEN;
+                break;
+            }
+            case BLACK: {
+                this.playerTurn=GREEN;
+                break;
+            }
+        }
     }
 
 }
