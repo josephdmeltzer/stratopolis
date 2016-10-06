@@ -2,6 +2,7 @@ package comp1110.ass2;
 
 import static comp1110.ass2.AI.alphabeta;
 import static comp1110.ass2.AI.alphabetaCheat;
+import static comp1110.ass2.AI.validTiles;
 import static comp1110.ass2.Colour.*;
 import static comp1110.ass2.Pieces.getColours;
 import static comp1110.ass2.Player.MAX_TILES;
@@ -724,23 +725,25 @@ public class StratoGame {
     /* Even older version of the generateMove function. Only looks at the immediately available moves.
        Seemingly instant computation time.
        Will be used exclusively when the AI difficulty setting is set to 'Easy'. (To be implemented)*/
+    static char[] checkOrder = {'M','L','N','K','O','J','P','I','Q','H','R','G','S','F','T','E','U','D','V','C','W','B','X','A','Y','Z'};
+
     public static String genMoveEasy(String placement, char piece, char opponentsPiece) {
         String bestMove = "";
         int bestScore = 0;
-        for (char x='A'; x<='Z'; x++) {
-            for (char y='A'; y<='Z'; y++) {
-                for (char o='A'; o<='D'; o++) {
-                    if (piece>='A' && piece <='J') {
-                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)>bestScore ) {
-                            bestMove = ""+x+y+piece+o;
-                            bestScore = getScoreForPlacement(placement + x + y + piece + o, false);
-                        }
+        for (String move : validTiles(placement)) {
+            char x = move.charAt(0);
+            char y = move.charAt(1);
+            for (char o='A'; o<='D'; o++) {
+                if (piece>='A' && piece <='J') {
+                    if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)>bestScore ) {
+                        bestMove = ""+x+y+piece+o;
+                        bestScore = getScoreForPlacement(placement + x + y + piece + o, false);
                     }
-                    if (piece>='K' && piece <='T') {
-                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true)>bestScore ) {
-                            bestMove = ""+x+y+piece+o;
-                            bestScore = getScoreForPlacement(placement + x + y + piece + o, true);
-                        }
+                }
+                if (piece>='K' && piece <='T') {
+                    if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true)>bestScore ) {
+                        bestMove = ""+x+y+piece+o;
+                        bestScore = getScoreForPlacement(placement + x + y + piece + o, true);
                     }
                 }
             }
@@ -761,7 +764,7 @@ public class StratoGame {
     }
     public static String genMoveNotEasy(String placement, char piece, char opponentsPiece) {
         String bestMove = "";
-        int bestScore = 0;
+        int bestScore = -100;
         for (char x='A'; x<='Z'; x++) {
             for (char y='A'; y<='Z'; y++) {
                 for (char o='A'; o<='D'; o++) {
