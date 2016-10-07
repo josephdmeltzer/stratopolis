@@ -759,10 +759,10 @@ public class StratoGame {
         if (depth>0) return alphabetaCheat(placement, us, opponent, depth, depth, -1000, 1000, true, green).move;
         else {
             System.out.println("genMoveNotEasy");
-            return genMoveNotEasy(placement,piece,opiece);
+            return genMoveNotEasy(placement,piece);
         }
     }
-    public static String genMoveNotEasy(String placement, char piece, char opponentsPiece) {
+    public static String genMoveNotEasy(String placement, char piece) {
         String bestMove = "";
         int bestScore = -100;
         for (char x='A'; x<='Z'; x++) {

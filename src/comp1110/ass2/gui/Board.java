@@ -96,6 +96,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private Text redtxt = new Text("Red");
     private Button rotateG = new Button("Rotate");
     private Button rotateR = new Button("Rotate");
+    private Button nextMove = new Button("Next Move");
     private Text errormessage = new Text("Invalid move!");
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
@@ -133,6 +134,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         placementGrp.setOpacity(1);
         playingBoard.setOpacity(1);
         heightLabels.setOpacity(1);
+        nextMove.setDisable(false);
 
         gameState = new GameState(BLACK, HUMAN, HUMAN);
         System.out.println("initial settings: " + gameState.playerTurn);
@@ -749,7 +751,6 @@ layout by Manal Mohania and Joseph Meltzer*/
             makeGUIPlacement("MMUA");
 
             /*The button that tells the AI to make a move, click this to progress the game*/
-            Button nextMove = new Button("Next Move");
             nextMove.setOnMousePressed(event->  {
                 if (gameState.moveHistory.length()<=MAX_TILES*8){
                     aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
@@ -1350,6 +1351,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                 placementGrp.setOpacity(0.5);
                 playingBoard.setOpacity(0.3);
                 heightLabels.setOpacity(0.3);
+                nextMove.setDisable(true);
                 /*If green wins*/
                 if (Scoring.getWinner(gameState.moveHistory)){
                     Text score = new Text("Green Wins!");
