@@ -20,11 +20,15 @@ import static java.lang.StrictMath.min;
 public class StratoGame {
 
     static boolean isTilePlacementWellFormed(String tilePlacement) {
-        if (tilePlacement.length() != 4) {
-            return false;
-        } else {
-            return ('A'<=tilePlacement.charAt(0) && tilePlacement.charAt(0)<='Z' && 'A'<=tilePlacement.charAt(1) && tilePlacement.charAt(1)<='Z' && 'A'<=tilePlacement.charAt(2) && tilePlacement.charAt(2)<='U' && 'A'<=tilePlacement.charAt(3) && tilePlacement.charAt(3)<='D');
-        }
+        if (tilePlacement.length() != 4) return false;
+        else if (tilePlacement.charAt(0)<'A') return false;
+        else if (tilePlacement.charAt(0)>'Z') return false;
+        else if (tilePlacement.charAt(1)<'A') return false;
+        else if (tilePlacement.charAt(1)>'Z') return false;
+        else if (tilePlacement.charAt(2)<'A') return false;
+        else if (tilePlacement.charAt(2)>'U') return false;
+        else if (tilePlacement.charAt(3)<'A') return false;
+        else return tilePlacement.charAt(3)<='D';
     }
 
     /**
@@ -40,7 +44,7 @@ public class StratoGame {
      * @return True if the placement is well-formed
      */
     /* Method by Manal Mohania and Joseph Meltzer */
-     static boolean isPlacementWellFormed(String placement) {
+    static boolean isPlacementWellFormed(String placement) {
         // FIXME Task 4: determine whether a placement is well-formed
         if (placement == null) return false;
         int len = placement.length();
@@ -48,24 +52,16 @@ public class StratoGame {
         int[] counter = new int[20];
         Boolean c1 = (len % 4 == 0) && (numPieces >=1) && (numPieces <= 41);
         if (!c1) return false;
-        for (int i = 0; i < len; i += 4){ /*note: name.substring(0,n) returns only up to the (n-1)the character*/
-            if (!(isTilePlacementWellFormed(placement.substring(i,i+4))))
-                return false;
-        }
         if (! placement.substring(0,4).equals("MMUA")) return false;
-
-        for (int i = 6; i< len - 1; i += 8) {
-            if (!(placement.charAt(i) >= 'K' && placement.charAt(i) <= 'T')) return false;
-        }
-
-        for (int i = 10; i < len - 1; i += 8) {
-            if (!(placement.charAt(i) >= 'A' && placement.charAt(i) <= 'J')) return false;
-        }
-
-        for (int i = 6; i < len; i += 4){
-            int idx = placement.charAt(i) - 'A';
-            counter[idx]++;
-            if (counter[idx] > 2) return false;
+        for (int i=2; i<len; i+=4) {
+            if (i%4==2 && !(isTilePlacementWellFormed(placement.substring(i-2,i+2)))) return false;
+            if (i%8==6 && !(placement.charAt(i) >= 'K' && placement.charAt(i) <= 'T')) return false;
+            if (i%8==2 && i>9 && !(placement.charAt(i) >= 'A' && placement.charAt(i) <= 'J')) return false;
+            if (i%4==2 && i>5) {
+                int idx = placement.charAt(i) - 'A';
+                counter[idx]++;
+                if (counter[idx]>2) return false;
+            }
         }
         return true;
     }
@@ -82,9 +78,8 @@ public class StratoGame {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
         if (!isPlacementAdjacent2(placement)) {return false;}
-        if (!tileStraddle(placement)) return false;
+        return straddleAndColours(placement);
        // if (!checkBounds(placement)) return false; // most likely this is not needed anymore, as its stuff has been incorporated in placementAdjacent. Do not remove this line though.
-        return areColoursAlright(placement);
     }
 
     /**
@@ -129,7 +124,6 @@ public class StratoGame {
             else
                 System.out.println("colourArray: should not reach here");
         }
-        
         return coverage;
     }
 
@@ -598,6 +592,92 @@ public class StratoGame {
     }
 
     /**
+     * Method by Joseph Meltzer
+     * Combines the old tileStraddle and areColoursAlright methods into a single method.
+     * The placement string is therefore only looped through once for these methods, saving time.
+     * @param placement     The placement string to inspect.
+     * @return              Whether or not the placement is valid with respect to tile straddling and colour overlaps.
+     */
+    private static boolean straddleAndColours(String placement) {
+        int[][] tileTable = new int[26][26];
+        Colour[][] colourTable = new Colour[26][26];
+        colourTable[12][12] = RED;
+        colourTable[12][13] = GREEN;
+
+        for (int i=4; i < placement.length(); i+=4) {
+            int col = placement.charAt(i) - 'A';
+            int row = placement.charAt(i + 1) - 'A';
+
+            if ((colourTable[col][row] != RED || getColours(placement.charAt(i+2))[0] != GREEN) && (colourTable[col][row] != GREEN || getColours(placement.charAt(i+2))[0] != RED)) {
+                colourTable[col][row] = getColours(placement.charAt(i+2))[0];
+            }
+            else return false;
+
+            if (placement.charAt(i+3) == 'A'){
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
+                tileTable[col+1][row] = i;
+                tileTable[col][row+1] = i;
+
+                if ((colourTable[col+1][row] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col+1][row] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col+1][row] = getColours(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if ((colourTable[col][row+1] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row+1] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col][row+1] = getColours(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i + 3) == 'B'){
+                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
+                tileTable[col-1][row] = i;
+                tileTable[col][row+1] = i;
+
+                if ((colourTable[col][row+1] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col][row+1] = getColours(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if ((colourTable[col-1][row] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col-1][row] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col-1][row] = getColours(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i + 3) == 'C'){
+                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
+                tileTable[col-1][row] = i;
+                tileTable[col][row-1] = i;
+
+                if ((colourTable[col-1][row] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col-1][row] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col-1][row] = getColours(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if ((colourTable[col][row-1] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row-1] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col][row-1] = getColours(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+            else if (placement.charAt(i + 3) == 'D'){
+                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
+                tileTable[col][row] = i;
+                tileTable[col+1][row] = i;
+                tileTable[col][row-1] = i;
+
+                if ((colourTable[col][row-1] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
+                    colourTable[col][row-1] = getColours(placement.charAt(i+2))[1];
+                }
+                else return false;
+                if ((colourTable[col+1][row] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col+1][row] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
+                    colourTable[col+1][row] = getColours(placement.charAt(i+2))[2];
+                }
+                else return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * This method returns true if green has won the game.
      * Currently, the method does not say if green has won by scoring higher points or by virtue of luck.
      * Adding that functionality should be fairly simple though.
@@ -759,10 +839,10 @@ public class StratoGame {
         if (depth>0) return alphabetaCheat(placement, us, opponent, depth, depth, -1000, 1000, true, green).move;
         else {
             System.out.println("genMoveNotEasy");
-            return genMoveNotEasy(placement,piece,opiece);
+            return genMoveNotEasy(placement,piece);
         }
     }
-    public static String genMoveNotEasy(String placement, char piece, char opponentsPiece) {
+    public static String genMoveNotEasy(String placement, char piece) {
         String bestMove = "";
         int bestScore = -100;
         for (char x='A'; x<='Z'; x++) {

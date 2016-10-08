@@ -96,6 +96,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private Text redtxt = new Text("Red");
     private Button rotateG = new Button("Rotate");
     private Button rotateR = new Button("Rotate");
+    private Button nextMove = new Button("Next Move");
     private Text errormessage = new Text("Invalid move!");
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
@@ -133,6 +134,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         placementGrp.setOpacity(1);
         playingBoard.setOpacity(1);
         heightLabels.setOpacity(1);
+        nextMove.setDisable(false);
 
         gameState = new GameState(BLACK, HUMAN, HUMAN);
         System.out.println("initial settings: " + gameState.playerTurn);
@@ -621,6 +623,8 @@ layout by Manal Mohania and Joseph Meltzer*/
             ivr.setRotate((((int) (playerR.rotation)-'A')*90));
         });
 
+
+
         /*Adding the nodes. We may omit the a rotate button depending on the playingMode*/
         playerControls.getChildren().addAll(greentxt,redtxt,ivg,ivr);
         if (gameState.greenPlayer==HUMAN) playerControls.getChildren().add(rotateG);
@@ -749,7 +753,6 @@ layout by Manal Mohania and Joseph Meltzer*/
             makeGUIPlacement("MMUA");
 
             /*The button that tells the AI to make a move, click this to progress the game*/
-            Button nextMove = new Button("Next Move");
             nextMove.setOnMousePressed(event->  {
                 if (gameState.moveHistory.length()<=MAX_TILES*8){
                     aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
@@ -962,6 +965,41 @@ layout by Manal Mohania and Joseph Meltzer*/
                 }
 
         });
+
+        /*Event by Joseph Meltzer, rotates the piece on scrolling*/
+        pane.setOnScroll(event -> {
+            removeTempPlacement(iv);
+            if (gameState.playerTurn==GREEN) {
+                playerG.rotateTile();
+                if (event.getDeltaY()>0) {
+                    playerG.rotateTile(); playerG.rotateTile();
+                }
+                ivg.setRotate((((int) (playerG.rotation) - 'A') * 90));
+                iv.setRotate(((int) (playerG.rotation) - 'A') * 90);
+            }
+            else {
+                playerR.rotateTile();
+                if (event.getDeltaY()>0) {
+                    playerR.rotateTile(); playerR.rotateTile();
+                }
+                ivr.setRotate(((int) (playerR.rotation) - 'A') * 90);
+                iv.setRotate(((int) (playerR.rotation) - 'A') * 90);
+            }
+            char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');
+
+            switch (gameState.playerTurn){
+                case RED:
+                    String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+                    makeTempPlacement(iv, placement);
+                    break;
+                case GREEN:
+                    String placement2 = "" + col + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+                    makeTempPlacement(iv, placement2);
+                    break;
+            }
+        });
+
         /*Event by Manal Mohania, this creates the preview piece*/
         pane.setOnMouseEntered(event -> {
             char col = (char) (colIndex + 'A');
@@ -998,6 +1036,23 @@ layout by Manal Mohania and Joseph Meltzer*/
     private void addPanePlayerGreen(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
+
+        /*Event by Joseph Meltzer, rotates the piece on scrolling*/
+        pane.setOnScroll(event -> {
+            removeTempPlacement(iv);
+            playerG.rotateTile();
+            if (event.getDeltaY()>0) {
+                playerG.rotateTile(); playerG.rotateTile();
+            }
+            ivg.setRotate((((int) (playerG.rotation) - 'A') * 90));
+            iv.setRotate(((int) (playerG.rotation) - 'A') * 90);
+
+            char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');
+
+            String placement2 = "" + col + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+            makeTempPlacement(iv, placement2);
+            });
 
         /*Event by Manal Mohania, this adds the preview piece*/
         pane.setOnMouseEntered(event -> {
@@ -1056,6 +1111,23 @@ layout by Manal Mohania and Joseph Meltzer*/
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
+
+        /*Event by Joseph Meltzer, rotates the piece on scrolling*/
+        pane.setOnScroll(event -> {
+            removeTempPlacement(iv);
+            playerR.rotateTile();
+            if (event.getDeltaY()>0) {
+                playerR.rotateTile(); playerR.rotateTile();
+            }
+            ivr.setRotate(((int) (playerR.rotation) - 'A') * 90);
+            iv.setRotate(((int) (playerR.rotation) - 'A') * 90);
+
+            char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');
+
+            String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+            makeTempPlacement(iv, placement);
+        });
 
         /*Event by Manal Mohania, the adds the preview piece*/
         pane.setOnMouseEntered(event -> {
@@ -1350,6 +1422,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                 placementGrp.setOpacity(0.5);
                 playingBoard.setOpacity(0.3);
                 heightLabels.setOpacity(0.3);
+                nextMove.setDisable(true);
                 /*If green wins*/
                 if (Scoring.getWinner(gameState.moveHistory)){
                     Text score = new Text("Green Wins!");
