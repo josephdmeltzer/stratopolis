@@ -375,7 +375,8 @@ layout by Manal Mohania and Joseph Meltzer*/
         startGame.setLayoutY(620);
 
         /*The mute button's image*/
-        sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+        if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+        else sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
         sound_icon.setFitWidth(25);
         sound_icon.setPreserveRatio(true);
         sound_icon.setSmooth(true);
@@ -547,7 +548,8 @@ layout by Manal Mohania and Joseph Meltzer*/
         redtxt.setFont(Font.font("Verdana", 16));
 
         /*The mute button's image*/
-        sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+        if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+        else sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
         sound_icon.setFitWidth(25);
         sound_icon.setPreserveRatio(true);
         sound_icon.setSmooth(true);
