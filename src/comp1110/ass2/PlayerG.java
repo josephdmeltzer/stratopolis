@@ -44,10 +44,9 @@ public class PlayerG extends Player {
     }
     /*Constructor for the class*/
     public PlayerG(){
+        super();
         this.available_tiles = movesG();
         this.playerColour = GREEN;
-        this.used_tiles = 0;
-        this.rotation = 'A';
     }
 
 

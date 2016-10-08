@@ -2,7 +2,6 @@ package comp1110.ass2.gui;
 
 import comp1110.ass2.*;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -31,45 +30,50 @@ import static comp1110.ass2.Colour.RED;
 import static comp1110.ass2.Difficulty.*;
 import static comp1110.ass2.Player.MAX_TILES;
 import static comp1110.ass2.StratoGame.*;
+import static comp1110.ass2.GameState.*;
 import static javafx.scene.paint.Color.*;
 
 public class Board extends Application {
 
-    /*TODO: Change instructions text so it actually tells you the instructions*/
-
-    /*TODO: Better Game Over screen*/
-
-
+/*The majority of this class was done by Zhixian Wu, with some functions and
+layout by Manal Mohania and Joseph Meltzer*/
 
 /*OVERVIEW: The first function called by the stage is initialSettings(), which
-* creates the first screen with three buttons to choose the playing mode.
-* (And a button to tell you how to play the game)*/
+* creates the first screen many buttons to choose the playing mode (Human v.s
+* Hard AI, Human vs. Human, Easy AI vs. Cheating AI, etc.
+* (And buttons for the instructions, sound, etc.)*/
 
-/*The buttons set a variable called playingMode as PlayerIsRed, PlayerIsGreen,
-* or TwoPlayer. Then they all call makePlayer(). If the player is red, it also
-* makes a move for the AI as the first (after MMUA) move.*/
+/*The buttons set variables for the GameState which determines what kine of game,
+* is created, what difficult AI to call, etc. Then they all call makeGame(). */
 
-/*makePlayer() calls makeControls() and makeBoard()*/
+/*makeGame() calls makeControls() and makeBoard(). */
 
 /*makeControls() is pretty much the same for all playing modes, except it omits
-* a "Rotate" button if it's single-player. */
+* a "Rotate" button if it's single-player. And if the game is AI vs. AI, it creates
+* a button Next Move which progesses the game when clicked*/
 
-/*makeBoard() is pretty much the same again. The big difference is that
-* depending on which playingMode it is, it calls different addPane function:
-* addPanePlayerGreen, addPanePlayerRed, or addPaneTwoPlayer.
-* makeBoard() modifies the GridPane playingBoard so it looks like a board*/
+/*makeBoard() is pretty much the same again.
+* makeBoard() modifies some GridPanes:
+ * 1. playingBoard so it looks like a board
+ * 2. heightLabels so its rows and columns align with the playingBoard
+ * 3. clickablePanes so its rows and columns align with the playingBoard
+ * The big difference is that depending if it's Human vs. AI, AI vs. Human,
+ * or Human vs. Human, it calls different addPane function: addPanePlayerGreen,
+ * addPanePlayerRed, or addPaneTwoPlayer.
+ * If it's AI vs. Human, it also makes the AI's first move by calling makeAIMove*/
 
 /*Each 'addPane' function creates a pane at the specified row and column
-* on the GridPane clickableTiles.
+* on the GridPane clickablePanes.
 * When a pane is clicked, the two player version of the function makes a
-* move based on whose turn it is.
-* The one player version makes the player's move and calls the AI with the
-* appropriate input on which player it is supposed to be.
-* 'addPane' also holds the events for the previews of tile placements*/
+* move (by calling makeGUIPlacement) based on whose turn it is.
+* The one player version makes the player's move and calls makeAIMove().
+* These panes also hold the events for the previews of tile placements*/
 
-/*Many of the buttons, text, and images were defined as class fields to be
- modified by functions, instead of being created by functions  because they
- need to be accessible by many different functions.*/
+/*Apart from putting an image in the right place, the makeGUIPlacement function
+* modifies whose turn it is, how far through their stack of tiles each player
+* is at, the heights of the tiles (by calling displayHeights()), what the current
+ * score is (by calling updateScores()), check if the game is over and display
+ * the Game Over Screen is true, etc.*/
 
 
 
@@ -90,8 +94,8 @@ public class Board extends Application {
     private ImageView ivr = new ImageView();
     private Text greentxt = new Text("Green");
     private Text redtxt = new Text("Red");
-    Button rotateG = new Button("Rotate");
-    Button rotateR = new Button("Rotate");
+    private Button rotateG = new Button("Rotate");
+    private Button rotateR = new Button("Rotate");
     private Text errormessage = new Text("Invalid move!");
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
@@ -115,6 +119,7 @@ public class Board extends Application {
 
     /*A counter that tells you if this is the first game played.*/
     private boolean firstGame = true;
+    /*If the sound is muted*/
     private boolean soundOn = true;
 
     /*the audio clip played when a placement is made*/
@@ -122,21 +127,25 @@ public class Board extends Application {
     private final AudioClip audio = new AudioClip(PLACEMENT_URI);
 
 
-    /*Function by Zhixian Wu*/
+    /*Function mostly by Zhixian Wu, with all button styling and some layout by Manal Mohania*/
     private void initialSettings() {
+        /*Set the opacity back to normal after the last game ended*/
         placementGrp.setOpacity(1);
         playingBoard.setOpacity(1);
         heightLabels.setOpacity(1);
-        scene.setFill(LIGHTGREY);
 
-        gameState  = new GameState(BLACK, HUMAN, HUMAN);
+        gameState = new GameState(BLACK, HUMAN, HUMAN);
+        System.out.println("initial settings: " + gameState.playerTurn);
 
+        /*The logo*/
         ImageView logo = new ImageView();
         logo.setImage(new Image(Viewer.class.getResource(URI_BASE + "stratopolis" + ".png").toString()));
         placementGrp.getChildren().add(logo);
         logo.setLayoutX(220);
         logo.setLayoutY(180);
 
+      /*The options for the game: Human vs Hard AI, etc.*/
+        /*This is the text describing these options*/
         Text greenText = new Text("Player Green: Human");
         greenText.setFill(Color.GREEN);
         greenText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
@@ -160,7 +169,6 @@ public class Board extends Application {
         Text red2 = new Text("AI:   ");
         red2.setFill(Color.RED);
         red2.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-
 
         /*Each of these buttons tell the game if you want a two player game, or
         * to play as green or red against an AI*/
@@ -226,8 +234,7 @@ public class Board extends Application {
         greenHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHard.setEffect(shadow));
         greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null));
 
-
-        Button greenCheating = new Button("Nightmare");
+        Button greenCheating = new Button("Cheating");
         greenCheating.setOnAction(event-> {
             gameState.greenPlayer = CHEATING;
             greenText.setText("Player Green: Cheating");
@@ -302,7 +309,7 @@ public class Board extends Application {
         redHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redHard.setEffect(shadow));
         redHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redHard.setEffect(null));
 
-        Button redCheating = new Button("Nightmare");
+        Button redCheating = new Button("Cheating");
         redCheating.setOnAction(event-> {
             gameState.redPlayer = CHEATING;
             redText.setText("Player Red: Cheating");
@@ -317,47 +324,7 @@ public class Board extends Application {
         redCheating.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redCheating.setEffect(shadow));
         redCheating.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redCheating.setEffect(null));
 
-        Button startGame = new Button("Start");
-        startGame.setOnAction(event-> {
-            placementGrp.getChildren().clear();
-            makePlayer();
-        });
-        startGame.setStyle("-fx-background-color: \n" +
-                "        linear-gradient(#ffd65b, #e68400),\n" +
-                "        linear-gradient(#ffef84, #f2ba44),\n" +
-                "        linear-gradient(#ffea6a, #efaa22),\n" +
-                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
-                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
-                "    -fx-background-radius: 30;\n" +
-                "    -fx-background-insets: 0,1,2,3,0;\n" +
-                "    -fx-text-fill: #654b00;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-font-size: 26px;\n" +
-                "    -fx-padding: 10 25 10 25;");
-
-        startGame.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> startGame.setEffect(shadow));
-        startGame.addEventHandler(MouseEvent.MOUSE_EXITED, event -> startGame.setEffect(null));
-        startGame.setLayoutX(420);
-        startGame.setLayoutY(620);
-
-        /*A button that created a scrolling text node that displays the instructions*/
-        Button instructions = new Button("?");
-        instructions.setOnAction(event-> getInstructions());
-        instructions.setStyle("-fx-background-color: #9932cc;" +
-                "-fx-background-radius: 55em; " +
-                "-fx-min-width: 30px; " +
-                "-fx-min-height: 30px; " +
-                "-fx-max-width: 30px; " +
-                "-fx-max-height: 30px;" +
-                "-fx-text-fill: #ffd65b"
-        );
-
-        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
-        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
-        instructions.setLayoutX(870);
-        instructions.setLayoutY(20);
-
-        /*Layout*/
+        /*Layout of the options by Zhixian Wu and Manal Mohania*/
         HBox ghb1 = new HBox(5);
         ghb1.getChildren().addAll(green1,greenHuman);
         HBox ghb2 = new HBox(5);
@@ -382,22 +349,96 @@ public class Board extends Application {
         red.setLayoutX(570);
         red.setLayoutY(480);
 
-        placementGrp.getChildren().addAll(green, red, startGame, instructions);
+
+        /*This button starts the game*/
+        Button startGame = new Button("Start");
+        startGame.setOnAction(event-> {
+            placementGrp.getChildren().clear();
+            makeGame();
+        });
+        startGame.setStyle("-fx-background-color: \n" +
+                "        linear-gradient(#ffd65b, #e68400),\n" +
+                "        linear-gradient(#ffef84, #f2ba44),\n" +
+                "        linear-gradient(#ffea6a, #efaa22),\n" +
+                "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
+                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
+                "    -fx-background-radius: 30;\n" +
+                "    -fx-background-insets: 0,1,2,3,0;\n" +
+                "    -fx-text-fill: #654b00;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-font-size: 26px;\n" +
+                "    -fx-padding: 10 25 10 25;");
+
+        startGame.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> startGame.setEffect(shadow));
+        startGame.addEventHandler(MouseEvent.MOUSE_EXITED, event -> startGame.setEffect(null));
+        startGame.setLayoutX(420);
+        startGame.setLayoutY(620);
+
+        /*The mute button's image*/
+        sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+        sound_icon.setFitWidth(25);
+        sound_icon.setPreserveRatio(true);
+        sound_icon.setSmooth(true);
+        sound_icon.setCache(true);
+        sound_icon.setLayoutX(900);
+        sound_icon.setLayoutY(15);
+        /*The mute button's clickable pane*/
+        Pane sound_pane = new Pane();
+        sound_pane.setPrefSize(25,25);
+        sound_pane.setOnMouseClicked(event -> {
+            if (soundOn){
+                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
+                sound_icon.setFitWidth(25);
+                sound_icon.setPreserveRatio(true);
+                sound_icon.setSmooth(true);
+                sound_icon.setCache(true);
+                soundOn = false;
+            } else{
+                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+                sound_icon.setFitWidth(25);
+                sound_icon.setPreserveRatio(true);
+                sound_icon.setSmooth(true);
+                sound_icon.setCache(true);
+                soundOn = true;
+            }
+        });
+        sound_pane.setLayoutX(900);
+        sound_pane.setLayoutY(15);
+
+        /*The button that brings up the instructions*/
+        Button instructions = new Button("?");
+        instructions.setOnAction(event-> getInstructions());
+        instructions.setStyle("-fx-background-color: #9932cc;" +
+                "-fx-background-radius: 55em; " +
+                "-fx-min-width: 30px; " +
+                "-fx-min-height: 30px; " +
+                "-fx-max-width: 30px; " +
+                "-fx-max-height: 30px;" +
+                "-fx-text-fill: #ffd65b"
+        );
+        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
+        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
+        instructions.setLayoutX(860);
+        instructions.setLayoutY(12);
+
+
+
+        placementGrp.getChildren().addAll(green, red, startGame, instructions, sound_icon, sound_pane);
     }
 
     /*Function by Zhixian Wu. This function displays the instructions when called.*/
     private void getInstructions(){
+        /*Disable the interactive stuff from these groups when the instructions are up*/
         placementGrp.setDisable(true);
         controls.setDisable(true);
 
+        /*Layout*/
         GridPane mainInstruc = new GridPane();
         mainInstruc.setLayoutY(50);
         mainInstruc.setLayoutX(105);
         mainInstruc.setHgap(5);
         mainInstruc.setVgap(5);
-
-        ScrollPane scroll = new ScrollPane();
-
+        /*A nice outline around the instructions*/
         Rectangle thickBorder = new Rectangle(750,520,Color.BEIGE);
         thickBorder.setArcHeight(7);
         thickBorder.setArcWidth(7);
@@ -445,10 +486,13 @@ public class Board extends Application {
         instructions.setFont(Font.font("Arial", 16));
         instructions.setWrappingWidth(680);
 
+        /*The scroll-capable pane the instructions go in*/
+        ScrollPane scroll = new ScrollPane();
         scroll.setContent(instructions);
         scroll.setPrefViewportHeight(450.0);
         scroll.setPrefViewportWidth(700.0);
 
+        /*The button that removes the instructions and makes the groups interactive again*/
         Button exitBtn = new Button("x");
         exitBtn.setOnAction(event->  {
             root.getChildren().remove(popUp1);
@@ -461,11 +505,11 @@ public class Board extends Application {
                 "        linear-gradient(#20262b, #191d22),\n" +
                 "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
                 "-fx-text-fill: white;");
-
         DropShadow shadow = new DropShadow();
         exitBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, event ->  exitBtn.setEffect(shadow));
         exitBtn.addEventHandler(MouseEvent.MOUSE_EXITED, event -> exitBtn.setEffect(null));
 
+        /*Layout*/
         mainInstruc.getChildren().addAll(scroll,exitBtn);
         GridPane.setRowIndex(scroll,1);
         GridPane.setColumnIndex(scroll,0);
@@ -478,7 +522,7 @@ public class Board extends Application {
     }
 
     /*Function by Zhixian Wu*/
-    private void makePlayer(){
+    private void makeGame(){
         playerG = new PlayerG();
         playerR = new PlayerR();
 
@@ -487,43 +531,10 @@ public class Board extends Application {
 
         /*Makes the controls for the game, separately from the board*/
         makeControls();
-
-        /*Plays the game for two AI*/
-        if (gameState.greenPlayer!=HUMAN && gameState.redPlayer!=HUMAN) {
-            makeGUIPlacement("MMUA");
-
-            Button nextMove = new Button("Next Move");
-            nextMove.setOnMousePressed(event->  {
-                if (gameState.moveHistory.length()<=MAX_TILES*8){
-                    aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
-                    controls.getChildren().add(aiThink);
-                    aiThink.setLayoutX(750);
-                    aiThink.setLayoutY(420);
-                }
-            });
-            nextMove.setOnAction(event->  makeAIMove());
-
-            nextMove.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
-                    "        #090a0c,\n" +
-                    "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                    "        linear-gradient(#20262b, #191d22),\n" +
-                    "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                    "-fx-text-fill: white;");
-
-            DropShadow shadow = new DropShadow();
-            nextMove.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> nextMove.setEffect(shadow));
-            nextMove.addEventHandler(MouseEvent.MOUSE_EXITED, event -> nextMove.setEffect(null));
-            nextMove.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
-            nextMove.setLayoutY(650);
-            controls.getChildren().add(nextMove);
-        }
-
-
     }
 
-    /*Function mostly by Zhixian Wu, with the running score by Manal Mohania*/
+    /*Function mostly by Zhixian Wu, with the running score and button styling by Manal Mohania*/
     private void makeControls(){
-        scene.setFill(WHITESMOKE);
         /*Make the control pane as a GridPane. This is the stuff on the right*/
         playerControls.setPrefSize(120, 200);
         playerControls.setMaxSize(120, 200);
@@ -535,6 +546,7 @@ public class Board extends Application {
         redtxt.setFill(Color.RED);
         redtxt.setFont(Font.font("Verdana", 16));
 
+        /*The mute button's image*/
         sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
         sound_icon.setFitWidth(25);
         sound_icon.setPreserveRatio(true);
@@ -542,9 +554,9 @@ public class Board extends Application {
         sound_icon.setCache(true);
         sound_icon.setLayoutX(900);
         sound_icon.setLayoutY(15);
-
+        /*The mute button's clickable pane*/
         Pane sound_pane = new Pane();
-        sound_pane.setPrefSize(50,50);
+        sound_pane.setPrefSize(25,25);
         sound_pane.setOnMouseClicked(event -> {
             if (soundOn){
                 sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
@@ -565,30 +577,24 @@ public class Board extends Application {
         sound_pane.setLayoutX(900);
         sound_pane.setLayoutY(15);
 
-        /*sound_icon.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (soundOn){
-                    sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
-                    sound_icon.setFitWidth(25);
-                    sound_icon.setPreserveRatio(true);
-                    sound_icon.setSmooth(true);
-                    sound_icon.setCache(true);
-                    soundOn = false;
-                } else{
-                    sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
-                    sound_icon.setFitWidth(25);
-                    sound_icon.setPreserveRatio(true);
-                    sound_icon.setSmooth(true);
-                    sound_icon.setCache(true);
-                    soundOn = true;
-                }
-                event.consume();
-            }
-        });*/
-        controls.getChildren().addAll(sound_icon,sound_pane);
+        /*The button that brings up the instructions*/
+        Button instructions = new Button("?");
+        instructions.setOnAction(event-> getInstructions());
+        instructions.setStyle("-fx-background-color: #9932cc;" +
+                "-fx-background-radius: 55em; " +
+                "-fx-min-width: 30px; " +
+                "-fx-min-height: 30px; " +
+                "-fx-max-width: 30px; " +
+                "-fx-max-height: 30px;" +
+                "-fx-text-fill: #ffd65b"
+        );
+        DropShadow shadow = new DropShadow();
+        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
+        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
+        instructions.setLayoutX(860);
+        instructions.setLayoutY(12);
 
-
+        controls.getChildren().addAll(sound_icon,sound_pane,instructions);
 
         /*The tiles at the "top" of each player's "stack", displayed on the right*/
         ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
@@ -605,26 +611,22 @@ public class Board extends Application {
         ivr.setSmooth(true);
         ivr.setCache(true);
 
-        /*The buttons that rotate the tiles*/
+        /*The events for the buttons that rotate the tiles*/
         rotateG.setOnAction(event-> {
             playerG.rotateTile();
             ivg.setRotate((((int) (playerG.rotation)-'A')*90));
         });
-
-
         rotateR.setOnAction(event-> {
             playerR.rotateTile();
             ivr.setRotate((((int) (playerR.rotation)-'A')*90));
         });
-
-
 
         /*Adding the nodes. We may omit the a rotate button depending on the playingMode*/
         playerControls.getChildren().addAll(greentxt,redtxt,ivg,ivr);
         if (gameState.greenPlayer==HUMAN) playerControls.getChildren().add(rotateG);
         if (gameState.redPlayer==HUMAN) playerControls.getChildren().add(rotateR);
 
-        /*Layout*/
+        /*Layout for the controls*/
         GridPane.setColumnIndex(ivg,0);
         GridPane.setRowIndex(ivg,0);
         GridPane.setColumnIndex(ivr,1);
@@ -638,8 +640,6 @@ public class Board extends Application {
         GridPane.setColumnIndex(redtxt,1);
         GridPane.setRowIndex(redtxt,2);
 
-        GridPane.setValignment(redTilesLeft, VPos.TOP);
-
         playerControls.setLayoutX(TILE_SIZE*BOARD_SIZE+85);
         playerControls.setLayoutY(200);
 
@@ -648,9 +648,9 @@ public class Board extends Application {
 
         controls.getChildren().add(playerControls);
 
-
         /*This line is for debugging purposes only. When set to true, it shows grid lines*/
         playerControls.setGridLinesVisible(false);
+
 
         /*A main menu button. It clears the current game and calls initialSettings()*/
         Button menu = new Button("Main Menu");
@@ -672,7 +672,6 @@ public class Board extends Application {
         menu.setLayoutX(835);
         menu.setLayoutY(650);
 
-        /*Changes have been made from this line onwards*/
         menu.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
@@ -680,13 +679,8 @@ public class Board extends Application {
                 "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
                 "-fx-text-fill: white;");
 
-        DropShadow shadow = new DropShadow();
-
         menu.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> menu.setEffect(shadow));
         menu.addEventHandler(MouseEvent.MOUSE_EXITED, event -> menu.setEffect(null));
-
-
-
 
         /*Scores by Manal Mohania*/
         Rectangle r = new Rectangle(170,80,Color.SANDYBROWN);
@@ -697,7 +691,7 @@ public class Board extends Application {
         controls.getChildren().add(r);
 
         Text score = new Text("SCORES");
-        score.setLayoutX(801);
+        score.setLayoutX(800);
         score.setLayoutY(65);
         controls.getChildren().add(score);
 
@@ -705,15 +699,15 @@ public class Board extends Application {
         greenScore.setLayoutY(103);
         greenScore.setFill(Color.GREEN);
         greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
-        updateGreenScore();
 
         redScore.setLayoutX(830);
         redScore.setLayoutY(103);
         redScore.setFill(Color.RED);
         redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
-        updateRedScore();
+        controls.getChildren().addAll(greenScore,redScore);
+        updateScores();
 
-        /*Tiles left by Zhixian Wu*/
+        /*Counter of tiles left by Zhixian Wu*/
         Text tiles_left = new Text("TILES LEFT");
 
         greenTilesLeft.setFill(Color.GREEN);
@@ -725,12 +719,12 @@ public class Board extends Application {
         updateTilesLeft();
 
         GridPane tileCounter = new GridPane();
-        tileCounter.getChildren().addAll(/*r2,*/tiles_left,greenTilesLeft,redTilesLeft);
+        tileCounter.getChildren().addAll(tiles_left,greenTilesLeft,redTilesLeft);
         for (int i = 0; i < 2; i++) {
             ColumnConstraints column = new ColumnConstraints(85);
             tileCounter.getColumnConstraints().add(column);
         }
-        /*Layout*/
+        /*Layout of tiles left*/
         GridPane.setColumnIndex(tiles_left,0);
         GridPane.setRowIndex(tiles_left,0);
         GridPane.setColumnSpan(tiles_left,2);
@@ -749,13 +743,42 @@ public class Board extends Application {
         tileCounter.setLayoutY(360);
         controls.getChildren().add(tileCounter);
 
+        /*If both players are AI: */
+        if (gameState.greenPlayer!=HUMAN && gameState.redPlayer!=HUMAN) {
+            /*Makes the first move*/
+            makeGUIPlacement("MMUA");
+
+            /*The button that tells the AI to make a move, click this to progress the game*/
+            Button nextMove = new Button("Next Move");
+            nextMove.setOnMousePressed(event->  {
+                if (gameState.moveHistory.length()<=MAX_TILES*8){
+                    aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+                    controls.getChildren().add(aiThink);
+                    aiThink.setLayoutX(750);
+                    aiThink.setLayoutY(420);
+                }
+            });
+            nextMove.setOnAction(event->  makeAIMove());
+
+            nextMove.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+                    "        #090a0c,\n" +
+                    "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                    "        linear-gradient(#20262b, #191d22),\n" +
+                    "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                    "-fx-text-fill: white;");
+
+            nextMove.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> nextMove.setEffect(shadow));
+            nextMove.addEventHandler(MouseEvent.MOUSE_EXITED, event -> nextMove.setEffect(null));
+            nextMove.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
+            nextMove.setLayoutY(650);
+            controls.getChildren().add(nextMove);
+        }
+
     }
     private void updateTilesLeft(){
         if (gameState.moveHistory.length()<=MAX_TILES*8-4){
             String green = Integer.toString(MAX_TILES-playerG.used_tiles);
-            System.out.println("G "+playerG.used_tiles);
             String red = Integer.toString(MAX_TILES-playerR.used_tiles);
-            System.out.println("R "+playerR.used_tiles);
             greenTilesLeft.setText(green);
             redTilesLeft.setText(red);
         } else{
@@ -789,8 +812,6 @@ public class Board extends Application {
                 playingBoard.getColumnConstraints().add(column);
             }
         }
-
-
 
         /*Makes the board background black using CSS*/
         playingBoard.setStyle("-fx-background-color: black");
@@ -841,7 +862,6 @@ public class Board extends Application {
         heightLabels.setLayoutX(offset);
         heightLabels.setLayoutY(offset);
 
-
         /*A GridPane on top of playingBoard and heightLabels, laid out identically to playingBoard,
          holding the interactive tiles for the game*/
         clickablePanes.setPrefSize(size, size);
@@ -858,22 +878,6 @@ public class Board extends Application {
             }
         }
 
-        Button instructions = new Button("How to Play");
-
-
-        instructions.setOnAction(event->getInstructions());
-
-        instructions.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        DropShadow shadow = new DropShadow();
-        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
-        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
-
         /*What kind of function the pane calls when clicked depends on the playingMode.
         * Instead of checking what the playingMode is everytime a pane is clicked,
         * we check it now and create different panes depending on the playingMode*/
@@ -885,10 +889,7 @@ public class Board extends Application {
                     addPaneTwoPlayer(j,i);
                 }
             }
-            controls.getChildren().add(instructions);
-            instructions.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
-            instructions.setLayoutY(650);
-
+            /*Makes the first move*/
             makeGUIPlacement("MMUA");
         }
         if (gameState.greenPlayer==HUMAN && gameState.redPlayer!=HUMAN) {
@@ -898,10 +899,7 @@ public class Board extends Application {
                     addPanePlayerGreen(j,i);
                 }
             }
-            controls.getChildren().add(instructions);
-            instructions.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
-            instructions.setLayoutY(650);
-
+            /*Makes the first move*/
             makeGUIPlacement("MMUA");
         }
         if (gameState.greenPlayer!=HUMAN && gameState.redPlayer==HUMAN) {
@@ -912,10 +910,7 @@ public class Board extends Application {
                     addPanePlayerRed(j,i);
                 }
             }
-            controls.getChildren().add(instructions);
-            instructions.setLayoutX(TILE_SIZE*BOARD_SIZE+60);
-            instructions.setLayoutY(650);
-
+            /*Makes the first move*/
             makeGUIPlacement("MMUA");
 
             /*Makes the opponent's move first*/
@@ -929,7 +924,6 @@ public class Board extends Application {
             makeGUIPlacement(opponent);
         }
 
-
         /*Layout*/
         clickablePanes.setLayoutX(offset);
         clickablePanes.setLayoutY(offset);
@@ -938,7 +932,6 @@ public class Board extends Application {
         * and the interactive panes are on top of all of them.*/
         placementGrp.getChildren().addAll(thickBorder,playingBoard,heightLabels,clickablePanes);
     }
-
 
     /*The clickable panes for when there are two players*/
     /*Function by Zhixian Wu and Manal Mohania.*/
@@ -965,7 +958,6 @@ public class Board extends Application {
                         break;
                     case BLACK:
                         makeGUIPlacement("MMUA");
-                        gameState.playerTurn = GREEN;
                         break;
                 }
 
@@ -998,7 +990,9 @@ public class Board extends Application {
     /*The clickable panes for when the human player is Green*/
     /*Function by Zhixian Wu and Manal Mohania.*/
     /*Idea of how to recursively creates panes that remember what position they
-    were created for is from StackOverflow (URL in the in the C-u5807060 originality statement)*/
+    were created for is from StackOverflow: <http://stackoverflow.com
+            /questions/31095954/how-to-get-gridpane-row-and-column-ids
+            -on-mouse-entered-in-each-cell-of-grid-in>*/
     /*@param colIndex   The column the pane is on
     * @param rowIndex   The row the pane is on*/
     private void addPanePlayerGreen(int colIndex, int rowIndex){
@@ -1026,8 +1020,9 @@ public class Board extends Application {
             makeGUIPlacement(placement);
 
             int length = gameState.moveHistory.length()-2;
-            /*We only suggest the AI is thinking if it actually is, i.e. your move was valid,
-             i.e. if the last move in moveHistory was yours*/
+            /*This adds the image that suggests tha AI is thinking.
+            We only suggest the AI is thinking if it actually is, i.e. your
+            move was valid, i.e. if the last move in moveHistory was yours*/
             if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
@@ -1039,14 +1034,11 @@ public class Board extends Application {
         /*Event by Zhixian Wu. This event causes the AI to make its move when the mouse is released.*/
         pane.setOnMouseReleased(event -> {
             int length = gameState.moveHistory.length()-2;
-            System.out.println("addPanePlayerGreen, the moveHistory the AI uses: " + gameState.moveHistory);
 
-            /*Zhixian Wu: The AI only makes its move if your move was valid, i.e. if the
+            /*The AI only makes its move if your move was valid, i.e. if the
             last move in moveHistory was yours*/
             if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
                 makeAIMove();
-            } else{
-                System.out.println("AI did not move");
             }
         });
 
@@ -1083,11 +1075,11 @@ public class Board extends Application {
             char row = (char) (rowIndex+'A');
 
             String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
-            System.out.println("Red tried: " + placement);
             makeGUIPlacement(placement);
 
             int length = gameState.moveHistory.length()-2;
-            /*We only suggest the AI is thinking if it actually is, i.e. if your
+            /*This adds the image that suggests tha AI is thinking.
+            We only suggest the AI is thinking if it actually is, i.e. your
             move was valid, i.e. if the last move in moveHistory was yours*/
             if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J'){
                 aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
@@ -1102,15 +1094,14 @@ public class Board extends Application {
         pane.setOnMouseReleased(event -> {
             int length = gameState.moveHistory.length()-2;
 
-            /*The first two conditions check if your move was valid,
-            by checking if the last move in moveHistory was yours.
-            The AI only makes its move if your move was valid.
-              The last condition checks if the game is not over yet,
-            so te AI doesn't try to make a move after the game is over*/
+            /*The first two conditions check if your move was valid, by
+            checking if the last move in moveHistory was yours. The AI only
+            makes its move if your move was valid.
+            *  The last condition checks if you are out of tiles, so the AI
+            doesn't try to make a move you are out of tiles*/
             if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J' && gameState.moveHistory.length()<MAX_TILES*8){
                 makeAIMove();
             } else{
-                System.out.println("AI did not move");
                 controls.getChildren().remove(aiThink);
             }
 
@@ -1151,24 +1142,15 @@ public class Board extends Application {
         controls.getChildren().remove(errormessage);
 
         /*The following ensure that the piece does not fall out of the board*/
-        if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'D'))){
-            return;
-        }
+        if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'D'))) return;
 
-        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'C'))){
-            return;
-        }
+        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'C'))) return;
 
-        if ((placement.charAt(1) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'B'))){
-            return;
-        }
+        if ((placement.charAt(1) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'B'))) return;
 
-        if ((placement.charAt(1) == 'A') && ((placement.charAt(3) == 'C') || (placement.charAt(3) == 'D'))){
-            return;
-        }
+        if ((placement.charAt(1) == 'A') && ((placement.charAt(3) == 'C') || (placement.charAt(3) == 'D'))) return;
 
         /*set image according to the validity of the placement*/
-
         if (StratoGame.isPlacementValid(gameState.moveHistory.concat(placement))) {
             iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
             iv.setOpacity(0.8);
@@ -1213,46 +1195,35 @@ public class Board extends Application {
 
 
     }
+
     /**
-     * The next two functions update the score of the green and the red players respectively.
+     * The next function updates the score of the green and the red players.
      *
      * These functions were written by Manal Mohania
      * Some minor edits by Joseph Meltzer and Zhixian Wu
      * */
-
-    private void updateGreenScore(){
+    private void updateScores(){
         String placement = gameState.moveHistory;
-        controls.getChildren().remove(greenScore);
         int score = StratoGame.getScoreForPlacement(placement, true);
         greenScore.setText("" + score);
-        controls.getChildren().add(greenScore);
         int offset = (Integer.toString(score)).length() * 15;
         greenScore.setLayoutX(790-offset);
         greenScore.setLayoutY(107);
-        greenScore.setFill(Color.GREEN);
-        greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
-    }
 
-    private void updateRedScore(){
-        String placement = gameState.moveHistory;
-        controls.getChildren().remove(redScore);
-        int score = StratoGame.getScoreForPlacement(placement, false);
-        redScore.setText("" + score);
-        controls.getChildren().add(redScore);
-        int offset = (Integer.toString(score)).length() * 15;
-        redScore.setLayoutX(870 - offset);
+        int score2 = StratoGame.getScoreForPlacement(placement, false);
+        redScore.setText("" + score2);
+        int offset2 = (Integer.toString(score2)).length() * 15;
+        redScore.setLayoutX(870 - offset2);
         redScore.setLayoutY(107);
-        redScore.setFill(Color.RED);
-        redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
     }
 
     /*The method that makes a placement*/
     /*Function by Zhixian Wu*/
     /* @param placement   The placement string*/
     private void makeGUIPlacement(String placement) {
+        /*Remove some messages if they are on screen*/
         controls.getChildren().remove(errormessage);
         controls.getChildren().remove(aiThink);
-        System.out.println("Someone tried: " + placement); /*For debugging purposes*/
 
         String tempMove = gameState.moveHistory.concat(placement);
         if (!StratoGame.isPlacementValid(tempMove)) { /*If the attempted move is invalid*/
@@ -1276,7 +1247,6 @@ public class Board extends Application {
                /*make sure it's centered*/
             GridPane.setHalignment(iv1, HPos.CENTER);
             GridPane.setValignment(iv1, VPos.CENTER);
-
 
             /*Place the image, in the correct rotation, in the correct place on the board*/
             switch (placement.charAt(3)) {
@@ -1304,12 +1274,9 @@ public class Board extends Application {
             displayHeights();
 
             /*Update the scores displayed*/
-            updateRedScore();
-            updateGreenScore();
+            updateScores();
 
             if (soundOn) audio.play();
-
-
 
             /*Update the top tiles shown on the control panel, whose turn it is, and whose turn is bolded.*/
             switch (gameState.playerTurn) {
@@ -1332,8 +1299,7 @@ public class Board extends Application {
                         playerControls.getChildren().add(outoftiles);
                         playerR.getNextTile();
                     }
-                    /*Update whose turn it is, whose turn is bolded, and which rotate button is greyed out.*/
-                    gameState.playerTurn = GREEN;
+                    /*Update whose turn is bolded, and which rotate button is greyed out.*/
                     greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
                     redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
                     rotateG.setDisable(false);
@@ -1358,25 +1324,29 @@ public class Board extends Application {
                         playerControls.getChildren().add(outoftiles);
                         playerG.getNextTile();
                     }
-                    /*Update whose turn it is, and whose turn is bolded.*/
-                    gameState.playerTurn = RED;
+                    /*Update whose turn is bolded, and which rotate button is greyed out.*/
                     greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
                     redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
                     rotateG.setDisable(true);
                     rotateR.setDisable(false);
                     break;
                 case BLACK:
-                    gameState.playerTurn = GREEN;
                     rotateG.setDisable(false);
                     rotateR.setDisable(true);
                     break;
             }
+            /*Update whose turn it is*/
+            gameState.nextTurn();
+            System.out.println(gameState.playerTurn);
+
             /*Update the number of tiles left*/
             updateTilesLeft();
 
-            /*Checks if the game is over. If it is, we clear the board and display the winner.*/
+            /*Checks if the game is over. If it is, we lower the board opacity and display the winner.*/
             if (gameState.moveHistory.length() > MAX_TILES*8) {
+                /*Get rid of the panes*/
                 clickablePanes.getChildren().clear();
+                /*Lower opacity of the board*/
                 placementGrp.setOpacity(0.5);
                 playingBoard.setOpacity(0.3);
                 heightLabels.setOpacity(0.3);
@@ -1385,7 +1355,7 @@ public class Board extends Application {
                     Text score = new Text("Green Wins!");
                     score.setFill(Color.GREEN);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-                    popUp2.getChildren().clear();
+                    popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
                     score.setLayoutX(280);
                     score.setLayoutY(300);
@@ -1394,7 +1364,7 @@ public class Board extends Application {
                     Text score = new Text("Red Wins!");
                     score.setFill(Color.RED);
                     score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
-                    popUp2.getChildren().clear();
+                    popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
                     score.setLayoutX(290);
                     score.setLayoutY(300);
@@ -1404,14 +1374,17 @@ public class Board extends Application {
         }
     }
 
+    /*Function by Zhixian Wu
+    * It makes a move for the AI, which plays as whichever player whose turn it is*/
     private void makeAIMove(){
-        if (gameState.moveHistory.length()<=MAX_TILES*8){
-            if (gameState.playerTurn==GREEN){
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
+        if (gameState.moveHistory.length()<=MAX_TILES*8){ /*Checks the game is not over*/
 
-                String opponent = "";
+            char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
+            char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
 
+            String opponent = "";
+
+            if (gameState.playerTurn==GREEN){ /*if the current turn is green*/
                 switch (gameState.greenPlayer){
                     case EASY:
                         opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
@@ -1428,12 +1401,7 @@ public class Board extends Application {
                 }
 
                 makeGUIPlacement(opponent);
-            } else{
-                char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
-                char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
-
-                String opponent = "";
-
+            } else{ /*if the current turn is red*/
                 switch (gameState.redPlayer){
                     case EASY:
                         opponent = genMoveEasy(gameState.moveHistory, redTile, greenTile);
@@ -1484,7 +1452,6 @@ public class Board extends Application {
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "icon.png").toString())));
         scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT, LIGHTGREY);
-        scene.setFill(Color.LIGHTGRAY);
 
         root.getChildren().add(controls);
         root.getChildren().add(placementGrp);
