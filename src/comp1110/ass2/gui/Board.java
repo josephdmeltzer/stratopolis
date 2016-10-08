@@ -123,7 +123,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private boolean soundOn = true;
 
     /*the audio clip played when a placement is made*/
-    /*The sound was retrieved from http://www.sounds.beachware.com/2illionzayp3may/jspjrz/SWITCH.mp3*/
+    /*The sound was downloaded from http://www.sounds.beachware.com/2illionzayp3may/jspjrz/SWITCH.mp3*/
     private final AudioClip audio = new AudioClip(PLACEMENT_URI);
 
 
