@@ -157,8 +157,7 @@ public class AI {
      */
     public static float average(String placement, ArrayList<Character> pieceArray, int depth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0 || pieceArray.size()==0) {
-            float x = getScore(placement, initialGreen)-getScore(placement, !initialGreen);
-            return x;
+            return getScore(placement, initialGreen)-getScore(placement, !initialGreen);
         }
         float counter = 0.0f;
         ArrayList<Character> noDupsPieces = new ArrayList<>(new HashSet<>(pieceArray));
@@ -300,10 +299,4 @@ public class AI {
             return new moveScore(bestMove, bestScore);
         }
     }
-
-//    public static void main(String[] args) {
-//        for (char i = 'K'; i<='T'; i++) {
-//            System.out.println(generateMove("MMUALMMBNLEBLNTDLLACKLKANMJCLMNCNKGCJMRCMMIALMMDLJBDJKRDOJHAIKPBOMEDMKKAJLCBKITBPLIDIISBOIGDLJNAMJABNHSCPKFBJKLCNKBALHPCMKHDILODQIDALHQBOHCBHHLDQHDCKGQCHIFDOGOD", 'J', i));
-//        }
-//    }
 }
