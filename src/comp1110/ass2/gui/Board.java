@@ -130,6 +130,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     /*Function mostly by Zhixian Wu, with all button styling and some layout by Manal Mohania*/
     private void initialSettings() {
+
+        scene.setFill(Color.LIGHTGREY);
         /*Set the opacity back to normal after the last game ended*/
         placementGrp.setOpacity(1);
         playingBoard.setOpacity(1);
@@ -538,6 +540,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     /*Function mostly by Zhixian Wu, with the running score and button styling by Manal Mohania*/
     private void makeControls(){
+
+        scene.setFill(Color.WHITESMOKE);
         /*Make the control pane as a GridPane. This is the stuff on the right*/
         playerControls.setPrefSize(120, 200);
         playerControls.setMaxSize(120, 200);
