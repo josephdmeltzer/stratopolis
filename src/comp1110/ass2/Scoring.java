@@ -300,7 +300,7 @@ public final class Scoring {
     }
 
     /**Calculates the maximum of four intgers
-     * @params a, b, c, d: the four integers
+     * @param a,b,c,d: the four integers
      * @return the max of the four
      * */
     private static int myMax(int a, int b, int c, int d) {

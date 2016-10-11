@@ -82,7 +82,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private static final String URI_BASE = "assets/";
     private static final int TILE_SIZE = 25;
     private static final int BOARD_SIZE = 26;
-    private static final String PLACEMENT_URI = Viewer.class.getResource(URI_BASE + "sound.mp3").toString();
+    private static final String PLACEMENT_URI = Viewer.class.getResource(URI_BASE + "sound.wav").toString();
 
     /*Some fields for initial conditions.*/
     private GameState gameState;
