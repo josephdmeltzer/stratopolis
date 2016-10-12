@@ -26,11 +26,9 @@ import comp1110.ass2.StratoGame;
 
 import static comp1110.ass2.Colour.BLACK;
 import static comp1110.ass2.Colour.GREEN;
-import static comp1110.ass2.Colour.RED;
 import static comp1110.ass2.Difficulty.*;
 import static comp1110.ass2.Player.MAX_TILES;
 import static comp1110.ass2.StratoGame.*;
-import static comp1110.ass2.GameState.*;
 import static javafx.scene.paint.Color.*;
 
 public class Board extends Application {
@@ -97,7 +95,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private Button rotateG = new Button("Rotate");
     private Button rotateR = new Button("Rotate");
     private Button nextMove = new Button("Next Move");
-    private Text errormessage = new Text("Invalid move!");
+    private Text errorMessage = new Text("Invalid move!");
     private Text aiThink = new Text("Thinking...");
     private Text redScore = new Text("1");
     private Text greenScore = new Text("1");
@@ -1209,17 +1207,19 @@ layout by Manal Mohania and Joseph Meltzer*/
      * 2. ensures that the individual piece does not lie outside the board when making the placement
      * 3. removes error messages if a valid placement is reached
      *
+     * @param iv: The preview image to be added
+     * @param placement: the placement string
+     *
      * Function by Manal Mohania
      * Minor edits by Joseph Meltzer
    */
-    /*@param iv          The preview image to be added
-    * @param placement   The placement string*/
+
     private void makeTempPlacement(ImageView iv, String placement){
 
         /*remove error messages, if any*/
-        controls.getChildren().remove(errormessage);
+        controls.getChildren().remove(errorMessage);
 
-        /*The following ensure that the piece does not fall out of the board*/
+        /*The following ensure that the piece does not fall out of the board, and thus they are not part of the preview*/
         if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'D'))) return;
 
         if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'C'))) return;
@@ -1271,7 +1271,6 @@ layout by Manal Mohania and Joseph Meltzer*/
                 break;
         }
 
-
     }
 
     /**
@@ -1300,15 +1299,15 @@ layout by Manal Mohania and Joseph Meltzer*/
     /* @param placement   The placement string*/
     private void makeGUIPlacement(String placement) {
         /*Remove some messages if they are on screen*/
-        controls.getChildren().remove(errormessage);
+        controls.getChildren().remove(errorMessage);
         controls.getChildren().remove(aiThink);
 
         String tempMove = gameState.moveHistory.concat(placement);
         if (!StratoGame.isPlacementValid(tempMove)) { /*If the attempted move is invalid*/
-            errormessage.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
-            controls.getChildren().add(errormessage);
-            errormessage.setLayoutX(740);
-            errormessage.setLayoutY(480);
+            errorMessage.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+            controls.getChildren().add(errorMessage);
+            errorMessage.setLayoutX(740);
+            errorMessage.setLayoutY(480);
         } else {
             /*create the image that'll go on the board*/
             ImageView iv1 = new ImageView();
