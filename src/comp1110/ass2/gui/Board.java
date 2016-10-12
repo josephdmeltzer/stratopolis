@@ -950,10 +950,13 @@ layout by Manal Mohania and Joseph Meltzer*/
         Pane pane = new Pane();
         ImageView iv = new ImageView();
 
+        char col = (char) (colIndex+'A');
+        char row = (char) (rowIndex+'A');
+
         /*Event by Zhixian Wu, this makes the player's move when they click on a pane*/
         pane.setOnMouseClicked(event -> {
-                char col = (char) (colIndex+'A');
-                char row = (char) (rowIndex+'A');
+               /* char col = (char) (colIndex+'A');
+                char row = (char) (rowIndex+'A');*/
                 switch (gameState.playerTurn){
                     case RED:
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
@@ -989,8 +992,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                 ivr.setRotate(((int) (playerR.rotation) - 'A') * 90);
                 iv.setRotate(((int) (playerR.rotation) - 'A') * 90);
             }
-            char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');
+            /*char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');*/
 
             switch (gameState.playerTurn){
                 case RED:
@@ -1006,8 +1009,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Manal Mohania, this creates the preview piece*/
         pane.setOnMouseEntered(event -> {
-            char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');
+            /*char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');*/
 
             switch (gameState.playerTurn){
                 case RED:
@@ -1029,6 +1032,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         GridPane.setColumnIndex(pane,colIndex);
     }
 
+
     /*The clickable panes for when the human player is Green*/
     /*Function by Zhixian Wu and Manal Mohania.*/
     /*Idea of how to recursively creates panes that remember what position they
@@ -1040,6 +1044,8 @@ layout by Manal Mohania and Joseph Meltzer*/
     private void addPanePlayerGreen(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
+        char col = (char) (colIndex+'A');
+        char row = (char) (rowIndex+'A');
 
         /*Event by Joseph Meltzer, rotates the piece on scrolling*/
         pane.setOnScroll(event -> {
@@ -1051,8 +1057,8 @@ layout by Manal Mohania and Joseph Meltzer*/
             ivg.setRotate((((int) (playerG.rotation) - 'A') * 90));
             iv.setRotate(((int) (playerG.rotation) - 'A') * 90);
 
-            char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');
+            /*char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');*/
 
             String placement2 = "" + col + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
             makeTempPlacement(iv, placement2);
@@ -1060,8 +1066,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Manal Mohania, this adds the preview piece*/
         pane.setOnMouseEntered(event -> {
-            char col = (char) (colIndex+'A');
-            char row = (char) (rowIndex+'A');
+            /*char col = (char) (colIndex+'A');
+            char row = (char) (rowIndex+'A');*/
 
             String placement = "" + col + row + playerG.available_tiles.get(playerG.used_tiles) + playerG.rotation;
             makeTempPlacement(iv, placement);
@@ -1072,8 +1078,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
-            char col = (char) (colIndex+'A');
-            char row = (char) (rowIndex+'A');
+            /*char col = (char) (colIndex+'A');
+            char row = (char) (rowIndex+'A');*/
 
             String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
             makeGUIPlacement(placement);
@@ -1115,6 +1121,8 @@ layout by Manal Mohania and Joseph Meltzer*/
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
+        char col = (char) (colIndex+'A');
+        char row = (char) (rowIndex+'A');
 
         /*Event by Joseph Meltzer, rotates the piece on scrolling*/
         pane.setOnScroll(event -> {
@@ -1126,8 +1134,8 @@ layout by Manal Mohania and Joseph Meltzer*/
             ivr.setRotate(((int) (playerR.rotation) - 'A') * 90);
             iv.setRotate(((int) (playerR.rotation) - 'A') * 90);
 
-            char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');
+            /*char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');*/
 
             String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeTempPlacement(iv, placement);
@@ -1135,8 +1143,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Manal Mohania, the adds the preview piece*/
         pane.setOnMouseEntered(event -> {
-            char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');
+            /*char col = (char) (colIndex + 'A');
+            char row = (char) (rowIndex + 'A');*/
 
             String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeTempPlacement(iv, placement);
@@ -1147,8 +1155,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
-            char col = (char) (colIndex+'A');
-            char row = (char) (rowIndex+'A');
+            /*char col = (char) (colIndex+'A');
+            char row = (char) (rowIndex+'A');*/
 
             String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
             makeGUIPlacement(placement);
