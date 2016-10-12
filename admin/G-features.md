@@ -9,7 +9,7 @@ of our project implements the following features:
  - Heights of regions indicated
  - Running scores
  - Basic computer opponent
- - Advanced computer opponent
+ - Advanced computer opponent (uses a probabilistic approach beyond two levels)
 
 additional features...
 - Previews of the placement to be made when you hover over the board, with the image desaturated when it is not valid

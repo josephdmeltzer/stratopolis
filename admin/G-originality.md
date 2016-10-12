@@ -1,6 +1,6 @@
 We declare that the work we have submitted for Stage G of this assignment and all stages before it is entirely our own work, with the following documented exceptions:
 
-* The idea of using <...> to make the game run faster came from a discussion with <...> (noted in source code comments)
+* The CSS code for styling buttons was heavily adapted from <http://fxexperience.com/2011/12/styling-fx-buttons-with-css/>
 
 * The code for all variations of 'addPane' in class Board if heavily adapted from:
 * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and-column-ids-on-mouse-entered-in-each-cell-of-grid-in>
