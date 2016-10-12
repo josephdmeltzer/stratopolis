@@ -77,9 +77,8 @@ public class StratoGame {
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
         if (!isPlacementWellFormed(placement)) return false;
-        if (!isPlacementAdjacent2(placement)) {return false;}
+        if (!isPlacementAdjacent(placement)) {return false;}
         return straddleAndColours(placement);
-       // if (!checkBounds(placement)) return false; // most likely this is not needed anymore, as its stuff has been incorporated in placementAdjacent. Do not remove this line though.
     }
 
     /**
@@ -165,7 +164,7 @@ public class StratoGame {
     }
 
     /*Exploit the fact that a tile on top must completely lie within the boundaries formed by other placements*/
-    private static boolean isPlacementAdjacent2(String placement){
+    private static boolean isPlacementAdjacent(String placement){
 
         int coverage[][] = new int[26][26];
         coverage[12][12] = 1;
@@ -323,238 +322,6 @@ public class StratoGame {
         return true;
     }
 
-    /**
-     * This method is called internally from isPlacementAdjacent.
-     * Checks if a given piece is dangling on the placements that are already made
-     *
-     * @param piece: the piece which is being checked for the overhanging
-     * @param placement: the placement string of the previous placements
-     *
-     * @return true iff the piece is not overhanging
-     *
-     * function written by Manal Mohania
-     * */
-    private static boolean isOnTop(String piece, String placement){
-        int[][] coverage;
-        coverage = heightArray(placement);
-
-        int idx1 = piece.charAt(0) - 'A';
-        int idx2 = piece.charAt(1) - 'A';
-        if (coverage[idx1][idx2] == 0)
-            return false;
-
-
-        if (piece.charAt(3) == 'A') {
-            if (idx1 == 25 || idx2 == 25){return false;}
-
-            if (!(coverage[1 + idx1][idx2] == coverage[idx1][1 + idx2] && coverage[1 + idx1][idx2] == coverage[idx1][idx2])) {
-                return false;
-            }
-        }
-        else if (piece.charAt(3) == 'B') {
-            if (idx1 == 0 || idx2 == 25){return false;}
-            if (!(coverage[idx1][idx2] == coverage[-1 + idx1][idx2] && coverage[-1 + idx1][idx2] == coverage[idx1][1 + idx2])) {
-                return false;
-            }
-        }
-        else if (piece.charAt(3) == 'C') {
-            if (idx1 == 0 || idx2 == 0){return false;}
-            if (!(coverage[-1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2])) {
-                return false;
-            }
-        }
-        else if (piece.charAt(3) == 'D') {
-            if (idx1 == 25 || idx2 == 0){return false;}
-            if (!(coverage[1 + idx1][idx2] == coverage[idx1][idx2] && coverage[idx1][idx2] == coverage[idx1][-1 + idx2]))
-                return false;
-        }
-        else {
-            System.out.println("call from isPlacementAdjacent - should not reach here");
-        }
-        return true;
-    }
-
-    /**
-     * This method checks if tiles are adjacent to one another, and if they are stacked there must be no tile dangling
-     *
-     * @param placement a placement string
-     * @return true iff tiles are adjacent and there is no overhanging
-     *
-     * To make this method more efficient the call to isOnTop can be removed and the code can be adjusted here.
-     *
-     * function written by Manal Mohania
-    */
-
-    private static boolean isPlacementAdjacent(String placement){
-        /*
-           The next array is used to identify if a position on the board has been covered
-           I'll have the two middle tiles as 1 since they're covered since the beginning
-        */
-        int[][] coverage = new int[26][26];
-        coverage[12][12] = 1;
-        coverage[12][13] = 1;
-
-        for (int i = 4; i < placement.length(); i += 4){
-
-            //The first four characters must be MMUA .. skipping them
-
-            int col = placement.charAt(i) - 'A';
-            int row = placement.charAt(i + 1) - 'A';
-
-            if (coverage[col][row] != 0){
-                if (!(isOnTop(placement.substring(i, i + 4), placement.substring(0, i)))) {
-                    return false;
-                }
-                continue;
-            }
-
-            if (placement.charAt(i+3) == 'A'){
-                if ((col < 25 && coverage[1 + col][row] == 1) ||
-                        (row < 25 && coverage[col][1 + row] == 1)){
-                    return false;}
-                if ((!(2 + col < 26) || coverage[2 + col][row] == 0) &&
-                        (!(1 + col < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
-                        (!(col + 1 < 26 && row + 1 < 26) || coverage[1 + col][1 + row] == 0) &&
-                        (!(row - 1 >= 0) || coverage[col][-1 + row] == 0) &&
-                        (!(row + 2 < 26) || coverage[col][2 + row] == 0) &&
-                        (!(col - 1 >= 0) || coverage[-1 + col][row] == 0) &&
-                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0)){
-                    return false;
-                }
-
-                if (col == 25 || row == 25) {
-                    return false;
-                }
-                coverage[col][row] = 1;
-                coverage[1 + col][row] = 1;
-                coverage[col][1 + row] = 1;
-            }
-
-            else if (placement.charAt(i+3) == 'B'){
-                if ((col - 1 >= 0 && coverage[-1 + col][row] == 1) ||
-                        (row + 1 < 26 && coverage[col][1 + row] == 1)) {
-                    return false;
-                }
-                if (((!(1 + col < 26) || coverage[1 + col][row] == 0) &&
-                        (!(1 + col < 26 && 1 + row < 26) || coverage[1 + col][1 + row] == 0) &&
-                        (!(row - 1 >= 0) || coverage[col][-1 + row] == 0) &&
-                        (!(row + 2 < 26) || coverage[col][2 + row] == 0) &&
-                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0) &&
-                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0) &&
-                        (!(col - 2 >= 0) || coverage[-2 + col][row] == 0))) {
-                    return false;
-                }
-
-                if (col == 0 || row == 25) {
-                    return false;
-                }
-                coverage[col][row] = 1;
-                coverage[-1 + col][row] = 1;
-                coverage[col][1 + row] = 1;
-            }
-
-            else if (placement.charAt(i+3) == 'C'){
-                if ((col - 1 >= 0 && coverage[-1 + col][row] == 1) ||
-                        (row - 1 >= 0 && coverage[col][-1 + row] == 1)) {
-                    return false;
-                }
-                if ((!(col + 1 < 26) || coverage[1 + col][row] == 0 ) &&
-                        (!(col + 1 < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
-                        (!(row - 2 >= 0) || coverage[col][-2 + row] == 0) &&
-                        (!(row + 1 < 26) || coverage[col][1 + row] == 0) &&
-                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0) &&
-                        (!(col - 1 >= 0 && row + 1 < 26) || coverage[-1 + col][1 + row] == 0) &&
-                        (!(col - 2 >= 0) || coverage[-2 + col][row] == 0)){
-                    return false;
-                }
-
-                if (col == 0  || row == 0 ) {
-                    return false;
-                }
-                coverage[col][row] = 1;
-                coverage[-1 + col][row] = 1;
-                coverage[col][-1 + row] = 1;
-            }
-
-            else if (placement.charAt(i+3) == 'D'){
-                if ((col + 1 < 26 && coverage[1 + col][row] == 1) ||
-                        (row - 1 >= 0 && coverage[col][-1 + row] == 1)){
-                    return false;
-                }
-                if ((!(col + 2 < 26) || coverage[2 + col][row] == 0) &&
-                        (!(col + 1 < 26 && row - 1 >= 0) || coverage[1 + col][-1 + row] == 0) &&
-                        (!(col + 1 < 26 && row + 1 < 26) || coverage[1 + col][1 + row] == 0) &&
-                        (!(row - 2 >= 0) || coverage[col][-2 + row] == 0) &&
-                        (!(row + 1 < 26) || coverage[col][1 + row] == 0) &&
-                        (!(col - 1 >= 0) || coverage[-1 + col][row] == 0) &&
-                        (!(col - 1 >= 0 && row - 1 >= 0) || coverage[-1 + col][-1 + row] == 0)){
-                    return false;
-                }
-
-                if (col == 25 || row == 0) {
-                    return false;
-                }
-                coverage[col][row] = 1;
-                coverage[1 + col][row] = 1;
-                coverage[col][-1 + row] = 1;
-            }
-            else
-                System.out.println("isPlacementAdjacent: should not reach here");
-        }
-        return true;
-    }
-
-    /**
-     * Check if the tiles don't fall out of the board
-     *
-     * @param placement a placement string
-     * @return true iff each tile falls within the board range
-     *
-     * function written by Manal Mohania
-     * */
-
-    private static boolean checkBounds(String placement){
-        /*Inspect the positions of the origins of the pieces*/
-
-        int flag = 0;
-
-        for (int i = 0; i < placement.length(); i += 4){
-            if (placement.charAt(i) == 'A' || placement.charAt(i + 1) == 'A' || placement.charAt(i) == 'Z' || placement.charAt(i + 1) == 'Z'){
-                flag = 1;
-                break;
-            }
-        }
-        /*return true if it has nothing on the periphery of the grid*/
-        if (flag == 0)
-            return true;
-
-        /*else check*/
-        // if on the top row, the rotation must not be C or D
-        // if on the rightmost column, the rotation must not be A or D
-        // if on the bottom row, the rotation must not be A or B
-        // if on the leftmost column, rotation must not be B or C
-
-        for (int i = 0; i < placement.length(); i += 4) {
-            if (placement.charAt(i) == 'A'){
-                if (placement.charAt(i + 3) == 'B' || placement.charAt(i + 3) == 'C')
-                    return false;
-            }
-            else if (placement.charAt(i) == 'Z'){
-                if (placement.charAt(i + 3) == 'A' || placement.charAt(i + 3) == 'D')
-                    return false;
-            }
-            else if (placement.charAt(i + 1) == 'A'){
-                if (placement.charAt(i + 3) == 'C' || placement.charAt(i + 3) == 'D')
-                    return false;
-            }
-            else if (placement.charAt(i + 1) == 'Z'){
-                if (placement.charAt(i + 3) == 'A' || placement.charAt(i + 3) == 'B')
-                    return false;
-            }
-        }
-        return true;
-    }
-
     /* Method by Joseph Meltzer */
     private static boolean tileStraddle(String placement) {
         int[][] tileTable = new int[26][26];
@@ -678,11 +445,7 @@ public class StratoGame {
     }
 
     /**
-     * This method returns true if green has won the game.
-     * Currently, the method does not say if green has won by scoring higher points or by virtue of luck.
-     * Adding that functionality should be fairly simple though.
-     * NOTE: THE PLACEMENT STRING IS ASSUMED TO BE VALID
-     *
+     * This method returns true if green has won the game given a valid placement string.
      * function written by Manal Mohania
      * */
     static boolean greenHasWon(String placement){

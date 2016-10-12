@@ -19,15 +19,12 @@ import static comp1110.ass2.Colour.*;
 public final class Scoring {
     private static final int BOARD_SIZE = 26;
 
-    /* The following declarations are global for efficiency purposes only
-    *  Do NOT add any methods to try and access/write to them. */
-    /*private static int[][] flags = new int[BOARD_SIZE][BOARD_SIZE];*/
+    /* The following declarations are global for efficiency purposes only*/
     private static Colour[][] colours;
     private static Colour[][] colours2 = new Colour[26][26];
     private static int[][] heights = new int[BOARD_SIZE][BOARD_SIZE];
     private static final int REGIONS = 36; // Maximum number of contiguous regions of a certain colour
     private static int[][] candidates = new int[REGIONS][2];
-    private static boolean winnerByChance; // If this bool is true, you'll know that the winner has been determined by chance.
 
     /**
      * Given a placement string, this method returns the winner according to the rules of the game.
@@ -37,7 +34,6 @@ public final class Scoring {
      * */
     public static boolean getWinner(String placement) {
 
-        winnerByChance = false;
         int[][] greenStuff = new int[REGIONS][2];
         int[][] redStuff = new int[REGIONS][2];
 
@@ -89,16 +85,18 @@ public final class Scoring {
      * @return the winner based on the boolean values as described above*/
 
     private static boolean nextResult(int[][] red, int[][] green) {
-        /*identify max*/
+
         int redMax = 0;
         int greenMax = 0;
 
+        /*identify max area among all of the areas covered by red*/
         for (int i = 0; i < REGIONS; i++) {
             redMax = redMax > red[i][0] ? redMax : red[i][0];
             if (red[i][0] == 0)
                 break;
         }
 
+        /*identify max area among all of the areas covered by green*/
         for (int i = 0; i < REGIONS; i++) {
             greenMax = greenMax > green[i][0] ? greenMax : green[i][0];
             if (green[i][0] == 0)
@@ -108,19 +106,21 @@ public final class Scoring {
         int redH = 0;
         int greenH = 0;
 
+        /*find the height corresponding to the maximum red area*/
         for (int i = 0; i < REGIONS; i++) {
             if (red[i][0] == 0)
                 break;
             redH = (red[i][0] == redMax && red[i][1] > redH ? red[i][1] : redH);
         }
 
+        /*find the height corresponding to the maximum green area*/
         for (int i = 0; i < REGIONS; i++) {
             if (green[i][0] == 0)
                 break;
             greenH = (green[i][0] == greenMax && green[i][1] > greenH ? green[i][1] : greenH);
         }
 
-        /*remove max and shift everything*/
+        /*remove max area and height from red's list and shift everything else later on it the array to one index before*/
         int flag = 0;
 
         for (int i = 0; i < REGIONS; i++) {
@@ -141,13 +141,13 @@ public final class Scoring {
                 break;
         }
 
-        /*same thing with the green array*/
+        /*remove max area and height from green's list and shift everything else later on it the array to one index before*/
         flag = 0;
 
         for (int j = 0; j < REGIONS; j++) {
             if (green[j][0] == greenMax && green[j][1] == greenH) {
                 if (flag == 0) {
-                    flag += 1; // Fooled IntelliJ into stop complaining about duplicated code. Remove that `+` and you'll see what I mean
+                    flag += 1;
                     continue;
                 }
                 flag = 1;
@@ -162,13 +162,12 @@ public final class Scoring {
                 break;
         }
 
-        /*check if there are regions left*/
+        /*check if there are regions left. These act as the base cases for the recursion*/
         if (greenMax == 0 && redMax > 0)
             return false;
         if (redMax == 0 && greenMax > 0)
             return true;
         if (greenMax == 0 && redMax == 0) {
-            winnerByChance = true;
             Random r = new Random();
             return r.nextBoolean();
         }
@@ -205,12 +204,12 @@ public final class Scoring {
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                if (colours[i][j] == GREEN && /*flags[i][j] == 0 && */green) {
+                if (colours[i][j] == GREEN && green) {
                     int val = floodFill(i, j, GREEN);
                     candidates[k][0] = val;
                     candidates[k][1] = floodHeight(i, j, GREEN, 0);
                     k++;
-                } else if (!green && colours[i][j] == RED /*&& flags[i][j] == 0*/) {
+                } else if (!green && colours[i][j] == RED) {
                     int val = floodFill(i, j, RED);
                     candidates[k][0] = val;
                     candidates[k][1] = floodHeight(i, j, RED, 0);
@@ -223,7 +222,6 @@ public final class Scoring {
         int maxHeight = 1;
 
         for (int i = 0; i < REGIONS; i++) {
-          //  System.out.println(i + "\t" + candidates[i][0] + "\t" + candidates[i][1]);
             if (candidates[i][0] == 0)
                 break;
             maxArea = (candidates[i][0] > maxArea ? candidates[i][0] : maxArea);
@@ -249,20 +247,12 @@ public final class Scoring {
      * @return the max height in the region*/
     private static int floodHeight(int col, int row, Colour colour, int max) {
 
-        int val;
-
         if (!(col >= 0 && row >= 0 && col <= 25 && row <= 25) || colours2[col][row] != colour) {
             return max;
         }
 
-        /*
-        if (colours2[col][row] != colour) {
-            return max;
-        }
-        */
-
         colours2[col][row] = BLACK;
-        val = heights[col][row] > max ? heights[col][row] : max;
+        int val = heights[col][row] > max ? heights[col][row] : max;
 
         return myMax(floodHeight(col + 1, row, colour, val),
                 floodHeight(col - 1, row, colour, val),
@@ -271,7 +261,7 @@ public final class Scoring {
     }
 
     /**
-     * This function calculates the are of a contiguous region of one colour given the coordinates of any one cell on it
+     * This function calculates the area of a contiguous region of one colour given the coordinates of any one cell on it
      *
      * @param col: The column value of the cell for which the area is required
      * @param row: The rwo value of the cell of for which the area is required
@@ -283,14 +273,6 @@ public final class Scoring {
         if (!(col >= 0 && row >= 0 && col <= 25 && row <= 25) || colours[col][row] != colour) {
             return 0;
         }
-
-        /*flags[col][row] = 1;*/
-
-        /*
-        if (colours[col][row] != colour) {
-            return 0;
-        }
-        */
 
         colours[col][row] = BLACK;
         return 1 + floodFill(col + 1, row, colour) +
@@ -306,17 +288,5 @@ public final class Scoring {
     private static int myMax(int a, int b, int c, int d) {
         return Math.max(Math.max(Math.max(a, b), c), d);
     }
-
-    /**
-     * The method checks if the winner has been determined by chance
-     *
-     * @return a boolean, true if the winner has been determined by chance
-     *
-     * NOTE: This method hasn't been called as yet, because it will only be used in the very end*/
-    static boolean isWinnerByChance() {
-        return winnerByChance;
-    }
-
-    // public static void main(String[] args) {System.out.println(getScore("MMUAKNNDLLGALMMCMNBCMMOB", false));}
-
+    
 }
