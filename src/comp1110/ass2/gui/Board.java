@@ -36,6 +36,9 @@ public class Board extends Application {
 /*The majority of this class was done by Zhixian Wu, with some functions and
 layout by Manal Mohania and Joseph Meltzer*/
 
+/*All elements using CSS was done by Manal Mohania, with inspiration and any
+* pieces of adapted code in the G-originality*/
+
 /*OVERVIEW: The first function called by the stage is initialSettings(), which
 * creates the first screen many buttons to choose the playing mode (Human v.s
 * Hard AI, Human vs. Human, Easy AI vs. Cheating AI, etc.
@@ -82,7 +85,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private static final int BOARD_SIZE = 26;
     private static final String PLACEMENT_URI = Viewer.class.getResource(URI_BASE + "sound.wav").toString();
 
-    /*Some fields for initial conditions.*/
+    /*Objects that need to be accessible to many functions.*/
     private GameState gameState;
     private Player playerG;
     private Player playerR;
@@ -116,28 +119,30 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     private Scene scene;
 
-    /*A counter that tells you if this is the first game played.*/
+    /*A counter that tells you if this is the first game played*/
     private boolean firstGame = true;
     /*If the sound is muted*/
     private boolean soundOn = true;
 
     /*the audio clip played when a placement is made*/
-    /*The sound was downloaded from http://www.sounds.beachware.com/2illionzayp3may/jspjrz/SWITCH.mp3*/
+    /*The sound was downloaded from <http://www.sounds.beachware.com/2illionzayp3may/jspjrz/SWITCH.mp3>*/
     private final AudioClip audio = new AudioClip(PLACEMENT_URI);
 
 
     /*Function mostly by Zhixian Wu, with all button styling and some layout by Manal Mohania*/
     private void initialSettings() {
 
+        /*The scene actually changes colour from the start screen to the actual game.
+        * This was done by Manal Mohania*/
         scene.setFill(Color.LIGHTGREY);
-        /*Set the opacity back to normal after the last game ended*/
+        /*Set the opacity back to normal and re-enable a button after the last game ended*/
         placementGrp.setOpacity(1);
         playingBoard.setOpacity(1);
         heightLabels.setOpacity(1);
         nextMove.setDisable(false);
 
+        /*A new game*/
         gameState = new GameState(BLACK, HUMAN, HUMAN);
-        System.out.println("initial settings: " + gameState.playerTurn);
 
         /*The logo*/
         ImageView logo = new ImageView();
@@ -146,7 +151,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         logo.setLayoutX(220);
         logo.setLayoutY(180);
 
-      /*The options for the game: Human vs Hard AI, etc.*/
+     /*The options for the game: Human vs Hard AI, etc.*/
         /*This is the text describing these options*/
         Text greenText = new Text("Player Green: Human");
         greenText.setFill(Color.GREEN);
@@ -172,8 +177,8 @@ layout by Manal Mohania and Joseph Meltzer*/
         red2.setFill(Color.RED);
         red2.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 
-        /*Each of these buttons tell the game if you want a two player game, or
-        * to play as green or red against an AI*/
+        /*Each of these buttons tell the game which players you want to be
+        * human, and which to be AIs*/
         Button greenHuman = new Button("Human");
         greenHuman.setOnAction(event-> {
             gameState.greenPlayer = HUMAN;
@@ -376,7 +381,10 @@ layout by Manal Mohania and Joseph Meltzer*/
         startGame.setLayoutX(420);
         startGame.setLayoutY(620);
 
+        /*The mute button by Zhixian Wu*/
         /*The mute button's image*/
+        /*The image for unmuted sound is from <https://pixabay.com/en/icon-loudspeaker-speaker-horn-1628258/>
+        * The image from the muted sound is an edited version of that image*/
         if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
         else sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
         sound_icon.setFitWidth(25);
@@ -424,8 +432,6 @@ layout by Manal Mohania and Joseph Meltzer*/
         instructions.setLayoutX(860);
         instructions.setLayoutY(12);
 
-
-
         placementGrp.getChildren().addAll(green, red, startGame, instructions, sound_icon, sound_pane);
     }
 
@@ -437,63 +443,56 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Layout*/
         GridPane mainInstruc = new GridPane();
-        mainInstruc.setLayoutY(50);
-        mainInstruc.setLayoutX(105);
+        mainInstruc.setLayoutY(90);
+        mainInstruc.setLayoutX(130);
         mainInstruc.setHgap(5);
         mainInstruc.setVgap(5);
         /*A nice outline around the instructions*/
-        Rectangle thickBorder = new Rectangle(750,520,Color.BEIGE);
+        Rectangle thickBorder = new Rectangle(655,470,Color.BEIGE);
         thickBorder.setArcHeight(7);
         thickBorder.setArcWidth(7);
-        thickBorder.setLayoutX(87);
-        thickBorder.setLayoutY(40);
+        thickBorder.setLayoutX(120);
+        thickBorder.setLayoutY(80);
         thickBorder.setOpacity(0.5);
 
-        Text instructions = new Text("Stratopolis a two player strategy based game." +
-                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
-                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
-                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
-                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
-                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
-                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
-                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
-                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
-                "The score for a certain colour is determined by multiplying the area of" +
-                " its largest contiguous region with the maximum height in that region." +
-                " The winner of the game is the one who has the highest score when all tiles are finished." +
-                " If the two scores are equal at the end of the game, the next largest region for each colour is selected to break the tie." +
-                " This process is continued indefinitely to ascertain the winner if there is still a tie." +
-                " Even at the end of it, if a winner hasn't been decided, the winner is selected using a simple coin toss." + "\n" + "\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
-                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
-                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
-                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
-                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
-                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
-                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
-                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
-                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" + "\n" + "\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit," +
-                " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim" +
-                " ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip" +
-                " ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate" +
-                " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat" +
-                " cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum");
+        /*Some of the instructions copied from
+        * <https://boardgamegeek.com/boardgame/125022/stratopolis>*/
+        Text instructions = new Text("\n  Stratopolis a two player strategy based game." +
+                " Each player starts the game with twenty L-shaped tiles, each comprising "
+                + "three squares; one player has tiles showing all green squares, green and "
+                + "neutral squares, or two green squares and one red square, while the other "
+                + "player's tiles reverse red and green. Players shuffle and stack these "
+                + "tiles face down, revealing only the topmost tile. \n \n"
+                + "  To start the game, a two-square tile (one red, one green) is placed "
+                + "on the table. Players then take turns adding their topmost tile to "
+                + "the display. A placement is made by clicking on the board. Inalid placements "
+                + "have duller preview images. \n\n"
+                + "A tile can be placed (1) on the table with at least one "
+                + "edge adjacent to an edge in play or (2) on top of at least two tiles "
+                + "already in play. When placed on a higher level, each square of the "
+                + "tile must be supported, the tile must be level, and red and green "
+                + "tile must be supported, the tile must be level, and red and green "
+                + "squares cannot cover one another. (Every other color play – such as "
+                + "green on neutral or red on red – is legal.)\n \n"
+                + "  Each player's score is the area of the largest connected area of "
+                + "their colour, times the maximum height of that area.\n \n"
+                + "  If a tie breaker is required, the next largest area for both "
+                + "players is used. If a tie breaker is still required, we go on "
+                + "to the next largest area, and so on. If this does not produce a "
+                + "winner, the winner is determined randomly.\n\n"
+                + "  You can choose a two-player game, play against an AI of any "
+                + "difficulty (the cheating AI can peek into both your decks), or "
+                + "watch two AIs play against each other. The two-AI game is advanced "
+                + "by clicking the 'Next Move' button. \n");
 
         instructions.setFont(Font.font("Arial", 16));
-        instructions.setWrappingWidth(680);
+        instructions.setWrappingWidth(610);
 
         /*The scroll-capable pane the instructions go in*/
         ScrollPane scroll = new ScrollPane();
         scroll.setContent(instructions);
-        scroll.setPrefViewportHeight(450.0);
-        scroll.setPrefViewportWidth(700.0);
+        scroll.setPrefViewportHeight(400.0);
+        scroll.setPrefViewportWidth(620.0);
 
         /*The button that removes the instructions and makes the groups interactive again*/
         Button exitBtn = new Button("x");

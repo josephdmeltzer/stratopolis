@@ -593,10 +593,14 @@ public class StratoGame {
         }
         return bestMove;
     }
+    /*Function by Zhixian Wu, based off generateMove() by Joseph Meltzer*/
+    /* @param placement    A valid placement string indicating the game state
+    *  @param us           The player the AI is playing as
+    *  @param opponent     The player the AI is opposing
+     */
     public static String genMoveCheating(String placement, Player us, Player opponent){
         int depth = min(MAX_TILES-us.used_tiles-1, 3);
         char piece = (char) (us.available_tiles).get(us.used_tiles);
-        char opiece = (char) (opponent.available_tiles).get(opponent.used_tiles);
         boolean green = (piece>='K' && piece<='T');
         System.out.println("We are: "+green);
         if (depth>0) return alphabetaCheat(placement, us, opponent, depth, depth, -1000, 1000, true, green).move;
@@ -605,6 +609,10 @@ public class StratoGame {
             return genMoveNotEasy(placement,piece);
         }
     }
+    /*Method by Joseph Meltzer
+    * @param placement    A valid placement string indicating the game state
+    *  @param us           The piece you are to play ('A' to 'T')
+     */
     public static String genMoveNotEasy(String placement, char piece) {
         String bestMove = "";
         int bestScore = -100;
