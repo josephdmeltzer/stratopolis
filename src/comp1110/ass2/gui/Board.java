@@ -36,7 +36,8 @@ public class Board extends Application {
 /*The majority of this class was done by Zhixian Wu, with some functions and
 layout by Manal Mohania and Joseph Meltzer*/
 
-/*All elements using CSS was done by Manal Mohania*/
+/*All elements using CSS was done by Manal Mohania, with inspiration and any
+* pieces of adapted code in the G-originality*/
 
 /*OVERVIEW: The first function called by the stage is initialSettings(), which
 * creates the first screen many buttons to choose the playing mode (Human v.s
