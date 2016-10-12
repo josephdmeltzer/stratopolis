@@ -155,27 +155,27 @@ layout by Manal Mohania and Joseph Meltzer*/
         /*This is the text describing these options*/
         Text greenText = new Text("Player Green: Human");
         greenText.setFill(Color.GREEN);
-        greenText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+        greenText.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
         Text green1 = new Text("Human: ");
         green1.setFill(Color.GREEN);
-        green1.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+        green1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
 
         Text green2 = new Text("AI:   ");
         green2.setFill(Color.GREEN);
-        green2.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+        green2.setFont(Font.font("Arial", FontWeight.BOLD, 15));
 
         Text redText = new Text("Player Red: Human");
         redText.setFill(Color.RED);
-        redText.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+        redText.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
         Text red1 = new Text("Human: ");
         red1.setFill(Color.RED);
-        red1.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+        red1.setFont(Font.font("Arial", FontWeight.BOLD, 15));
 
         Text red2 = new Text("AI:   ");
         red2.setFill(Color.RED);
-        red2.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+        red2.setFont(Font.font("Arial", FontWeight.BOLD, 15));
 
         /*Each of these buttons tell the game which players you want to be
         * human, and which to be AIs*/
@@ -483,7 +483,9 @@ layout by Manal Mohania and Joseph Meltzer*/
                 + "  You can choose a two-player game, play against an AI of any "
                 + "difficulty (the cheating AI can peek into both your decks), or "
                 + "watch two AIs play against each other. The two-AI game is advanced "
-                + "by clicking the 'Next Move' button. \n");
+                + "by clicking the 'Next Move' button. \n"
+                + "Also apart from using the rotate button, mouse scrolling can also be used to rotate the tiles."
+        );
 
         instructions.setFont(Font.font("Arial", 16));
         instructions.setWrappingWidth(610);
@@ -545,10 +547,10 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*The text labeling Green and Red's tiles, which you see on the right*/
         greentxt.setFill(Color.GREEN);
-        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+        greentxt.setFont(Font.font("Arial", FontWeight.BOLD, 18));
 
         redtxt.setFill(Color.RED);
-        redtxt.setFont(Font.font("Verdana", 16));
+        redtxt.setFont(Font.font("Arial", 16));
 
         /*The mute button's image*/
         if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
@@ -705,12 +707,12 @@ layout by Manal Mohania and Joseph Meltzer*/
         greenScore.setLayoutX(750);
         greenScore.setLayoutY(103);
         greenScore.setFill(Color.GREEN);
-        greenScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
+        greenScore.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 40));
 
         redScore.setLayoutX(830);
         redScore.setLayoutY(103);
         redScore.setFill(Color.RED);
-        redScore.setFont(Font.font("", FontWeight.EXTRA_BOLD, 40));
+        redScore.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 40));
         controls.getChildren().addAll(greenScore,redScore);
         updateScores();
 
@@ -718,10 +720,10 @@ layout by Manal Mohania and Joseph Meltzer*/
         Text tiles_left = new Text("TILES LEFT");
 
         greenTilesLeft.setFill(Color.GREEN);
-        greenTilesLeft.setFont(Font.font("", FontWeight.EXTRA_BOLD, 16));
+        greenTilesLeft.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 16));
 
         redTilesLeft.setFill(Color.RED);
-        redTilesLeft.setFont(Font.font("", FontWeight.EXTRA_BOLD, 16));
+        redTilesLeft.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 16));
 
         updateTilesLeft();
 
@@ -758,7 +760,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             /*The button that tells the AI to make a move, click this to progress the game*/
             nextMove.setOnMousePressed(event->  {
                 if (gameState.moveHistory.length()<=MAX_TILES*8){
-                    aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+                    aiThink.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
                     controls.getChildren().add(aiThink);
                     aiThink.setLayoutX(750);
                     aiThink.setLayoutY(420);
@@ -1088,7 +1090,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             We only suggest the AI is thinking if it actually is, i.e. your
             move was valid, i.e. if the last move in moveHistory was yours*/
             if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
-                aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+                aiThink.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(750);
                 aiThink.setLayoutY(420);
@@ -1165,7 +1167,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             We only suggest the AI is thinking if it actually is, i.e. your
             move was valid, i.e. if the last move in moveHistory was yours*/
             if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J'){
-                aiThink.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+                aiThink.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(740);
                 aiThink.setLayoutY(420);
@@ -1311,7 +1313,7 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         String tempMove = gameState.moveHistory.concat(placement);
         if (!StratoGame.isPlacementValid(tempMove)) { /*If the attempted move is invalid*/
-            errorMessage.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+            errorMessage.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
             controls.getChildren().add(errorMessage);
             errorMessage.setLayoutX(740);
             errorMessage.setLayoutY(480);
@@ -1376,7 +1378,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                         ivr.setCache(true);
                     } else{ /*If red does not still have tiles left, say they're our of tiles*/
                         Text outoftiles = new Text("Out of\n tiles");
-                        outoftiles.setFont(Font.font("", FontWeight.BOLD, 24));
+                        outoftiles.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                         GridPane.setColumnIndex(outoftiles,1);
                         GridPane.setRowIndex(outoftiles,0);
                         playerControls.getChildren().remove(ivr);
@@ -1384,8 +1386,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                         playerR.getNextTile();
                     }
                     /*Update whose turn is bolded, and which rotate button is greyed out.*/
-                    greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-                    redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
+                    greentxt.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+                    redtxt.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
                     rotateG.setDisable(false);
                     rotateR.setDisable(true);
                     break;
@@ -1401,7 +1403,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                         ivg.setCache(true);
                     } else{ /*If green does not still have tiles left, say they're out of tiles*/
                         Text outoftiles = new Text("Out of\n tiles");
-                        outoftiles.setFont(Font.font("", FontWeight.BOLD, 24));
+                        outoftiles.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                         GridPane.setColumnIndex(outoftiles,0);
                         GridPane.setRowIndex(outoftiles,0);
                         playerControls.getChildren().remove(ivg);
@@ -1409,8 +1411,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                         playerG.getNextTile();
                     }
                     /*Update whose turn is bolded, and which rotate button is greyed out.*/
-                    greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
-                    redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+                    greentxt.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+                    redtxt.setFont(Font.font("Arial", FontWeight.BOLD, 18));
                     rotateG.setDisable(true);
                     rotateR.setDisable(false);
                     break;
@@ -1439,7 +1441,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                 if (Scoring.getWinner(gameState.moveHistory)){
                     Text score = new Text("Green Wins!");
                     score.setFill(Color.GREEN);
-                    score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+                    score.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                     popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
                     score.setLayoutX(280);
@@ -1448,7 +1450,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                 } else{ /*if red wins*/
                     Text score = new Text("Red Wins!");
                     score.setFill(Color.RED);
-                    score.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+                    score.setFont(Font.font("Arial", FontWeight.BOLD, 24));
                     popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
                     score.setLayoutX(290);
@@ -1520,7 +1522,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                     String tall = Integer.toString(heights[i][j]);
                     Text label1 = new Text(tall);
                     label1.setFill(Color.WHITE);
-                    label1.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+                    label1.setFont(Font.font("Arial", FontWeight.BOLD, 12));
                     heightLabels.getChildren().add(label1);
                     GridPane.setRowIndex(label1,j);
                     GridPane.setColumnIndex(label1,i);
