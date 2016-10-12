@@ -252,7 +252,7 @@ public class AI {
     }
 
 
-    /*Zhixian trying a random thing for a cheating AI*/
+    /*Function by Zhixian Wu, based very heavily of the implementation of alpha-beta pruning by Joseph Meltzer*/
     public static moveScore alphabetaCheat(String placement, Player us, Player opponent, int depth, int maxDepth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
         if (maximising) {
