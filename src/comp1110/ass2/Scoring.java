@@ -1,7 +1,5 @@
 package comp1110.ass2;
 
-
-
 import java.util.Random;
 
 import static comp1110.ass2.StratoGame.*;
@@ -14,7 +12,7 @@ import static comp1110.ass2.Colour.*;
 /**
  * This class contains methods relating to scoring and winner determination.
  * All methods implemented by Manal Mohania.
- * */
+ */
 
 public final class Scoring {
     private static final int BOARD_SIZE = 26;
@@ -176,8 +174,8 @@ public final class Scoring {
         return nextResult(red, green);
     }
 
-    /**given a placement string, this function returns the score based on the rules of the game
-     *
+    /**
+     * Given a placement string, this function returns the score based on the rules of the game
      * @param placement: A valid placement string
      * @param green: A booleean value denoting if it's green's turn
      *
@@ -238,7 +236,6 @@ public final class Scoring {
 
     /**
      * This function calculates the maximum height in a contiguous region given the coordinates of any one cell on it
-     *
      * @param col: The column value of the cell of which the height is required
      * @param row: The rwo value of the cell of which the height is required
      * @param colour: The colour of the cell of which the height is being evaluated
@@ -262,7 +259,6 @@ public final class Scoring {
 
     /**
      * This function calculates the area of a contiguous region of one colour given the coordinates of any one cell on it
-     *
      * @param col: The column value of the cell for which the area is required
      * @param row: The rwo value of the cell of for which the area is required
      * @param colour: The colour of the cell of for which the area being evaluated
@@ -281,7 +277,8 @@ public final class Scoring {
                 floodFill(col, row - 1, colour);
     }
 
-    /**Calculates the maximum of four intgers
+    /**
+     * Calculates the maximum of four intgers
      * @param a,b,c,d: the four integers
      * @return the max of the four
      * */

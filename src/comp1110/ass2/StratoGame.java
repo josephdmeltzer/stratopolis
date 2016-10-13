@@ -36,8 +36,8 @@ public class StratoGame {
      *  - no tile appears more than twice in the placement
      *  Method by Manal Mohania and Joseph Meltzer
      *
-     * @param placement A string describing a placement of one or more tiles
-     * @return True if the placement is well-formed
+     * @param placement     A string describing a placement of one or more tiles
+     * @return              True if the placement is well-formed
      */
     static boolean isPlacementWellFormed(String placement) {
         if (placement == null) return false;
@@ -309,7 +309,7 @@ public class StratoGame {
     }
 
     /**
-     * Method by Joseph Meltzer
+     * Method by Joseph Meltzekr
      * Combines the old tileStraddle and areColoursAlright methods into a single method.
      * The placement string is therefore only looped through once for these methods, saving time.
      * @param placement     The placement string to inspect.
