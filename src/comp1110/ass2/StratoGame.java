@@ -20,15 +20,11 @@ import static java.lang.StrictMath.min;
 public class StratoGame {
 
     static boolean isTilePlacementWellFormed(String tilePlacement) {
-        if (tilePlacement.length() != 4) return false;
-        else if (tilePlacement.charAt(0)<'A') return false;
-        else if (tilePlacement.charAt(0)>'Z') return false;
-        else if (tilePlacement.charAt(1)<'A') return false;
-        else if (tilePlacement.charAt(1)>'Z') return false;
-        else if (tilePlacement.charAt(2)<'A') return false;
-        else if (tilePlacement.charAt(2)>'U') return false;
-        else if (tilePlacement.charAt(3)<'A') return false;
-        else return tilePlacement.charAt(3)<='D';
+        return tilePlacement.length() == 4 && tilePlacement.charAt(0) >= 'A' &&
+                tilePlacement.charAt(0) <= 'Z' && tilePlacement.charAt(1) >= 'A' &&
+                tilePlacement.charAt(1) <= 'Z' && tilePlacement.charAt(2) >= 'A' &&
+                tilePlacement.charAt(2) <= 'U' && tilePlacement.charAt(3) >= 'A' &&
+                tilePlacement.charAt(3) <= 'D';
     }
 
     /**
@@ -76,9 +72,7 @@ public class StratoGame {
      */
     public static boolean isPlacementValid(String placement) {
         // FIXME Task 6: determine whether a placement is valid
-        if (!isPlacementWellFormed(placement)) return false;
-        if (!isPlacementAdjacent(placement)) {return false;}
-        return straddleAndColours(placement);
+        return isPlacementWellFormed(placement) && isPlacementAdjacent(placement) && straddleAndColours(placement);
     }
 
     /**
@@ -322,42 +316,6 @@ public class StratoGame {
         return true;
     }
 
-    /* Method by Joseph Meltzer */
-    private static boolean tileStraddle(String placement) {
-        int[][] tileTable = new int[26][26];
-
-        for (int i = 4; i < placement.length(); i+=4) {
-            int col = placement.charAt(i) - 'A';
-            int row = placement.charAt(i+1) - 'A';
-
-            if (placement.charAt(i+3) == 'A'){
-                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
-                tileTable[col][row] = i;
-                tileTable[col+1][row] = i;
-                tileTable[col][row+1] = i;
-            }
-            else if (placement.charAt(i + 3) == 'B'){
-                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row+1] && tileTable[col][row] != 0) return false;
-                tileTable[col][row] = i;
-                tileTable[col-1][row] = i;
-                tileTable[col][row+1] = i;
-            }
-            else if (placement.charAt(i + 3) == 'C'){
-                if (tileTable[col][row] == tileTable[col-1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
-                tileTable[col][row] = i;
-                tileTable[col-1][row] = i;
-                tileTable[col][row-1] = i;
-            }
-            else if (placement.charAt(i + 3) == 'D'){
-                if (tileTable[col][row] == tileTable[col+1][row] && tileTable[col][row] == tileTable[col][row-1] && tileTable[col][row] != 0) return false;
-                tileTable[col][row] = i;
-                tileTable[col+1][row] = i;
-                tileTable[col][row-1] = i;
-            }
-        }
-        return true;
-    }
-
     /**
      * Method by Joseph Meltzer
      * Combines the old tileStraddle and areColoursAlright methods into a single method.
@@ -452,66 +410,6 @@ public class StratoGame {
         return getWinner(placement);
     }
 
-    /* Method by Joseph Meltzer */
-    private static boolean areColoursAlright(String placement){
-        Colour[][] colourTable = new Colour[26][26];
-        colourTable[12][12] = RED;
-        colourTable[12][13] = GREEN;
-
-        for (int i=4; i < placement.length(); i+=4) {
-            int col = placement.charAt(i) - 'A';
-            int row = placement.charAt(i+1) - 'A';
-
-            if ((colourTable[col][row] != RED || getColours(placement.charAt(i+2))[0] != GREEN) && (colourTable[col][row] != GREEN || getColours(placement.charAt(i+2))[0] != RED)) {
-                colourTable[col][row] = getColours(placement.charAt(i+2))[0];
-            }
-            else return false;
-
-            if (placement.charAt(i+3) == 'A') {
-
-                if ((colourTable[col+1][row] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col+1][row] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col+1][row] = getColours(placement.charAt(i+2))[1];
-                }
-                else return false;
-                if ((colourTable[col][row+1] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row+1] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col][row+1] = getColours(placement.charAt(i+2))[2];
-                }
-                else return false;
-            }
-            else if (placement.charAt(i+3) == 'B') {
-                if ((colourTable[col][row+1] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row+1] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col][row+1] = getColours(placement.charAt(i+2))[1];
-                }
-                else return false;
-                if ((colourTable[col-1][row] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col-1][row] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col-1][row] = getColours(placement.charAt(i+2))[2];
-                }
-                else return false;
-            }
-            else if (placement.charAt(i+3) == 'C') {
-                if ((colourTable[col-1][row] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col-1][row] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col-1][row] = getColours(placement.charAt(i+2))[1];
-                }
-                else return false;
-                if ((colourTable[col][row-1] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col][row-1] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col][row-1] = getColours(placement.charAt(i+2))[2];
-                }
-                else return false;
-            }
-            else if (placement.charAt(i+3) == 'D') {
-                if ((colourTable[col][row-1] != RED || getColours(placement.charAt(i+2))[1] != GREEN) && (colourTable[col][row-1] != GREEN || getColours(placement.charAt(i+2))[1] != RED)) {
-                    colourTable[col][row-1] = getColours(placement.charAt(i+2))[1];
-                }
-                else return false;
-                if ((colourTable[col+1][row] != RED || getColours(placement.charAt(i+2))[2] != GREEN) && (colourTable[col+1][row] != GREEN || getColours(placement.charAt(i+2))[2] != RED)) {
-                    colourTable[col+1][row] = getColours(placement.charAt(i+2))[2];
-                }
-                else return false;
-            }
-        }
-        return true;
-    }
-
     /**
      * Determine the score for a player given a placement, following the
      * scoring rules for the game.
@@ -568,9 +466,8 @@ public class StratoGame {
     /* Even older version of the generateMove function. Only looks at the immediately available moves.
        Seemingly instant computation time.
        Will be used exclusively when the AI difficulty setting is set to 'Easy'. (To be implemented)*/
-    static char[] checkOrder = {'M','L','N','K','O','J','P','I','Q','H','R','G','S','F','T','E','U','D','V','C','W','B','X','A','Y','Z'};
 
-    public static String genMoveEasy(String placement, char piece, char opponentsPiece) {
+    public static String genMoveEasy(String placement, char piece) {
         String bestMove = "";
         int bestScore = 0;
         for (String move : validTiles(placement)) {
@@ -593,10 +490,13 @@ public class StratoGame {
         }
         return bestMove;
     }
-    /*Function by Zhixian Wu, based off generateMove() by Joseph Meltzer*/
-    /* @param placement    A valid placement string indicating the game state
-    *  @param us           The player the AI is playing as
-    *  @param opponent     The player the AI is opposing
+
+    /**
+     * Function by Zhixian Wu, based off generateMove() by Joseph Meltzer
+     * @param placement   A valid placement string indicating the game state
+     * @param us          The player the AI is playing as
+     * @param opponent    The player the AI is opposing
+     * @return            placeholder
      */
     public static String genMoveCheating(String placement, Player us, Player opponent){
         int depth = min(MAX_TILES-us.used_tiles-1, 3);
@@ -609,11 +509,14 @@ public class StratoGame {
             return genMoveNotEasy(placement,piece);
         }
     }
-    /*Method by Joseph Meltzer
-    * @param placement    A valid placement string indicating the game state
-    *  @param us           The piece you are to play ('A' to 'T')
+
+    /**
+     * Method by Joseph Meltzer
+     * @param placement  A valid placement string indicating the game state
+     * @param piece      The piece you are to play ('A' to 'T')
+     * @return           placeholder
      */
-    public static String genMoveNotEasy(String placement, char piece) {
+    private static String genMoveNotEasy(String placement, char piece) {
         String bestMove = "";
         int bestScore = -100;
         for (char x='A'; x<='Z'; x++) {

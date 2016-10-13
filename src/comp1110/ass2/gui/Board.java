@@ -184,7 +184,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.greenPlayer = HUMAN;
             greenText.setText("Player Green: Human");
         });
-        greenHuman.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        greenHuman.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -201,7 +201,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.greenPlayer = EASY;
             greenText.setText("Player Green: Easy");
         });
-        greenEasy.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        greenEasy.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -216,7 +216,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.greenPlayer = MEDIUM;
             greenText.setText("Player Green: Medium");
         });
-        greenMedium.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        greenMedium.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -231,7 +231,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.greenPlayer = HARD;
             greenText.setText("Player Green: Hard");
         });
-        greenHard.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        greenHard.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -246,7 +246,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.greenPlayer = CHEATING;
             greenText.setText("Player Green: Cheating");
         });
-        greenCheating.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        greenCheating.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -261,7 +261,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.redPlayer = HUMAN;
             redText.setText("Player Red: Human");
         });
-        redHuman.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        redHuman.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -276,7 +276,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.redPlayer = EASY;
             redText.setText("Player Red: Easy");
         });
-        redEasy.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        redEasy.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -291,7 +291,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.redPlayer = MEDIUM;
             redText.setText("Player Red: Medium");
         });
-        redMedium.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        redMedium.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -306,7 +306,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.redPlayer = HARD;
             redText.setText("Player Red: Hard");
         });
-        redHard.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        redHard.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -321,7 +321,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.redPlayer = CHEATING;
             redText.setText("Player Red: Cheating");
         });
-        redCheating.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        redCheating.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -353,7 +353,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         VBox red = new VBox(5);
         red.getChildren().addAll(redText,rhb1,rhb2);
         red.setSpacing(15);
-        red.setLayoutX(570);
+        red.setLayoutX(540);
         red.setLayoutY(480);
 
 
@@ -378,7 +378,7 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         startGame.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> startGame.setEffect(shadow));
         startGame.addEventHandler(MouseEvent.MOUSE_EXITED, event -> startGame.setEffect(null));
-        startGame.setLayoutX(420);
+        startGame.setLayoutX(400);
         startGame.setLayoutY(620);
 
         /*The mute button by Zhixian Wu*/
@@ -503,7 +503,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             placementGrp.setDisable(false);
             controls.setDisable(false);
         } );
-        exitBtn.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        exitBtn.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -678,10 +678,10 @@ layout by Manal Mohania and Joseph Meltzer*/
             initialSettings();
         });
         controls.getChildren().add(menu);
-        menu.setLayoutX(835);
+        menu.setLayoutX(820);
         menu.setLayoutY(650);
 
-        menu.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+        menu.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
@@ -705,14 +705,14 @@ layout by Manal Mohania and Joseph Meltzer*/
         controls.getChildren().add(score);
 
         greenScore.setLayoutX(750);
-        greenScore.setLayoutY(103);
+        greenScore.setLayoutY(110);
         greenScore.setFill(Color.GREEN);
-        greenScore.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 40));
+        greenScore.setFont(Font.font("Gentium", 52));
 
         redScore.setLayoutX(830);
-        redScore.setLayoutY(103);
+        redScore.setLayoutY(110);
         redScore.setFill(Color.RED);
-        redScore.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 40));
+        redScore.setFont(Font.font("Gentium", 52));
         controls.getChildren().addAll(greenScore,redScore);
         updateScores();
 
@@ -720,10 +720,10 @@ layout by Manal Mohania and Joseph Meltzer*/
         Text tiles_left = new Text("TILES LEFT");
 
         greenTilesLeft.setFill(Color.GREEN);
-        greenTilesLeft.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 16));
+        greenTilesLeft.setFont(Font.font("Gentium", 24));
 
         redTilesLeft.setFill(Color.RED);
-        redTilesLeft.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 16));
+        redTilesLeft.setFont(Font.font("Gentium", 24));
 
         updateTilesLeft();
 
@@ -748,7 +748,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         GridPane.setHalignment(redTilesLeft, HPos.CENTER);
         GridPane.setValignment(redTilesLeft, VPos.TOP);
 
-        tileCounter.setLayoutX(TILE_SIZE*BOARD_SIZE+80);
+        tileCounter.setLayoutX(TILE_SIZE*BOARD_SIZE+70);
         tileCounter.setLayoutY(360);
         controls.getChildren().add(tileCounter);
 
@@ -763,12 +763,12 @@ layout by Manal Mohania and Joseph Meltzer*/
                     aiThink.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
                     controls.getChildren().add(aiThink);
                     aiThink.setLayoutX(750);
-                    aiThink.setLayoutY(420);
+                    aiThink.setLayoutY(450);
                 }
             });
             nextMove.setOnAction(event->  makeAIMove());
 
-            nextMove.setStyle("-fx-font: 14 arial; -fx-background-color: \n" +
+            nextMove.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
                     "        #090a0c,\n" +
                     "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                     "        linear-gradient(#20262b, #191d22),\n" +
@@ -925,7 +925,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             char redTile = (char) (playerR.available_tiles).get(playerR.used_tiles);
             char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
 
-            String opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
+            String opponent = genMoveEasy(gameState.moveHistory, greenTile);
             if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
             if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
 
@@ -1093,7 +1093,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                 aiThink.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(750);
-                aiThink.setLayoutY(420);
+                aiThink.setLayoutY(450);
             }
         });
 
@@ -1170,7 +1170,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                 aiThink.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(740);
-                aiThink.setLayoutY(420);
+                aiThink.setLayoutY(450);
             }
 
         });
@@ -1294,13 +1294,11 @@ layout by Manal Mohania and Joseph Meltzer*/
         greenScore.setText("" + score);
         int offset = (Integer.toString(score)).length() * 15;
         greenScore.setLayoutX(790-offset);
-        greenScore.setLayoutY(107);
 
         int score2 = StratoGame.getScoreForPlacement(placement, false);
         redScore.setText("" + score2);
         int offset2 = (Integer.toString(score2)).length() * 15;
         redScore.setLayoutX(870 - offset2);
-        redScore.setLayoutY(107);
     }
 
     /*The method that makes a placement*/
@@ -1316,7 +1314,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             errorMessage.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
             controls.getChildren().add(errorMessage);
             errorMessage.setLayoutX(740);
-            errorMessage.setLayoutY(480);
+            errorMessage.setLayoutY(450);
         } else {
             /*create the image that'll go on the board*/
             ImageView iv1 = new ImageView();
@@ -1474,7 +1472,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             if (gameState.playerTurn==GREEN){ /*if the current turn is green*/
                 switch (gameState.greenPlayer){
                     case EASY:
-                        opponent = genMoveEasy(gameState.moveHistory, greenTile, redTile);
+                        opponent = genMoveEasy(gameState.moveHistory, greenTile);
                         break;
                     case MEDIUM:
                         opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
@@ -1491,7 +1489,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             } else{ /*if the current turn is red*/
                 switch (gameState.redPlayer){
                     case EASY:
-                        opponent = genMoveEasy(gameState.moveHistory, redTile, greenTile);
+                        opponent = genMoveEasy(gameState.moveHistory, redTile);
                         break;
                     case MEDIUM:
                         opponent = genMoveMedium(gameState.moveHistory, redTile, greenTile);
@@ -1548,6 +1546,10 @@ layout by Manal Mohania and Joseph Meltzer*/
         primaryStage.setScene(scene);
         primaryStage.show();
 
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 
 }
