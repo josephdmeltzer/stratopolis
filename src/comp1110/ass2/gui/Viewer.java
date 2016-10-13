@@ -36,7 +36,7 @@ public class Viewer extends Application {
     private final Group root = new Group();
     private final Group controls = new Group();
     private final Group placementGrp = new Group();
-    TextField textField;
+    private TextField textField;
 
     /**
      * Draw a placement in the window, removing any previously drawn one
@@ -44,7 +44,7 @@ public class Viewer extends Application {
      * @param placement  A valid placement string
      */
 
-    void makePlacement(String placement) {
+    private void makePlacement(String placement) {
         if (!StratoGame.isPlacementValid(placement)){
             throw new IllegalArgumentException("Bad placement " + placement);
         } else{
