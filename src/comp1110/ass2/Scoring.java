@@ -5,9 +5,6 @@ import java.util.Random;
 import static comp1110.ass2.StratoGame.*;
 import static comp1110.ass2.Colour.*;
 
-/**
- * Created by manalmohania on 25/08/2016.
- */
 
 /**
  * This class contains methods relating to scoring and winner determination.
@@ -177,7 +174,7 @@ public final class Scoring {
     /**
      * Given a placement string, this function returns the score based on the rules of the game
      * @param placement: A valid placement string
-     * @param green: A booleean value denoting if it's green's turn
+     * @param green: A boolean value denoting if it's green's turn
      *
      * @return the score*/
     static int getScore(String placement, boolean green) {
@@ -278,7 +275,7 @@ public final class Scoring {
     }
 
     /**
-     * Calculates the maximum of four intgers
+     * Calculates the maximum of four integers
      * @param a,b,c,d: the four integers
      * @return the max of the four
      * */

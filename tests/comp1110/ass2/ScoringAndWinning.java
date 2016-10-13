@@ -8,9 +8,6 @@ import static comp1110.ass2.TestUtility.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by manalmohania on 2/09/2016.
- */
 
 /**
  * All the tests in this section were created by Manal Mohania
@@ -19,9 +16,9 @@ import static org.junit.Assert.assertTrue;
 
 public class ScoringAndWinning {
 
-    /** Tests for scoring */
-
-    /**
+    /** Tests for scoring
+     *
+     *
     * Properties of score-
     * 1. Score >= 0
     * 2. Total Score <= ((n + 1)/2)*(-1 + 3n), where n is the number of pieces on board
