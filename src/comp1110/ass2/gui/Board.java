@@ -1350,7 +1350,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                     score.setFont(Font.font("Arial", FontWeight.BOLD, 36));
                     popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
-                    score.setLayoutX(280);
+                    score.setLayoutX(265);
                     score.setLayoutY(300);
                     root.getChildren().add(popUp2);
                 } else{ /*if red wins*/
@@ -1360,7 +1360,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                     score.setStyle("-fx-stroke: black; -fx-stroke-width: 1");
                     popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
-                    score.setLayoutX(290);
+                    score.setLayoutX(270);
                     score.setLayoutY(300);
                     root.getChildren().add(popUp2);
                 }
