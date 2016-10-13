@@ -45,8 +45,6 @@ public class Viewer extends Application {
      */
 
     void makePlacement(String placement) {
-        // FIXME Task 5: implement the simple placement viewer
-
         if (!StratoGame.isPlacementValid(placement)){
             throw new IllegalArgumentException("Bad placement " + placement);
         } else{

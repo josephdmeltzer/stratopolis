@@ -10,7 +10,6 @@ import static comp1110.ass2.Scoring.getScore;
 import static comp1110.ass2.Scoring.getWinner;
 import static java.lang.StrictMath.min;
 
-
 /**
  * This class provides the text interface for the Strato Game
  *
@@ -35,13 +34,12 @@ public class StratoGame {
      *  - the second tile placement (if any) is for a green tile
      *  - remaining tile placements alternate between red and green
      *  - no tile appears more than twice in the placement
+     *  Method by Manal Mohania and Joseph Meltzer
      *
      * @param placement A string describing a placement of one or more tiles
      * @return True if the placement is well-formed
      */
-    /* Method by Manal Mohania and Joseph Meltzer */
     static boolean isPlacementWellFormed(String placement) {
-        // FIXME Task 4: determine whether a placement is well-formed
         if (placement == null) return false;
         int len = placement.length();
         int numPieces = len/4;
@@ -71,18 +69,15 @@ public class StratoGame {
      * @return True if the placement is valid
      */
     public static boolean isPlacementValid(String placement) {
-        // FIXME Task 6: determine whether a placement is valid
         return isPlacementWellFormed(placement) && isPlacementAdjacent(placement) && straddleAndColours(placement);
     }
 
     /**
      * Convert a placement string to a 26x26 array of colours
-     *
+     * Function written by Manal Mohania
      * @param placement: A _valid_ placement string
      * @return a 26 x 26 array of colours
-     *
-     * function written by Manal Mohania
-     * */
+     */
     static Colour[][] colourArray(String placement){
         Colour[][] coverage = new Colour[26][26];
         coverage[12][12] = RED;
@@ -122,12 +117,10 @@ public class StratoGame {
 
     /**
      * Convert a placement string to a 26x26 array of heights
-     *
+     * Function written by Manal Mohania
      * @param placement: A _valid_ placement string
      * @return a 26 x 26 array of heights
-     *
-     * function written by Manal Mohania
-     * */
+     */
     public static int[][] heightArray(String placement){
         int[][] coverage = new int[26][26];
         coverage[12][12] = 1;
@@ -311,7 +304,6 @@ public class StratoGame {
             else {
                 System.out.println("isPlacementAdjacent: should not reach here");
             }
-
         }
         return true;
     }
@@ -405,7 +397,7 @@ public class StratoGame {
     /**
      * This method returns true if green has won the game given a valid placement string.
      * function written by Manal Mohania
-     * */
+     */
     static boolean greenHasWon(String placement){
         return getWinner(placement);
     }
@@ -413,18 +405,13 @@ public class StratoGame {
     /**
      * Determine the score for a player given a placement, following the
      * scoring rules for the game.
-     *
+     * Function written by Manal Mohania
      * @param placement A placement string
-     * @param green True if the score for the green player is requested,
-     *              otherwise the score for the red player should be returned
-     * @return the score for the requested player, given the placement
-     *
-     * function written by Manal Mohania
+     * @param green     True if the score for the green player is requested,
+     *                  otherwise the score for the red player should be returned
+     * @return          The score for the requested player, given the placement
      */
-
     public static int getScoreForPlacement(String placement, boolean green) {
-        // FIXME Task 7: determine the score for a player given a placement
-
         /*I have this here for the moment but will remove it once main gets implemented*/
         if (!isPlacementValid(placement))
             return -1;
@@ -451,7 +438,6 @@ public class StratoGame {
        the AI difficulty is set to 'Hard'. (To be implemented)
        */
     public static String generateMove(String placement, char piece, char opponentsPiece) {
-        // FIXME Task 10: generate a valid move
         boolean green = (piece>='K' && piece<='T');
         return alphabeta(placement, piece, opponentsPiece, 2, 1, -100, 1000, true, green).move;
     }

@@ -2,7 +2,6 @@ package comp1110.ass2;
 
 import static comp1110.ass2.Colour.*;
 
-
 /**
  * Created by manalmohania on 11/08/2016.
  */
@@ -11,8 +10,8 @@ import static comp1110.ass2.Colour.*;
  * This class contains the internal representations of the pieces and any associated functions
  * Developed by Manal Mohania
  * getColours function by Joseph Meltzer
- * */
-/*This enum contains a representation of the pieces and any associated functions*/
+ */
+
 public enum Pieces {
     A (RED, BLACK, BLACK),
     B (BLACK, BLACK, RED),
