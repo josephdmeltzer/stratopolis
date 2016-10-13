@@ -1345,22 +1345,22 @@ layout by Manal Mohania and Joseph Meltzer*/
                 /*If green wins*/
                 if (Scoring.getWinner(gameState.moveHistory)){
                     Text score = new Text("Green Wins!");
-                    score.setStyle("-fx-stroke: black; -fx-stroke-width: 2");
+                    score.setStyle("-fx-stroke: black; -fx-stroke-width: 1");
                     score.setFill(Color.GREEN);
-                    score.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+                    score.setFont(Font.font("Arial", FontWeight.BOLD, 36));
                     popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
-                    score.setLayoutX(280);
+                    score.setLayoutX(265);
                     score.setLayoutY(300);
                     root.getChildren().add(popUp2);
                 } else{ /*if red wins*/
                     Text score = new Text("Red Wins!");
                     score.setFill(Color.RED);
-                    score.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-                    score.setStyle("-fx-stroke: black; -fx-stroke-width: 2");
+                    score.setFont(Font.font("Arial", FontWeight.BOLD, 36));
+                    score.setStyle("-fx-stroke: black; -fx-stroke-width: 1");
                     popUp2.getChildren().clear(); /*get rid of the last game's result*/
                     popUp2.getChildren().add(score);
-                    score.setLayoutX(290);
+                    score.setLayoutX(270);
                     score.setLayoutY(300);
                     root.getChildren().add(popUp2);
                 }
