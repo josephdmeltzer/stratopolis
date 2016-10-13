@@ -187,152 +187,73 @@ layout by Manal Mohania and Joseph Meltzer*/
             gameState.greenPlayer = HUMAN;
             greenText.setText("Player Green: Human");
         });
-        greenHuman.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        DropShadow shadow = new DropShadow();
-
-        greenHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHuman.setEffect(shadow));
-        greenHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHuman.setEffect(null));
 
         Button greenEasy = new Button("Easy");
         greenEasy.setOnAction(event-> {
             gameState.greenPlayer = EASY;
             greenText.setText("Player Green: Easy");
         });
-        greenEasy.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        greenEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenEasy.setEffect(shadow));
-        greenEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenEasy.setEffect(null));
 
         Button greenMedium = new Button("Medium");
         greenMedium.setOnAction(event-> {
             gameState.greenPlayer = MEDIUM;
             greenText.setText("Player Green: Medium");
         });
-        greenMedium.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        greenMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenMedium.setEffect(shadow));
-        greenMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenMedium.setEffect(null));
 
         Button greenHard = new Button("Hard");
         greenHard.setOnAction(event-> {
             gameState.greenPlayer = HARD;
             greenText.setText("Player Green: Hard");
         });
-        greenHard.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        greenHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenHard.setEffect(shadow));
-        greenHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenHard.setEffect(null));
 
         Button greenCheating = new Button("Cheating");
         greenCheating.setOnAction(event-> {
             gameState.greenPlayer = CHEATING;
             greenText.setText("Player Green: Cheating");
         });
-        greenCheating.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        greenCheating.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> greenCheating.setEffect(shadow));
-        greenCheating.addEventHandler(MouseEvent.MOUSE_EXITED, event -> greenCheating.setEffect(null));
 
         Button redHuman = new Button("Human");
         redHuman.setOnAction(event-> {
             gameState.redPlayer = HUMAN;
             redText.setText("Player Red: Human");
         });
-        redHuman.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        redHuman.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redHuman.setEffect(shadow));
-        redHuman.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redHuman.setEffect(null));
 
         Button redEasy = new Button("Easy");
         redEasy.setOnAction(event-> {
             gameState.redPlayer = EASY;
             redText.setText("Player Red: Easy");
         });
-        redEasy.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        redEasy.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redEasy.setEffect(shadow));
-        redEasy.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redEasy.setEffect(null));
 
         Button redMedium = new Button("Medium");
         redMedium.setOnAction(event-> {
             gameState.redPlayer = MEDIUM;
             redText.setText("Player Red: Medium");
         });
-        redMedium.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        redMedium.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redMedium.setEffect(shadow));
-        redMedium.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redMedium.setEffect(null));
 
         Button redHard = new Button("Hard");
         redHard.setOnAction(event-> {
             gameState.redPlayer = HARD;
             redText.setText("Player Red: Hard");
         });
-        redHard.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
-
-        redHard.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redHard.setEffect(shadow));
-        redHard.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redHard.setEffect(null));
 
         Button redCheating = new Button("Cheating");
         redCheating.setOnAction(event-> {
             gameState.redPlayer = CHEATING;
             redText.setText("Player Red: Cheating");
         });
-        redCheating.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
-                "        #090a0c,\n" +
-                "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
-                "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
-                "-fx-text-fill: white;");
 
-        redCheating.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> redCheating.setEffect(shadow));
-        redCheating.addEventHandler(MouseEvent.MOUSE_EXITED, event -> redCheating.setEffect(null));
+        DropShadow shadow = new DropShadow();
+        for (Button b : new Button[] {greenHuman, greenEasy, greenMedium, greenHard, greenCheating,
+                                      redHuman, redEasy, redMedium, redHard, redCheating}) {
+            b.setStyle("-fx-font: 14 Arial; -fx-background-color: \n" +
+                    "        #090a0c,\n" +
+                    "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
+                    "        linear-gradient(#20262b, #191d22),\n" +
+                    "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                    "-fx-text-fill: white;");
+            b.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> b.setEffect(shadow));
+            b.addEventHandler(MouseEvent.MOUSE_EXITED, event -> b.setEffect(null));
+        }
 
         /*Layout of the options by Zhixian Wu and Manal Mohania*/
         HBox ghb1 = new HBox(5);
@@ -945,14 +866,14 @@ layout by Manal Mohania and Joseph Meltzer*/
         placementGrp.getChildren().addAll(thickBorder,playingBoard,heightLabels,clickablePanes);
     }
 
-    /*The clickable panes for when there are two players*/
-    /*Function by Zhixian Wu, Manal Mohania and Joseph Meltzer.*/
-    /*Idea of how to recursively creates panes that remember what position they
-    were created for is from StackOverflow:
-      <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and
-      -column-ids-on-mouse-entered-in-each-cell-of-grid-in>*/
-    /*@param colIndex   The column the pane is on
-    * @param rowIndex   The row the pane is on */
+    /**
+     * The clickable panes for when there are two players
+     * Function by Zhixian Wu, Manal Mohania and Joseph Meltzer.
+     * Idea of how to recursively creates panes that remember what position they were created for is from StackOverflow:
+     * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and-column-ids-on-mouse-entered-in-each-cell-of-grid-in>
+     * @param colIndex      The column the pane is on
+     * @param rowIndex      The row the pane is on
+     */
     private void addPaneTwoPlayer(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -1033,15 +954,14 @@ layout by Manal Mohania and Joseph Meltzer*/
         GridPane.setColumnIndex(pane,colIndex);
     }
 
-
-    /*The clickable panes for when the human player is Green*/
-    /*Function by Zhixian Wu and Manal Mohania.*/
-    /*Idea of how to recursively creates panes that remember what position they
-    were created for is from StackOverflow: <http://stackoverflow.com
-            /questions/31095954/how-to-get-gridpane-row-and-column-ids
-            -on-mouse-entered-in-each-cell-of-grid-in>*/
-    /*@param colIndex   The column the pane is on
-    * @param rowIndex   The row the pane is on*/
+    /**
+     * The clickable panes for when the human player is Green
+     * Function by Zhixian Wu and Manal Mohania.
+     * Idea of how to recursively creates panes that remember what position they were created for is from StackOverflow:
+     * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and-column-ids-on-mouse-entered-in-each-cell-of-grid-in>
+     * @param colIndex      The column the pane is on
+     * @param rowIndex      The row the pane is on
+     */
     private void addPanePlayerGreen(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -1105,12 +1025,14 @@ layout by Manal Mohania and Joseph Meltzer*/
         GridPane.setColumnIndex(pane,colIndex);
     }
 
-    /*The clickable panes for when the human player is Red*/
-    /*Function by Zhixian Wu and Manal Mohania.*/
-    /*Idea of how to recursively creates panes that remember what position they
-    were created for is from StackOverflow (URL in the in the C-u5807060 originality statement)*/
-    /*@param colIndex   The column the pane is on
-    * @param rowIndex   The row the pane is on*/
+    /**
+     * The clickable panes for when the human player is Red
+     * Function by Zhixian Wu and Manal Mohania.
+     * Idea of how to recursively creates panes that remember what position they
+     * were created for is from StackOverflow (URL in the in the C-u5807060 originality statement)
+     * @param colIndex      The column the pane is on
+     * @param rowIndex      The row the pane is on
+     */
     private void addPanePlayerRed(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -1183,8 +1105,8 @@ layout by Manal Mohania and Joseph Meltzer*/
     /**
      * This function removes the temporary placement created due to mouseover (if any)
      * Function by Manal Mohania
-     * */
-    /*@param iv   The preview image to be removed*/
+     * @param iv        The preview image to be removed
+     */
     private void removeTempPlacement(ImageView iv){
         if (iv == null)
             return;
@@ -1284,9 +1206,11 @@ layout by Manal Mohania and Joseph Meltzer*/
         redScore.setLayoutX(870 - offset2);
     }
 
-    /*The method that makes a placement*/
-    /*Function by Zhixian Wu*/
-    /* @param placement   The placement string*/
+    /**
+     * The method that makes a placement
+     * Function by Zhixian Wu
+     * @param placement     The placement string
+     */
     private void makeGUIPlacement(String placement) {
         /*Remove some messages if they are on screen*/
         controls.getChildren().remove(errorMessage);
@@ -1534,5 +1458,4 @@ layout by Manal Mohania and Joseph Meltzer*/
     public static void main(String[] args) {
         launch(args);
     }
-
 }
