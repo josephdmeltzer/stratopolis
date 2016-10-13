@@ -471,10 +471,10 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*The text labeling Green and Red's tiles, which you see on the right*/
         greentxt.setFill(Color.GREEN);
-        greentxt.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 
         redtxt.setFill(Color.RED);
-        redtxt.setFont(Font.font("Arial", 16));
+        redtxt.setFont(Font.font("Verdana", 16));
 
         /*The mute button's image*/
         if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
@@ -631,12 +631,12 @@ layout by Manal Mohania and Joseph Meltzer*/
         greenScore.setLayoutX(750);
         greenScore.setLayoutY(110);
         greenScore.setFill(Color.GREEN);
-        greenScore.setFont(Font.font("Gentium", 52));
+        greenScore.setFont(Font.font("Gentium", 44));
 
         redScore.setLayoutX(830);
         redScore.setLayoutY(110);
         redScore.setFill(Color.RED);
-        redScore.setFont(Font.font("Gentium", 52));
+        redScore.setFont(Font.font("Gentium", 44));
         controls.getChildren().addAll(greenScore,redScore);
         updateScores();
 
@@ -1292,8 +1292,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                         playerR.getNextTile();
                     }
                     /*Update whose turn is bolded, and which rotate button is greyed out.*/
-                    greentxt.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-                    redtxt.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+                    greentxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+                    redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
                     rotateG.setDisable(false);
                     rotateR.setDisable(true);
                     break;
@@ -1317,8 +1317,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                         playerG.getNextTile();
                     }
                     /*Update whose turn is bolded, and which rotate button is greyed out.*/
-                    greentxt.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
-                    redtxt.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+                    greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
+                    redtxt.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
                     rotateG.setDisable(true);
                     rotateR.setDisable(false);
                     break;
@@ -1364,6 +1364,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                     score.setLayoutY(300);
                     root.getChildren().add(popUp2);
                 }
+                greentxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
+                redtxt.setFont(Font.font("Verdana", FontWeight.NORMAL, 16));
             }
         }
     }
