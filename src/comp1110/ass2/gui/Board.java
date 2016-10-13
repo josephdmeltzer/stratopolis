@@ -44,24 +44,26 @@ layout by Manal Mohania and Joseph Meltzer*/
 * Hard AI, Human vs. Human, Easy AI vs. Cheating AI, etc.
 * (And buttons for the instructions, sound, etc.)*/
 
-/*The buttons set variables for the GameState which determines what kine of game,
-* is created, what difficult AI to call, etc. Then they all call makeGame(). */
+/*The difficulty buttons change the GameState, which changes what kind of board
+* is created, what difficulty AI to call, etc. */
 
-/*makeGame() calls makeControls() and makeBoard(). */
+/*Whenyou click 'Start', makeGame() is called
+* makeGame() calls makeControls() and makeBoard(). */
 
 /*makeControls() is pretty much the same for all playing modes, except it omits
 * a "Rotate" button if it's single-player. And if the game is AI vs. AI, it creates
-* a button Next Move which progesses the game when clicked*/
+* a button Next Move which progresses the game when clicked*/
 
 /*makeBoard() is pretty much the same again.
 * makeBoard() modifies some GridPanes:
  * 1. playingBoard so it looks like a board
  * 2. heightLabels so its rows and columns align with the playingBoard
  * 3. clickablePanes so its rows and columns align with the playingBoard
- * The big difference is that depending if it's Human vs. AI, AI vs. Human,
+ * The big difference is that depending if the game is Human vs. AI, AI vs. Human,
  * or Human vs. Human, it calls different addPane function: addPanePlayerGreen,
  * addPanePlayerRed, or addPaneTwoPlayer.
- * If it's AI vs. Human, it also makes the AI's first move by calling makeAIMove*/
+ * If it's AI vs. Human, it also makes the AI's first move by calling makeAIMove.
+ * If it's AI vs. AI, it doesn't add clickable panes to the board*/
 
 /*Each 'addPane' function creates a pane at the specified row and column
 * on the GridPane clickablePanes.
@@ -73,16 +75,16 @@ layout by Manal Mohania and Joseph Meltzer*/
 /*Apart from putting an image in the right place, the makeGUIPlacement function
 * modifies whose turn it is, how far through their stack of tiles each player
 * is at, the heights of the tiles (by calling displayHeights()), what the current
- * score is (by calling updateScores()), check if the game is over and display
- * the Game Over Screen is true, etc.*/
+* score is (by calling updateScores()), check if the game is over and display
+* the Game Over Screen if it is, etc.*/
 
 
 
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
     private static final String URI_BASE = "assets/";
-    private static final int TILE_SIZE = 25;
-    private static final int BOARD_SIZE = 26;
+    private static final int TILE_SIZE = 25; /*This is half the width of each tile*/
+    private static final int BOARD_SIZE = 26; /*As in a 26x26 board*/
     private static final String PLACEMENT_URI = Viewer.class.getResource(URI_BASE + "sound.wav").toString();
 
     /*Objects that need to be accessible to many functions.*/
@@ -117,6 +119,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private final GridPane heightLabels = new GridPane();
     private final GridPane clickablePanes = new GridPane();
 
+    /*We change the background colour the the scene in the game*/
     private Scene scene;
 
     /*A counter that tells you if this is the first game played*/
@@ -129,7 +132,7 @@ layout by Manal Mohania and Joseph Meltzer*/
     private final AudioClip audio = new AudioClip(PLACEMENT_URI);
 
 
-    /*Function mostly by Zhixian Wu, with all button styling and some layout by Manal Mohania*/
+    /*Function mostly by Zhixian Wu, with all button styling by Manal Mohania*/
     private void initialSettings() {
 
         /*The scene actually changes colour from the start screen to the actual game.
@@ -537,7 +540,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         makeControls();
     }
 
-    /*Function mostly by Zhixian Wu, with the running score and button styling by Manal Mohania*/
+    /*Function mostly by Zhixian Wu, with the running score and all button styling by Manal Mohania*/
     private void makeControls(){
 
         scene.setFill(Color.WHITESMOKE);
@@ -783,6 +786,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         }
 
     }
+    /*Function by Zhixian Wu*/
     private void updateTilesLeft(){
         if (gameState.moveHistory.length()<=MAX_TILES*8-4){
             String green = Integer.toString(MAX_TILES-playerG.used_tiles);
@@ -942,11 +946,13 @@ layout by Manal Mohania and Joseph Meltzer*/
     }
 
     /*The clickable panes for when there are two players*/
-    /*Function by Zhixian Wu and Manal Mohania.*/
+    /*Function by Zhixian Wu, Manal Mohania and Joseph Meltzer.*/
     /*Idea of how to recursively creates panes that remember what position they
-    were created for is from StackOverflow (URL in the C-u5807060 originality statement)*/
+    were created for is from StackOverflow:
+      <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and
+      -column-ids-on-mouse-entered-in-each-cell-of-grid-in>*/
     /*@param colIndex   The column the pane is on
-    * @param rowIndex   The row the pane is on*/
+    * @param rowIndex   The row the pane is on */
     private void addPaneTwoPlayer(int colIndex, int rowIndex){
         Pane pane = new Pane();
         ImageView iv = new ImageView();
@@ -956,8 +962,6 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu, this makes the player's move when they click on a pane*/
         pane.setOnMouseClicked(event -> {
-               /* char col = (char) (colIndex+'A');
-                char row = (char) (rowIndex+'A');*/
                 switch (gameState.playerTurn){
                     case RED:
                         String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
@@ -993,8 +997,6 @@ layout by Manal Mohania and Joseph Meltzer*/
                 ivr.setRotate(((int) (playerR.rotation) - 'A') * 90);
                 iv.setRotate(((int) (playerR.rotation) - 'A') * 90);
             }
-            /*char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');*/
 
             switch (gameState.playerTurn){
                 case RED:
@@ -1010,8 +1012,6 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Manal Mohania, this creates the preview piece*/
         pane.setOnMouseEntered(event -> {
-            /*char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');*/
 
             switch (gameState.playerTurn){
                 case RED:
@@ -1058,17 +1058,12 @@ layout by Manal Mohania and Joseph Meltzer*/
             ivg.setRotate((((int) (playerG.rotation) - 'A') * 90));
             iv.setRotate(((int) (playerG.rotation) - 'A') * 90);
 
-            /*char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');*/
-
             String placement2 = "" + col + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
             makeTempPlacement(iv, placement2);
             });
 
         /*Event by Manal Mohania, this adds the preview piece*/
         pane.setOnMouseEntered(event -> {
-            /*char col = (char) (colIndex+'A');
-            char row = (char) (rowIndex+'A');*/
 
             String placement = "" + col + row + playerG.available_tiles.get(playerG.used_tiles) + playerG.rotation;
             makeTempPlacement(iv, placement);
@@ -1079,9 +1074,6 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
-            /*char col = (char) (colIndex+'A');
-            char row = (char) (rowIndex+'A');*/
-
             String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
             makeGUIPlacement(placement);
 
@@ -1135,18 +1127,12 @@ layout by Manal Mohania and Joseph Meltzer*/
             ivr.setRotate(((int) (playerR.rotation) - 'A') * 90);
             iv.setRotate(((int) (playerR.rotation) - 'A') * 90);
 
-            /*char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');*/
-
             String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeTempPlacement(iv, placement);
         });
 
         /*Event by Manal Mohania, the adds the preview piece*/
         pane.setOnMouseEntered(event -> {
-            /*char col = (char) (colIndex + 'A');
-            char row = (char) (rowIndex + 'A');*/
-
             String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeTempPlacement(iv, placement);
         });
@@ -1156,9 +1142,6 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
-            /*char col = (char) (colIndex+'A');
-            char row = (char) (rowIndex+'A');*/
-
             String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
             makeGUIPlacement(placement);
 
@@ -1216,8 +1199,8 @@ layout by Manal Mohania and Joseph Meltzer*/
      * 2. ensures that the individual piece does not lie outside the board when making the placement
      * 3. removes error messages if a valid placement is reached
      *
-     * @param iv: The preview image to be added
-     * @param placement: the placement string
+     * @param iv          The preview image to be added
+     * @param placement   the placement string
      *
      * Function by Manal Mohania
      * Minor edits by Joseph Meltzer
