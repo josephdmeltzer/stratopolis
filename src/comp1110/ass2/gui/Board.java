@@ -389,9 +389,11 @@ layout by Manal Mohania and Joseph Meltzer*/
                 + "tiles face down, revealing only the topmost tile. \n \n"
                 + "  To start the game, a two-square tile (one red, one green) is placed "
                 + "on the table. Players then take turns adding their topmost tile to "
-                + "the display. A placement is made by clicking on the board. Inalid placements "
+                + "the display. A placement is made by clicking on the board. Invalid placements "
                 + "have duller preview images. \n\n"
-                + "A tile can be placed (1) on the table with at least one "
+                + "  Apart from using the 'Rotate' button, the tiles can be rotated by scrolling "
+                + "while hovering over the board.\n\n"
+                + "  A tile can be placed (1) on the table with at least one "
                 + "edge adjacent to an edge in play or (2) on top of at least two tiles "
                 + "already in play. When placed on a higher level, each square of the "
                 + "tile must be supported, the tile must be level, and red and green "
@@ -408,7 +410,6 @@ layout by Manal Mohania and Joseph Meltzer*/
                 + "difficulty (the cheating AI can peek into both your decks), or "
                 + "watch two AIs play against each other. The two-AI game is advanced "
                 + "by clicking the 'Next Move' button. \n"
-                + "Also apart from using the rotate button, mouse scrolling can also be used to rotate the tiles."
         );
 
         instructions.setFont(Font.font("Arial", 16));
