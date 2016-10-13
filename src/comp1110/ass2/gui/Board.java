@@ -885,11 +885,11 @@ layout by Manal Mohania and Joseph Meltzer*/
         pane.setOnMouseClicked(event -> {
                 switch (gameState.playerTurn){
                     case RED:
-                        String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+                        String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
                         makeGUIPlacement(placement);
                         break;
                     case GREEN:
-                        String placement2 = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+                        String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
                         makeGUIPlacement(placement2);
                         break;
                     case BLACK:
@@ -994,7 +994,7 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
-            String placement = new StringBuilder().append(col).append(row).append((playerG.available_tiles).get(playerG.used_tiles)).append(playerG.rotation).toString();
+            String placement = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
             makeGUIPlacement(placement);
 
             int length = gameState.moveHistory.length()-2;
@@ -1064,7 +1064,7 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
-            String placement = new StringBuilder().append(col).append(row).append((playerR.available_tiles).get(playerR.used_tiles)).append(playerR.rotation).toString();
+            String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeGUIPlacement(placement);
 
             int length = gameState.moveHistory.length()-2;
