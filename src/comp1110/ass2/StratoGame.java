@@ -150,7 +150,18 @@ public class StratoGame {
         return coverage;
     }
 
-    /*Exploit the fact that a tile on top must completely lie within the boundaries formed by other placements*/
+    /**
+     * This method checks
+     *
+     * 1. if each of the tiles in the placement string share at least one side in common with another tile.
+     * 2. if the tile lies on top of another, it ensures that the tile os not dangling, and the squares it rests upon have the same heights.
+     * 3. that no part of any tile falls of the board
+     *
+     * @param placement: the placement string
+     * @return true iff the above three conditions are satisfied
+     *
+     * Method by Manal Mohania
+     * */
     private static boolean isPlacementAdjacent(String placement){
 
         int coverage[][] = new int[26][26];
@@ -205,9 +216,6 @@ public class StratoGame {
                     coverage[col][-1 + row]++;
                     coverage[col][row]++;
                     continue;
-                }
-                else{
-                    System.out.println("isOnTop, adjacent2: should not reach here");
                 }
             }
 
@@ -300,9 +308,6 @@ public class StratoGame {
                 coverage[col][row] = 1;
                 coverage[1 + col][row] = 1;
                 coverage[col][-1 + row] = 1;
-            }
-            else {
-                System.out.println("isPlacementAdjacent: should not reach here");
             }
         }
         return true;

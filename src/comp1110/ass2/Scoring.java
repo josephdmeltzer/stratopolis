@@ -118,7 +118,7 @@ public final class Scoring {
             greenH = (green[i][0] == greenMax && green[i][1] > greenH ? green[i][1] : greenH);
         }
 
-        /*remove max area and height from red's list and shift everything else later on it the array to one index before*/
+        /*remove max area and height from red's list and shift everything else later on in the array to one index before*/
         int flag = 0;
 
         for (int i = 0; i < REGIONS; i++) {
@@ -139,7 +139,7 @@ public final class Scoring {
                 break;
         }
 
-        /*remove max area and height from green's list and shift everything else later on it the array to one index before*/
+        /*remove max area and height from green's list and shift everything else later on in the array to one index before*/
         flag = 0;
 
         for (int j = 0; j < REGIONS; j++) {
