@@ -52,8 +52,10 @@ public class GameStateTest {
         }
     }
 
+    /*This test checks if for each possible colour turn, the next turn
+    * assignmed by nextTurn() is correct*/
     @Test
-    public void testNextTurn() throws Exception {
+    public void testNextTurn(){
         GameState gs1 = new GameState(BLACK, HUMAN, HUMAN);
         for (int i=0;i<6;i++){
             Colour lastTurn = gs1.playerTurn;
