@@ -255,7 +255,21 @@ class AI {
     }
 
 
-    /*Function by Zhixian Wu, based very heavily of the implementation of alpha-beta pruning by Joseph Meltzer*/
+    /*Function by Zhixian Wu, based very heavily off the implementation of alpha-beta pruning by Joseph Meltzer*/
+    /**
+     * Use alpha-beta pruning to find the best score of all possible moves.
+     * @param placement    The board state with which to test each move
+     * @param us           The current player
+     * @param opponent     The other player
+     * @param depth        The depth of nested moves to search
+     * @param maxDepth     The number of depths from the original call to the alpha-beta function
+     * @param a            Alpha value: minimum obtainable score
+     * @param b            Beta value: maximum obtainable score
+     * @param maximising   Whether the current player is green or not (red)
+     * @param initialGreen Whether the player executing this function is green or not (red)
+     * @return             A moveScore object containing the best score,
+     *                     and the four letter move that corresponds to it
+     */
     static moveScore alphabetaCheat(String placement, Player us, Player opponent, int depth, int maxDepth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
         if (maximising) {
