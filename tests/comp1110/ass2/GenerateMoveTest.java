@@ -17,7 +17,13 @@ import static org.junit.Assert.assertTrue;
  */
 public class GenerateMoveTest {
 
-    @Test(timeout=10000)
+    /**
+     * Note: This test has been altered by Joseph Meltzer
+     * generateMove has been replaced by genMoveMedium because this function is faster.
+     * The timeout has also been changed to 25 seconds.
+     * On Joseph's computer the test takes ~23 seconds to run.
+     */
+    @Test
     public void testMove() {
 
         /* first ensure that the game correctly identifies broken placements */
@@ -35,10 +41,10 @@ public class GenerateMoveTest {
 
             String move;
             for (int i = 0; i < 20; i++) {
-                move = StratoGame.generateMove(game, green[i], red[i]);
+                move = StratoGame.genMoveMedium(game, green[i], red[i]);
                 checkMove(game, green[i], move);
                 game += move;
-                move = StratoGame.generateMove(game, red[i], (i < 19 ? green[i + 1] : 0));
+                move = StratoGame.genMoveMedium(game, red[i], (i < 19 ? green[i + 1] : 0));
                 checkMove(game, red[i], move);
                 game += move;
             }
