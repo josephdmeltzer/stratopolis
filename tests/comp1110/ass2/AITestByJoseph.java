@@ -167,18 +167,18 @@ public class AITestByJoseph {
         else {
             int bestScore = 1000;
             String bestMove = "";
-            for (char x : checkOrder) {
-                for (char y : checkOrder) {
-                    for (char o='A'; o<='D'; o++) {
-                        if (isPlacementValid(placement+x+y+piece+o)) {
-                            moveScore ab = new moveScore("" + x + y + piece + o, alphabeta2(placement + x + y + piece + o, opiece, piece, depth - 1, a, b, true, initialGreen).score);
-                            if (ab.score < bestScore) {
-                                bestScore = ab.score;
-                                bestMove = ab.move;
-                            }
-                            b = Math.min(b, bestScore);
-                            if (b <= a) break;
+            for (String move : validTiles(placement)) {
+                char x = move.charAt(0);
+                char y = move.charAt(1);
+                for (char o='A'; o<='D'; o++) {
+                    if (isPlacementValid(placement+x+y+piece+o)) {
+                        moveScore ab = new moveScore("" + x + y + piece + o, alphabeta2(placement + x + y + piece + o, opiece, piece, depth - 1, a, b, true, initialGreen).score);
+                        if (ab.score < bestScore) {
+                            bestScore = ab.score;
+                            bestMove = ab.move;
                         }
+                        b = Math.min(b, bestScore);
+                        if (b <= a) break;
                     }
                 }
             }
