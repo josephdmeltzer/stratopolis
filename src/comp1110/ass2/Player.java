@@ -29,7 +29,7 @@ public class Player {
                 this.rotation = 'A';
         }
     }
-    /*Moves the used_tiles counter so you know which tile is next for the player*/
+    /*Moves the used_tiles counter forward one so you know which tile is next for the player*/
     public void getNextTile(){
         if (this.used_tiles < MAX_TILES-1){
             used_tiles++;

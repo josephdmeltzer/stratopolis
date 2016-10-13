@@ -396,7 +396,8 @@ public class StratoGame {
 
     /**
      * This method returns true if green has won the game given a valid placement string.
-     * function written by Manal Mohania
+     * Function written by Manal Mohania
+     * @param placement   The string of all the placements so far
      */
     static boolean greenHasWon(String placement){
         return getWinner(placement);

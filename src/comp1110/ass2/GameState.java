@@ -7,6 +7,10 @@ import static comp1110.ass2.Colour.RED;
  * Created by u5807060 on 11/08/2016.
  */
 /*Implemented by Zhixian Wu*/
+/* This class contains all the variables that are reset for
+*  each new game, so they can be reset just by creating a
+*  new GameState object.
+*/
 public class GameState {
     public Colour playerTurn; /*Who has the current turn*/
     public Difficulty greenPlayer;
@@ -26,8 +30,11 @@ public class GameState {
         this.moveHistory = "";
     }
 
+    /*Update the string of all the placements so far with the new placement
+    * @param placement   the new placement*/
     public void updateMoves(String placement){ this.moveHistory = this.moveHistory + placement;}
 
+    /*Updates whose turn it is*/
     public void nextTurn(){
         switch (this.playerTurn){
             case GREEN: {
