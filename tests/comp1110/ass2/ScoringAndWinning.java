@@ -101,7 +101,6 @@ public class ScoringAndWinning {
         }
     }
 
-
     /*Creating a symmetric string
     * 1. Identify the symmetrically opposite pieces
     * 2. Identify the symmetrically opposite orientation
