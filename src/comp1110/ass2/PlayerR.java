@@ -15,7 +15,7 @@ import static comp1110.ass2.Colour.RED;
 public class PlayerR extends Player {
     public static Colour playerColour = RED;
 
-    //this generates a valid list of tiles
+    /*Generates a valid list of tiles and shuffles them*/
     private List movesG(){
         ArrayList<Character> moves = new ArrayList<>();
         moves.add('A');

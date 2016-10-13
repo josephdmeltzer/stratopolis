@@ -396,7 +396,8 @@ public class StratoGame {
 
     /**
      * This method returns true if green has won the game given a valid placement string.
-     * function written by Manal Mohania
+     * Function written by Manal Mohania
+     * @param placement   The string of all the placements so far
      */
     static boolean greenHasWon(String placement){
         return getWinner(placement);
@@ -482,10 +483,8 @@ public class StratoGame {
         int depth = min(MAX_TILES-us.used_tiles-1, 3);
         char piece = (char) (us.available_tiles).get(us.used_tiles);
         boolean green = (piece>='K' && piece<='T');
-        System.out.println("We are: "+green);
         if (depth>0) return alphabetaCheat(placement, us, opponent, depth, depth, -1000, 1000, true, green).move;
         else {
-            System.out.println("genMoveNotEasy");
             return genMoveNotEasy(placement,piece);
         }
     }

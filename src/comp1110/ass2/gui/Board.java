@@ -147,7 +147,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         /*A new game*/
         gameState = new GameState(BLACK, HUMAN, HUMAN);
 
-        /*The logo*/
+        /*The Stratopolis logo on the start screen*/
         ImageView logo = new ImageView();
         logo.setImage(new Image(Viewer.class.getResource(URI_BASE + "stratopolis" + ".png").toString()));
         placementGrp.getChildren().add(logo);
@@ -708,6 +708,7 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     }
     /*Function by Zhixian Wu*/
+    /*It updates the TILES LEFT field on the board*/
     private void updateTilesLeft(){
         if (gameState.moveHistory.length()<=MAX_TILES*8-4){
             String green = Integer.toString(MAX_TILES-playerG.used_tiles);
@@ -868,7 +869,7 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     /**
      * The clickable panes for when there are two players
-     * Function by Zhixian Wu, Manal Mohania and Joseph Meltzer.
+     * Function by Zhixian Wu, Manal Mohania, and Joseph Meltzer.
      * Idea of how to recursively creates panes that remember what position they were created for is from StackOverflow:
      * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and-column-ids-on-mouse-entered-in-each-cell-of-grid-in>
      * @param colIndex      The column the pane is on
@@ -956,7 +957,7 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     /**
      * The clickable panes for when the human player is Green
-     * Function by Zhixian Wu and Manal Mohania.
+     * Function by Zhixian Wu, Manal Mohania, and Joseph Meltzer.
      * Idea of how to recursively creates panes that remember what position they were created for is from StackOverflow:
      * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and-column-ids-on-mouse-entered-in-each-cell-of-grid-in>
      * @param colIndex      The column the pane is on
@@ -1027,7 +1028,7 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     /**
      * The clickable panes for when the human player is Red
-     * Function by Zhixian Wu and Manal Mohania.
+     * Function by Zhixian Wu, Manal Mohania, and Joseph Meltzer.
      * Idea of how to recursively creates panes that remember what position they
      * were created for is from StackOverflow (URL in the in the C-u5807060 originality statement)
      * @param colIndex      The column the pane is on
@@ -1258,8 +1259,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                     GridPane.setRowIndex(iv1, (((int) placement.charAt(1)) - 'A' - 1));
                     break;
             }
+            /*Update the string of all the placements so far*/
             gameState.updateMoves(placement);
-            System.out.println("makeGUIPlacement updated moveHistory: " + gameState.moveHistory);
 
             /*Update the heights we're supposed to display*/
             displayHeights();
@@ -1328,7 +1329,6 @@ layout by Manal Mohania and Joseph Meltzer*/
             }
             /*Update whose turn it is*/
             gameState.nextTurn();
-            System.out.println(gameState.playerTurn);
 
             /*Update the number of tiles left*/
             updateTilesLeft();
