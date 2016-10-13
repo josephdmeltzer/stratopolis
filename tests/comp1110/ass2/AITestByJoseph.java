@@ -3,6 +3,7 @@ package comp1110.ass2;
 import org.junit.Test;
 
 import static comp1110.ass2.AI.alphabeta;
+import static comp1110.ass2.AI.validTiles;
 import static comp1110.ass2.Scoring.getScore;
 import static comp1110.ass2.StratoGame.*;
 import static org.junit.Assert.assertFalse;
@@ -81,20 +82,20 @@ public class AITestByJoseph {
     public static String oldGenerator(String placement, char piece, char oppPiece) {
         String bestMove = "";
         int bestScore = -100;
-        for (char x : checkOrder) {
-            for (char y : checkOrder) {
-                for (char o = 'A'; o <= 'D'; o++) {
-                    if (piece >= 'A' && piece <= 'J') {
-                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)  - getScoreForPlacement(placement + x + y + piece + o, true)> bestScore) {
-                            bestMove = "" + x + y + piece + o;
-                            bestScore = getScoreForPlacement(placement + x + y + piece + o, false) - getScoreForPlacement(placement + x + y + piece + o, true);
-                        }
+        for (String move : validTiles(placement)) {
+            char x = move.charAt(0);
+            char y = move.charAt(1);
+            for (char o = 'A'; o <= 'D'; o++) {
+                if (piece >= 'A' && piece <= 'J') {
+                    if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, false)  - getScoreForPlacement(placement + x + y + piece + o, true)> bestScore) {
+                        bestMove = "" + x + y + piece + o;
+                        bestScore = getScoreForPlacement(placement + x + y + piece + o, false) - getScoreForPlacement(placement + x + y + piece + o, true);
                     }
-                    if (piece >= 'K' && piece <= 'T') {
-                        if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true) - getScoreForPlacement(placement + x + y + piece + o, false) > bestScore) {
-                            bestMove = "" + x + y + piece + o;
-                            bestScore = getScoreForPlacement(placement + x + y + piece + o, true) - getScoreForPlacement(placement + x + y + piece + o, false);
-                        }
+                }
+                if (piece >= 'K' && piece <= 'T') {
+                    if (isPlacementValid(placement + x + y + piece + o) && getScoreForPlacement(placement + x + y + piece + o, true) - getScoreForPlacement(placement + x + y + piece + o, false) > bestScore) {
+                        bestMove = "" + x + y + piece + o;
+                        bestScore = getScoreForPlacement(placement + x + y + piece + o, true) - getScoreForPlacement(placement + x + y + piece + o, false);
                     }
                 }
             }
@@ -114,7 +115,8 @@ public class AITestByJoseph {
     }
 
     @Test
-    /* Test that the Probabilistic generator with 0 levels of probabilistic search is equivalent to the previous Alpha-Beta generator. */
+    /* Test that the Probabilistic generator with 0 levels of probabilistic search is equivalent to the previous Alpha-Beta generator.
+    *  Takes around 30 seconds to complete */
     public void testProbIsAB() {
         for (char i = 'K'; i<='T'; i++) {
             for (String placement : greenTestPlacements){
@@ -136,26 +138,29 @@ public class AITestByJoseph {
         }
     }
 
-    /* Alpha-beta generator */
+    /* Alpha-beta generator
+       Copied from AI class, and modified to use same move ordering.
+     */
     public static moveScore alphabeta2(String placement, char piece, char opiece, int depth, int a, int b, boolean maximising, boolean initialGreen) {
         if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
         if (maximising) {
             int bestScore = -100;
             String bestMove = "c";
-            for (char x : checkOrder) {
-                for (char y : checkOrder) {
-                    for (char o='A'; o<='D'; o++) {
-                        if (isPlacementValid(placement+x+y+piece+o)) {
-                            moveScore ab = new moveScore("" + x + y + piece + o, alphabeta2(placement + x + y + piece + o, opiece, piece, depth - 1, a, b, false, initialGreen).score);
-                            if (ab.score > bestScore) {
-                                bestScore = ab.score;
-                                bestMove = ab.move;
-                            }
-                            a = Math.max(a, bestScore);
-                            if (b <= a) break;
+            for (String move : validTiles(placement)) {
+                char x = move.charAt(0);
+                char y = move.charAt(1);
+                for (char o='A'; o<='D'; o++) {
+                    if (isPlacementValid(placement+x+y+piece+o)) {
+                        moveScore ab = new moveScore("" + x + y + piece + o, alphabeta2(placement + x + y + piece + o, opiece, piece, depth - 1, a, b, false, initialGreen).score);
+                        if (ab.score > bestScore) {
+                            bestScore = ab.score;
+                            bestMove = ab.move;
                         }
+                        a = Math.max(a, bestScore);
+                        if (b <= a) break;
                     }
                 }
+
             }
             return new moveScore(bestMove, bestScore);
         }

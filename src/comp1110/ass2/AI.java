@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import static comp1110.ass2.Scoring.getScore;
-import static comp1110.ass2.StratoGame.generateMove;
 import static comp1110.ass2.StratoGame.isPlacementValid;
 
 /**
@@ -13,11 +12,11 @@ import static comp1110.ass2.StratoGame.isPlacementValid;
  */
 
 /*Implemented by Joseph Meltzer*/
-public class AI {
+class AI {
     /* The moveScore (nested) class is an object which combines a move and its score. */
-    public static class moveScore {
-        public String move;
-        public float score;
+    static class moveScore {
+        String move;
+        float score;
 
         moveScore(String move, float score) {
             this.move = move;
@@ -42,7 +41,7 @@ public class AI {
      * @return             A moveScore object containing the best score,
      *                     and the four letter move that corresponds to it
      */
-    public static moveScore alphabeta(String placement, char piece, char opiece, int depth, int prob, float a, float b, boolean maximising, boolean initialGreen) {
+    static moveScore alphabeta(String placement, char piece, char opiece, int depth, int prob, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0 || placement.length()==164) return new moveScore("", average(placement,piecesLeft(placement,maximising==initialGreen),prob,a,b,maximising,initialGreen));
         if (maximising) {
             float bestScore = -100;
@@ -98,7 +97,7 @@ public class AI {
      * @return              A moveScore object that contains the best score,
      *                      and the four letter move that corresponds to it.
      */
-    public static moveScore probAB(String placement, char piece, int depth, float a, float b, boolean maximising, boolean initialGreen) {
+    private static moveScore probAB(String placement, char piece, int depth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0 || placement.length()==164) return new moveScore ("", average(placement,piecesLeft(placement, maximising==initialGreen), 0, a, b, maximising, initialGreen));
         if (maximising) {
             float bestScore = -100.0f;
@@ -155,7 +154,7 @@ public class AI {
      * @param initialGreen  Whether the player executing this function is green or not (red)
      * @return              The expected value of the score given the board state and available moves.
      */
-    public static float average(String placement, ArrayList<Character> pieceArray, int depth, float a, float b, boolean maximising, boolean initialGreen) {
+    private static float average(String placement, ArrayList<Character> pieceArray, int depth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0 || pieceArray.size()==0) {
             return getScore(placement, initialGreen)-getScore(placement, !initialGreen);
         }
@@ -172,9 +171,9 @@ public class AI {
      * Create a list of available pieces for a particular player from a board state.
      * @param placement     The board state to evaluate
      * @param green         Whether or not the desired pieces belong to the green player
-     * @return              A list of pieces (with duplicates when necessary) that can be played by the chosen player.
+     * @return              A list of pieces (with duplicates when necessary) that can be played by the chosen player
      */
-    public static ArrayList<Character> piecesLeft(String placement, boolean green) {
+    private static ArrayList<Character> piecesLeft(String placement, boolean green) {
         if (green) {
             ArrayList<Character> piecesG = new ArrayList<>();
             for (char p = 'K'; p <= 'T'; p++) {
@@ -203,8 +202,12 @@ public class AI {
         }
     }
 
-    /*Updates the valid places for the next placement given a certain placement*/
-    public static HashSet<String> validTiles(String placement) {
+    /**
+     * Find the valid places for the next placement given a certain placement.
+     * @param placement     The placement to check
+     * @return              A set of all and only tiles covered or adjacent to a piece
+     */
+    static HashSet<String> validTiles(String placement) {
         HashSet<String> tiles = new HashSet<>();
         char tilex;
         char tiley;
@@ -253,7 +256,7 @@ public class AI {
 
 
     /*Function by Zhixian Wu, based very heavily of the implementation of alpha-beta pruning by Joseph Meltzer*/
-    public static moveScore alphabetaCheat(String placement, Player us, Player opponent, int depth, int maxDepth, float a, float b, boolean maximising, boolean initialGreen) {
+    static moveScore alphabetaCheat(String placement, Player us, Player opponent, int depth, int maxDepth, float a, float b, boolean maximising, boolean initialGreen) {
         if (depth==0) return new moveScore("", getScore(placement, initialGreen)-getScore(placement, !initialGreen));
         if (maximising) {
             float bestScore = -1000;

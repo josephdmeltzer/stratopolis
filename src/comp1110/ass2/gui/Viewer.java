@@ -11,16 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import comp1110.ass2.StratoGame;
-import comp1110.ass2.Pieces;
-
-import static comp1110.ass2.Pieces.K;
-import static javafx.scene.layout.GridPane.getColumnIndex;
-import static javafx.scene.layout.GridPane.getRowIndex;
-
 
 /**
  * A very simple viewer for piece placements in the link game.

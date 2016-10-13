@@ -2,8 +2,6 @@ package comp1110.ass2;
 
 import java.util.List;
 
-import static comp1110.ass2.Colour.GREEN;
-
 /**
  * Created by manalmohania on 11/08/2016.
  */
