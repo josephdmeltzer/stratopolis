@@ -85,7 +85,8 @@ layout by Manal Mohania and Joseph Meltzer*/
     private static final String URI_BASE = "assets/";
     private static final int TILE_SIZE = 25; /*This is half the width of each tile*/
     private static final int BOARD_SIZE = 26; /*As in a 26x26 board*/
-    private static final String PLACEMENT_URI = Viewer.class.getResource(URI_BASE + "sound.wav").toString();
+    private static final String PLACEMENT_URI = Viewer.class.getResource(URI_BASE
+            + "sound.wav").toString();
 
     /*Objects that need to be accessible to many functions.*/
     private GameState gameState;
@@ -128,7 +129,8 @@ layout by Manal Mohania and Joseph Meltzer*/
     private boolean soundOn = true;
 
     /*the audio clip played when a placement is made*/
-    /*The sound was downloaded from <http://www.sounds.beachware.com/2illionzayp3may/jspjrz/SWITCH.mp3>*/
+    /*The sound was downloaded from
+    * <http://www.sounds.beachware.com/2illionzayp3may/jspjrz/SWITCH.mp3>*/
     private final AudioClip audio = new AudioClip(PLACEMENT_URI);
 
 
@@ -149,7 +151,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*The Stratopolis logo on the start screen*/
         ImageView logo = new ImageView();
-        logo.setImage(new Image(Viewer.class.getResource(URI_BASE + "stratopolis" + ".png").toString()));
+        logo.setImage(new Image(Viewer.class.getResource(URI_BASE + "stratopolis"
+                + ".png").toString()));
         placementGrp.getChildren().add(logo);
         logo.setLayoutX(220);
         logo.setLayoutY(180);
@@ -249,7 +252,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                     "        #090a0c,\n" +
                     "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                     "        linear-gradient(#20262b, #191d22),\n" +
-                    "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                    "        radial-gradient(center 50% 0%, radius 100%, " +
+                    "rgba(114,131,148,0.9), rgba(255,255,255,0));" +
                     "-fx-text-fill: white;");
             b.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> b.setEffect(shadow));
             b.addEventHandler(MouseEvent.MOUSE_EXITED, event -> b.setEffect(null));
@@ -292,7 +296,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                 "        linear-gradient(#ffef84, #f2ba44),\n" +
                 "        linear-gradient(#ffea6a, #efaa22),\n" +
                 "        linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),\n" +
-                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0));\n" +
+                "        linear-gradient(from 0% 0% to 15% 50%, rgba(255,255,255,0.9)," +
+                " rgba(255,255,255,0));\n" +
                 "    -fx-background-radius: 30;\n" +
                 "    -fx-background-insets: 0,1,2,3,0;\n" +
                 "    -fx-text-fill: #654b00;\n" +
@@ -307,10 +312,13 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*The mute button by Zhixian Wu*/
         /*The mute button's image*/
-        /*The image for unmuted sound is from <https://pixabay.com/en/icon-loudspeaker-speaker-horn-1628258/>
+        /*The image for unmuted sound is from
+        * <https://pixabay.com/en/icon-loudspeaker-speaker-horn-1628258/>
         * The image from the muted sound is an edited version of that image*/
-        if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
-        else sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
+        if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon"
+                + ".png").toString()));
+        else sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off"
+                + ".png").toString()));
         sound_icon.setFitWidth(25);
         sound_icon.setPreserveRatio(true);
         sound_icon.setSmooth(true);
@@ -322,14 +330,16 @@ layout by Manal Mohania and Joseph Meltzer*/
         sound_pane.setPrefSize(25,25);
         sound_pane.setOnMouseClicked(event -> {
             if (soundOn){
-                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
+                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off"
+                        + ".png").toString()));
                 sound_icon.setFitWidth(25);
                 sound_icon.setPreserveRatio(true);
                 sound_icon.setSmooth(true);
                 sound_icon.setCache(true);
                 soundOn = false;
             } else{
-                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon"
+                        + ".png").toString()));
                 sound_icon.setFitWidth(25);
                 sound_icon.setPreserveRatio(true);
                 sound_icon.setSmooth(true);
@@ -351,12 +361,15 @@ layout by Manal Mohania and Joseph Meltzer*/
                 "-fx-max-height: 30px;" +
                 "-fx-text-fill: #ffd65b"
         );
-        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
-        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
+        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event ->
+                instructions.setEffect(shadow));
+        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event ->
+                instructions.setEffect(null));
         instructions.setLayoutX(860);
         instructions.setLayoutY(12);
 
-        placementGrp.getChildren().addAll(green, red, startGame, instructions, sound_icon, sound_pane);
+        placementGrp.getChildren().addAll(green, red, startGame, instructions,
+                sound_icon, sound_pane);
     }
 
     /*Function by Zhixian Wu. This function displays the instructions when called.*/
@@ -389,9 +402,11 @@ layout by Manal Mohania and Joseph Meltzer*/
                 + "tiles face down, revealing only the topmost tile. \n \n"
                 + "  To start the game, a two-square tile (one red, one green) is placed "
                 + "on the table. Players then take turns adding their topmost tile to "
-                + "the display. A placement is made by clicking on the board. Inalid placements "
+                + "the display. A placement is made by clicking on the board. Invalid placements "
                 + "have duller preview images. \n\n"
-                + "A tile can be placed (1) on the table with at least one "
+                + "  Apart from using the 'Rotate' button, the tiles can be rotated by scrolling "
+                + "while hovering over the board.\n\n"
+                + "  A tile can be placed (1) on the table with at least one "
                 + "edge adjacent to an edge in play or (2) on top of at least two tiles "
                 + "already in play. When placed on a higher level, each square of the "
                 + "tile must be supported, the tile must be level, and red and green "
@@ -408,7 +423,6 @@ layout by Manal Mohania and Joseph Meltzer*/
                 + "difficulty (the cheating AI can peek into both your decks), or "
                 + "watch two AIs play against each other. The two-AI game is advanced "
                 + "by clicking the 'Next Move' button. \n"
-                + "Also apart from using the rotate button, mouse scrolling can also be used to rotate the tiles."
         );
 
         instructions.setFont(Font.font("Arial", 16));
@@ -431,7 +445,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), " +
+                "  rgba(255,255,255,0));" +
                 "-fx-text-fill: white;");
         DropShadow shadow = new DropShadow();
         exitBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, event ->  exitBtn.setEffect(shadow));
@@ -461,7 +476,7 @@ layout by Manal Mohania and Joseph Meltzer*/
         makeControls();
     }
 
-    /*Function mostly by Zhixian Wu, with the running score and all button styling by Manal Mohania*/
+    /*Function mostly by Zhixian Wu, with the running score and button styling by Manal Mohania*/
     private void makeControls(){
 
         scene.setFill(Color.WHITESMOKE);
@@ -477,8 +492,10 @@ layout by Manal Mohania and Joseph Meltzer*/
         redtxt.setFont(Font.font("Verdana", 16));
 
         /*The mute button's image*/
-        if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
-        else sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
+        if (soundOn) sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon"
+                + ".png").toString()));
+        else sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off"
+                + ".png").toString()));
         sound_icon.setFitWidth(25);
         sound_icon.setPreserveRatio(true);
         sound_icon.setSmooth(true);
@@ -490,14 +507,16 @@ layout by Manal Mohania and Joseph Meltzer*/
         sound_pane.setPrefSize(25,25);
         sound_pane.setOnMouseClicked(event -> {
             if (soundOn){
-                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off" + ".png").toString()));
+                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon_off"
+                        + ".png").toString()));
                 sound_icon.setFitWidth(25);
                 sound_icon.setPreserveRatio(true);
                 sound_icon.setSmooth(true);
                 sound_icon.setCache(true);
                 soundOn = false;
             } else{
-                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon" + ".png").toString()));
+                sound_icon.setImage(new Image(Viewer.class.getResource(URI_BASE + "sound_icon"
+                        + ".png").toString()));
                 sound_icon.setFitWidth(25);
                 sound_icon.setPreserveRatio(true);
                 sound_icon.setSmooth(true);
@@ -520,22 +539,26 @@ layout by Manal Mohania and Joseph Meltzer*/
                 "-fx-text-fill: #ffd65b"
         );
         DropShadow shadow = new DropShadow();
-        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> instructions.setEffect(shadow));
-        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event -> instructions.setEffect(null));
+        instructions.addEventHandler(MouseEvent.MOUSE_ENTERED, event ->
+                instructions.setEffect(shadow));
+        instructions.addEventHandler(MouseEvent.MOUSE_EXITED, event ->
+                instructions.setEffect(null));
         instructions.setLayoutX(860);
         instructions.setLayoutY(12);
 
         controls.getChildren().addAll(sound_icon,sound_pane,instructions);
 
         /*The tiles at the "top" of each player's "stack", displayed on the right*/
-        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE +
+                (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
         ivg.setRotate((((int) (playerG.rotation)-'A')*90));
         ivg.setFitWidth(80);
         ivg.setPreserveRatio(true);
         ivg.setSmooth(true);
         ivg.setCache(true);
 
-        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE +
+                (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
         ivr.setRotate((((int) (playerR.rotation)-'A')*90));
         ivr.setFitWidth(80);
         ivr.setPreserveRatio(true);
@@ -609,7 +632,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                 "        #090a0c,\n" +
                 "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                 "        linear-gradient(#20262b, #191d22),\n" +
-                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), " +
+                "    rgba(255,255,255,0));" +
                 "-fx-text-fill: white;");
 
         menu.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> menu.setEffect(shadow));
@@ -696,7 +720,8 @@ layout by Manal Mohania and Joseph Meltzer*/
                     "        #090a0c,\n" +
                     "        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),\n" +
                     "        linear-gradient(#20262b, #191d22),\n" +
-                    "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));" +
+                    "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), " +
+                    "    rgba(255,255,255,0));" +
                     "-fx-text-fill: white;");
 
             nextMove.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> nextMove.setEffect(shadow));
@@ -716,7 +741,8 @@ layout by Manal Mohania and Joseph Meltzer*/
             greenTilesLeft.setText(green);
             redTilesLeft.setText(red);
         } else{
-            if (MAX_TILES*8-4<=gameState.moveHistory.length() && gameState.moveHistory.length()<=MAX_TILES*8){
+            if (MAX_TILES*8-4<=gameState.moveHistory.length() &&
+                    gameState.moveHistory.length()<=MAX_TILES*8){
                 greenTilesLeft.setText("0");
                 String red = Integer.toString(MAX_TILES-playerR.used_tiles);
                 redTilesLeft.setText(red);
@@ -852,8 +878,10 @@ layout by Manal Mohania and Joseph Meltzer*/
             char greenTile = (char) (playerG.available_tiles).get(playerG.used_tiles);
 
             String opponent = genMoveEasy(gameState.moveHistory, greenTile);
-            if (gameState.greenPlayer == MEDIUM) opponent = genMoveMedium(gameState.moveHistory, greenTile, redTile);
-            if (gameState.greenPlayer == HARD) opponent = generateMove(gameState.moveHistory, greenTile, redTile);
+            if (gameState.greenPlayer == MEDIUM) opponent =
+                    genMoveMedium(gameState.moveHistory, greenTile, redTile);
+            if (gameState.greenPlayer == HARD) opponent =
+                    generateMove(gameState.moveHistory, greenTile, redTile);
 
             makeGUIPlacement(opponent);
         }
@@ -870,8 +898,10 @@ layout by Manal Mohania and Joseph Meltzer*/
     /**
      * The clickable panes for when there are two players
      * Function by Zhixian Wu, Manal Mohania, and Joseph Meltzer.
-     * Idea of how to recursively creates panes that remember what position they were created for is from StackOverflow:
-     * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and-column-ids-on-mouse-entered-in-each-cell-of-grid-in>
+     * Idea of how to recursively creates panes that remember what position they were
+     * created for is from StackOverflow:
+     * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and-column
+       -ids-on-mouse-entered-in-each-cell-of-grid-in>
      * @param colIndex      The column the pane is on
      * @param rowIndex      The row the pane is on
      */
@@ -886,11 +916,13 @@ layout by Manal Mohania and Joseph Meltzer*/
         pane.setOnMouseClicked(event -> {
                 switch (gameState.playerTurn){
                     case RED:
-                        String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+                        String placement = String.valueOf(col) + row +
+                                (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
                         makeGUIPlacement(placement);
                         break;
                     case GREEN:
-                        String placement2 = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+                        String placement2 = String.valueOf(col) + row +
+                                (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
                         makeGUIPlacement(placement2);
                         break;
                     case BLACK:
@@ -922,11 +954,13 @@ layout by Manal Mohania and Joseph Meltzer*/
 
             switch (gameState.playerTurn){
                 case RED:
-                    String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+                    String placement = "" + col + row +
+                            (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
                     makeTempPlacement(iv, placement);
                     break;
                 case GREEN:
-                    String placement2 = "" + col + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+                    String placement2 = "" + col + row +
+                            (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
                     makeTempPlacement(iv, placement2);
                     break;
             }
@@ -937,11 +971,13 @@ layout by Manal Mohania and Joseph Meltzer*/
 
             switch (gameState.playerTurn){
                 case RED:
-                    String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+                    String placement = "" + col + row +
+                            (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
                     makeTempPlacement(iv, placement);
                     break;
                 case GREEN:
-                    String placement2 = "" + col + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+                    String placement2 = "" + col + row +
+                            (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
                     makeTempPlacement(iv, placement2);
                     break;
             }
@@ -958,8 +994,10 @@ layout by Manal Mohania and Joseph Meltzer*/
     /**
      * The clickable panes for when the human player is Green
      * Function by Zhixian Wu, Manal Mohania, and Joseph Meltzer.
-     * Idea of how to recursively creates panes that remember what position they were created for is from StackOverflow:
-     * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row-and-column-ids-on-mouse-entered-in-each-cell-of-grid-in>
+     * Idea of how to recursively creates panes that remember what position
+     * they were created for is from StackOverflow:
+     * <http://stackoverflow.com/questions/31095954/how-to-get-gridpane-row
+       -and-column-ids-on-mouse-entered-in-each-cell-of-grid-in>
      * @param colIndex      The column the pane is on
      * @param rowIndex      The row the pane is on
      */
@@ -979,14 +1017,16 @@ layout by Manal Mohania and Joseph Meltzer*/
             ivg.setRotate((((int) (playerG.rotation) - 'A') * 90));
             iv.setRotate(((int) (playerG.rotation) - 'A') * 90);
 
-            String placement2 = "" + col + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+            String placement2 = "" + col + row +
+                    (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
             makeTempPlacement(iv, placement2);
             });
 
         /*Event by Manal Mohania, this adds the preview piece*/
         pane.setOnMouseEntered(event -> {
 
-            String placement = "" + col + row + playerG.available_tiles.get(playerG.used_tiles) + playerG.rotation;
+            String placement = "" + col + row +
+                    playerG.available_tiles.get(playerG.used_tiles) + playerG.rotation;
             makeTempPlacement(iv, placement);
         });
 
@@ -995,7 +1035,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
-            String placement = String.valueOf(col) + row + (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
+            String placement = String.valueOf(col) + row +
+                    (playerG.available_tiles).get(playerG.used_tiles) + playerG.rotation;
             makeGUIPlacement(placement);
 
             int length = gameState.moveHistory.length()-2;
@@ -1016,7 +1057,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
             /*The AI only makes its move if your move was valid, i.e. if the
             last move in moveHistory was yours*/
-            if ('K'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='T'){
+            if ('K'<=gameState.moveHistory.charAt(length) &&
+                    gameState.moveHistory.charAt(length)<='T'){
                 makeAIMove();
             }
         });
@@ -1050,13 +1092,15 @@ layout by Manal Mohania and Joseph Meltzer*/
             ivr.setRotate(((int) (playerR.rotation) - 'A') * 90);
             iv.setRotate(((int) (playerR.rotation) - 'A') * 90);
 
-            String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+            String placement = "" + col + row +
+                    (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeTempPlacement(iv, placement);
         });
 
         /*Event by Manal Mohania, the adds the preview piece*/
         pane.setOnMouseEntered(event -> {
-            String placement = "" + col + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+            String placement = "" + col + row +
+                    (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeTempPlacement(iv, placement);
         });
 
@@ -1065,14 +1109,16 @@ layout by Manal Mohania and Joseph Meltzer*/
 
         /*Event by Zhixian Wu. This event makes the player's move when they press on a pane.*/
         pane.setOnMousePressed(event -> {
-            String placement = String.valueOf(col) + row + (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
+            String placement = String.valueOf(col) + row +
+                    (playerR.available_tiles).get(playerR.used_tiles) + playerR.rotation;
             makeGUIPlacement(placement);
 
             int length = gameState.moveHistory.length()-2;
             /*This adds the image that suggests tha AI is thinking.
             We only suggest the AI is thinking if it actually is, i.e. your
             move was valid, i.e. if the last move in moveHistory was yours*/
-            if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J'){
+            if ('A'<=gameState.moveHistory.charAt(length) &&
+                    gameState.moveHistory.charAt(length)<='J'){
                 aiThink.setFont(Font.font("Arial", FontWeight.NORMAL, 20));
                 controls.getChildren().add(aiThink);
                 aiThink.setLayoutX(740);
@@ -1090,7 +1136,8 @@ layout by Manal Mohania and Joseph Meltzer*/
             makes its move if your move was valid.
             *  The last condition checks if you are out of tiles, so the AI
             doesn't try to make a move you are out of tiles*/
-            if ('A'<=gameState.moveHistory.charAt(length) && gameState.moveHistory.charAt(length)<='J' && gameState.moveHistory.length()<MAX_TILES*8){
+            if ('A'<=gameState.moveHistory.charAt(length) &&
+                    gameState.moveHistory.charAt(length)<='J' && gameState.moveHistory.length()<MAX_TILES*8){
                 makeAIMove();
             } else{
                 controls.getChildren().remove(aiThink);
@@ -1117,8 +1164,8 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     /**
      * This function
-     * 1. creates a temporary placement upon mouseover - the placement pieces are of different opacity
-     *    depending upon the validity of the placement
+     * 1. creates a temporary placement upon mouseover - the placement pieces are
+     *    of different opacity depending upon the validity of the placement
      * 2. ensures that the individual piece does not lie outside the board when making the placement
      * 3. removes error messages if a valid placement is reached
      *
@@ -1134,22 +1181,29 @@ layout by Manal Mohania and Joseph Meltzer*/
         /*remove error messages, if any*/
         controls.getChildren().remove(errorMessage);
 
-        /*The following ensure that the piece does not fall out of the board, and thus they are not part of the preview*/
-        if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'D'))) return;
+        /*The following ensure that the piece does not fall out of the board,
+        * and thus they are not part of the preview*/
+        if ((placement.charAt(0) == 'Z') && ((placement.charAt(3) == 'A')
+                || (placement.charAt(3) == 'D'))) return;
 
-        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B') || (placement.charAt(3) == 'C'))) return;
+        if ((placement.charAt(0) == 'A') && ((placement.charAt(3) == 'B')
+                || (placement.charAt(3) == 'C'))) return;
 
-        if ((placement.charAt(1) == 'Z') && ((placement.charAt(3) == 'A') || (placement.charAt(3) == 'B'))) return;
+        if ((placement.charAt(1) == 'Z') && ((placement.charAt(3) == 'A')
+                || (placement.charAt(3) == 'B'))) return;
 
-        if ((placement.charAt(1) == 'A') && ((placement.charAt(3) == 'C') || (placement.charAt(3) == 'D'))) return;
+        if ((placement.charAt(1) == 'A') && ((placement.charAt(3) == 'C')
+                || (placement.charAt(3) == 'D'))) return;
 
         /*set image according to the validity of the placement*/
         if (StratoGame.isPlacementValid(gameState.moveHistory.concat(placement))) {
-            iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_h.png").toString()));
+            iv.setImage(new Image(Viewer.class.getResource(URI_BASE +
+                    placement.charAt(2) + "_h.png").toString()));
             iv.setOpacity(0.8);
         }
         else {
-            iv.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_hx.png").toString()));
+            iv.setImage(new Image(Viewer.class.getResource(URI_BASE +
+                    placement.charAt(2) + "_hx.png").toString()));
             iv.setOpacity(0.5);
         }
 
@@ -1226,7 +1280,8 @@ layout by Manal Mohania and Joseph Meltzer*/
         } else {
             /*create the image that'll go on the board*/
             ImageView iv1 = new ImageView();
-            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE + placement.charAt(2) + "_b.png").toString()));
+            iv1.setImage(new Image(Viewer.class.getResource(URI_BASE +
+                    placement.charAt(2) + "_b.png").toString()));
             iv1.setRotate((((int) placement.charAt(3)) - 'A') * 90);
             iv1.setFitWidth(TILE_SIZE * 2);
             iv1.setPreserveRatio(true);
@@ -1270,14 +1325,17 @@ layout by Manal Mohania and Joseph Meltzer*/
 
             if (soundOn) audio.play();
 
-            /*Update the top tiles shown on the control panel, whose turn it is, and whose turn is bolded.*/
+            /*Update the top tiles shown on the control panel,
+            * whose turn it is, and whose turn is bolded.*/
             switch (gameState.playerTurn) {
                 case RED:
                     if (playerR.used_tiles<19){ /*If red still has tiles left*/
                         /*Update the red player's tile index*/
                         playerR.getNextTile();
                         /*Update the top red tile shown*/
-                        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerR.available_tiles).get(playerR.used_tiles) + ".png").toString()));
+                        ivr.setImage(new Image(Viewer.class.getResource(URI_BASE +
+                                (playerR.available_tiles).get(playerR.used_tiles) +
+                                ".png").toString()));
                         ivr.setFitWidth(80);
                         ivr.setPreserveRatio(true);
                         ivr.setSmooth(true);
@@ -1302,7 +1360,9 @@ layout by Manal Mohania and Joseph Meltzer*/
                         /*Update the red player's tile index*/
                         playerG.getNextTile();
                         /*Update the top green tile shown*/
-                        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE + (playerG.available_tiles).get(playerG.used_tiles) + ".png").toString()));
+                        ivg.setImage(new Image(Viewer.class.getResource(URI_BASE +
+                                (playerG.available_tiles).get(playerG.used_tiles) +
+                                ".png").toString()));
                         ivg.setFitWidth(80);
                         ivg.setPreserveRatio(true);
                         ivg.setSmooth(true);
@@ -1333,7 +1393,7 @@ layout by Manal Mohania and Joseph Meltzer*/
             /*Update the number of tiles left*/
             updateTilesLeft();
 
-            /*Checks if the game is over. If it is, we lower the board opacity and display the winner.*/
+            /*Checks if the game is over. If it is, we display the winner.*/
             if (gameState.moveHistory.length() > MAX_TILES*8) {
                 /*Get rid of the panes*/
                 clickablePanes.getChildren().clear();
@@ -1446,7 +1506,8 @@ layout by Manal Mohania and Joseph Meltzer*/
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Stratopolis");
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "icon.png").toString())));
+        primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE +
+                "icon.png").toString())));
         scene = new Scene(root, BOARD_WIDTH, BOARD_HEIGHT, LIGHTGREY);
 
         root.getChildren().add(controls);
