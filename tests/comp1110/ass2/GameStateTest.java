@@ -25,8 +25,8 @@ public class GameStateTest {
             int inputLength = test.length();
             int totalLength = gs1.moveHistory.length();
             assertTrue("The total length of the new moveHistory is equal to " + totalLength
-                    + "but its length before was " + previousLength + "and the string added had length "
-                    + inputLength, previousLength+inputLength==totalLength);
+                + "but its length before was " + previousLength + "and the string added had length "
+                + inputLength, previousLength+inputLength==totalLength);
         }
     }
 
@@ -60,9 +60,13 @@ public class GameStateTest {
         for (int i=0;i<6;i++){
             Colour lastTurn = gs1.playerTurn;
             gs1.nextTurn();
-            if (lastTurn==BLACK) assertTrue("Turn after a BLACK (automatic MMUA) turn is not GREEN",gs1.playerTurn==GREEN);
-            if (lastTurn==GREEN) assertTrue("Turn after a GREEN turn is not RED",gs1.playerTurn==RED);
-            if (lastTurn==RED) assertTrue("Turn after a RED turn is not GREEN",gs1.playerTurn==GREEN);
+            if (lastTurn==BLACK)
+                assertTrue("Turn after a BLACK (automatic MMUA) turn is not GREEN",
+                        gs1.playerTurn==GREEN);
+            if (lastTurn==GREEN)
+                assertTrue("Turn after a GREEN turn is not RED", gs1.playerTurn==RED);
+            if (lastTurn==RED)
+                assertTrue("Turn after a RED turn is not GREEN", gs1.playerTurn==GREEN);
         }
 
     }
