@@ -1491,7 +1491,7 @@ layout by Manal Mohania and Joseph Meltzer*/
                     String tall = Integer.toString(heights[i][j]);
                     Text label1 = new Text(tall);
                     label1.setFill(Color.WHITE);
-                    label1.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                    label1.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
                     heightLabels.getChildren().add(label1);
                     GridPane.setRowIndex(label1,j);
                     GridPane.setColumnIndex(label1,i);
