@@ -1520,7 +1520,4 @@ layout by Manal Mohania and Joseph Meltzer*/
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }
